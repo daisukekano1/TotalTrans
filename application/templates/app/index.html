@@ -1,0 +1,75 @@
+{% extends "app/base_site.html" %}
+{% load i18n %}
+
+{% block title %} Dashboard 1 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="content-wrapper">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>#TranslationRequestList#</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div>
+                        <a href="{% url 'addwork' %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i>Add a translation work</a>
+                    </div>
+                    <div class="x_content">
+                        <table class="table table-striped projects">
+                        <thead>
+                          <tr>
+                            <th style="width: 1%">id</th>
+                            <th style="width: 20%">workTitle</th>
+                            <th>wordsOriginal</th>
+                            <th>lc_src</th>
+                            <th>lc_tgt</th>
+                            <th>progress</th>
+                            <th>createdDate</th>
+                            <th>numberofchar</th>
+                            <th>status</th>
+                            <th style="width: 20%">#Edit</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for row in data %}
+                          <tr>
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.workTitle }}</td>
+                            <td>{{ row.wordsOriginal }}</td>
+                            <td>{{ row.lc_src }}</td>
+                            <td>{{ row.lc_tgt }}</td>
+                            <td>{{ row.progress }}</td>
+                            <td>{{ row.createdDate }}</td>
+                            <td>{{ row.numberofchar }}</td>
+                            <td>{{ row.status }}</td>
+                            <td>
+                              <a href="{% url 'workdetail' row.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+{% endblock javascripts %}
