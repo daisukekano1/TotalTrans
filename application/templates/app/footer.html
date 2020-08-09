@@ -1,4 +1,11 @@
-<div class="float-right d-none d-sm-block">
-  <b>Version</b> 3.1.0-pre
-</div>
-<strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+{% if request.path == "/addwork/" %}
+    <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> #Cancel#</button>
+    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-share"></i> #Save#</button>
+{% endif %}
+{% if "/workdetail/" in request.path %}
+    <button type="button" class="btn btn-md btn-default" data-toggle="modal" data-target="#openGengoRequest" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#TransRequest#</button>
+    <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#openGoogleRequest" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#GoogleTrans#</button>
+    <button type="button" class="btn btn-md btn-self" data-toggle="modal" data-target="#openSelfTranslate" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#SelfTrans#</button>
+{% endif %}
+
+

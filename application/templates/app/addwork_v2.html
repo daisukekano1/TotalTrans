@@ -1,0 +1,154 @@
+{% extends "app/base_site.html" %}
+{% load i18n %}
+
+{% block title %} Dashboard 1 {% endblock title %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+{% block content %}
+<div class="content-wrapper workdetail">
+    <section class="content">
+        <form id="workform" action="savework" method="post">
+            {% csrf_token %}
+            <div class="container-fluid" style="padding-top:10px;">
+                <div class="card">
+                    <div class="card-header h5 sitecolor-bcolor">#New Translation#</div>
+                    <div class="card-body">
+                        <div id="accordion">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h4 class="card-title w-100">
+                                    <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">#LanguageSelection#</a>
+                                </h4>
+                                </div>
+                                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">From <span class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input type="text" class="form-control"  id="lc_src" name="lc_src" aria-placeholder="#SelectSourceLanguage#"/>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-SelectLanguage">Select Language</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align" for="SelectTargetLanguage">To <span class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input type="text" class="form-control" id="lc_tgt" name="lc_tgt" aria-placeholder="#SelectSourceLanguage#"/>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-SelectLanguage">Select Language</button>
+                                            </div>
+                                        </div>
+                                        <div ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-danger">
+                                <div class="card-header">
+                                    <h4 class="card-title w-100">
+                                        <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                                            #Translation words#
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                                    <div class="card-body">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="tagsinfo" name="tagsinfo" />
+        </form>
+    </section>
+</div>
+<div class="modal fade top" id="modal-SelectLanguage">
+    <div class="modal-dialog modal-dialog-centered modal-notify modal-info">
+        <div class="modal-content">
+            <div class="modal-head">
+                <div class="modal-title">#Title_SelectLanguage#</div>
+            </div>
+            <div class="modal-body">
+                {% for vals in langs %}
+                    <span class="badge" data-value="{{ vals.lc }}">{{ vals.displaylang }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascripts %}
+    {{ block.super }}
+{% endblock javascripts %}
+<script>
+    var tokens = []
+    function submitAction(url) {
+        $('#tagsinfo').val(JSON.stringify(tokens))
+        $('#workform').submit();
+    }
+    $(document).ready(function() {
+        {#$("#lc_src").on('change.select2', function(){#}
+        {#    $('#lc_tgt').val(null).trigger('change');#}
+        {#    $('#lc_tgt').empty().select2();#}
+        {#    $.ajax("/getTargetLang", {#}
+        {#        data: {lc_src: this.value}#}
+        {#    }).then(#}
+        {#        function success(data) {#}
+        {#            $("#lc_tgt").select2({#}
+        {#                val : null,#}
+        {#                data: data['langs'],#}
+        {#                theme : 'bootstrap form-control editableColor'#}
+        {#            });#}
+        {#        },#}
+        {#        function fail(data, status) {#}
+        {#            alert('Request failed.  Returned status of ' + status);#}
+        {#        }#}
+        {#    )#}
+        var tags = JSON.parse("{{ tags  | safe | escapejs }}")
+        var tagsource = []
+        for(var vals of tags){
+            tagsource.push(vals.tagname)
+        }
+        $('#tags')
+            .on('tokenfield:createtoken', function (event) {
+                var existingTokens = $(this).tokenfield('getTokens');
+                $.each(existingTokens, function(index, token) {
+                    if (token.value === event.attrs.value){
+                        event.preventDefault();
+                        return false;
+                    }
+                })
+            })
+            .on('tokenfield:createdtoken', function(e) {
+                value = e.attrs.value;
+                bgcolor = '#aaaaaa';
+                for(var tag of tags){
+                    if (tag.tagname == value)
+                        bgcolor = tag.backgroundcolor;
+                }
+                $(e.relatedTarget).addClass('badge');
+                $(e.relatedTarget).css('background-color', bgcolor);
+                var vals = { tagname: value, backgroundcolor: bgcolor }
+                tokens.push(vals)
+            }).on('tokenfield:removedtoken', function(e) {
+                var i = 0;
+                for(var tag of tokens){
+                    if(tag.tagname == e.attrs.value){
+                        tokens.splice(i, 1);
+                        break;
+                    }
+                    i++;
+                }
+            }).on('tokenfield:edittoken', function(e) {
+                e.preventDefault();
+            }).tokenfield({
+                autocomplete: {
+                    source: tagsource,
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true,
+                writeable : false
+        });
+    });
+</script>
+{% endblock content %}

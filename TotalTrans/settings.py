@@ -118,7 +118,7 @@ WSGI_APPLICATION = 'TotalTrans.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dkweb_honyaku',  # DB名を設定
+        'NAME': 'dkweb_honyaku2',  # DB名を設定
         'USER': 'root',  # DBへ接続するユーザIDを設定
         'PASSWORD': 'Mercury123',  # DBへ接続するユーザIDのパスワードを設定
         'HOST': '127.0.0.1',

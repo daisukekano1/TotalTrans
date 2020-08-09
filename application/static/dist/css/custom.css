@@ -1,0 +1,172 @@
+html, body{
+  font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+}
+.index table thead{
+  background-color: #7f94a7;
+  color:white;
+}
+.index table.tabletype1 tbody tr.closed{
+  background-color: #15171342;
+}
+.index table.tabletype1 {
+  background-color: #f5f0d330;
+}
+.workdetail .card-tools{
+  font-size-adjust: inherit;
+}
+.workdetail .card-body{
+  padding : .5rem;
+}
+.workdetail .select2-container{
+  display: inline-block;
+}
+.workdetail .tokenfield{
+  background-color: #f9fbf3;
+}
+.workdetail .tokenfield .token{
+  border: 0px;
+}
+.workdetail .form-control2{
+  font-size: 1rem;
+  padding: .375rem .75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  box-shadow: inset 0 0 0 transparent;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.workdetail .tagprepend{
+  color : white;
+  padding:10px 20px 4px 20px;
+  border-radius:4px 0px 0px 4px;
+  width:160px;
+}
+.workdetail div.tokenfield span.token-label{
+  padding:.2em 18px .2em .5em;
+  font-size:1.2em;
+}
+.workdetail .tokenfield .token{
+  background-color: #b7bcb8;
+  border-radius: 4px;
+  color: #ffffff;
+  height:inherit;
+}
+.workdetail .fa-long-arrow-alt-right{
+  padding:0px 4px 0px 4px;
+}
+.workdetail .select2-selection__rendered{
+}
+.workdetail .select2-results__option{
+  font-size:.6em;
+}
+.workdetail .wordsOriginal{
+  background-color: #f3f3f3;
+  border : 1px solid #aaaaaa;
+}
+/*@media (min-width: 576px) {*/
+/*  .modal-dialog {*/
+/*    max-width: 100%  !important;*/
+/*  }*/
+/*}*/
+.color-trans-request {
+  background-color: #30cfc0 !important;
+  color : white;
+}
+.color-trans-google {
+  background-color: #5a95f5 !important;
+  color : white;
+}
+.color-trans-self {
+  background-color : #ffa000 !important;
+  color : white;
+}
+.wordsOriginal::selection{
+  background-color: rgba(21, 83, 4, 0.73);
+  color:white;
+}
+.wordsOriginal::-moz-selection {
+  background-color: rgba(21, 83, 4, 0.73);
+  color:white;
+}
+.editableColor{
+  background-color: #f9fbf3;
+}
+.uneditableColor{
+  background-color: #f3f3f3;
+}
+.prewrap {
+  white-space: pre-wrap;
+}
+.sitecolor-bcolor{
+  background-color : #214267;
+  color : white;
+}
+.sitecolor-text{
+  color : #214267 !important;
+}
+.sitecolor-border{
+  border-color : #214267 !important;
+}
+.btn-self{
+  color: #fff;
+  background-color: #ffa000 !important;
+}
+.btn-outline-self{
+  color: #ffa000 !important;
+  border-color: #ffa000  !important;
+}
+.card-self.card-outline{
+  border-top: 3px solid #ffa000;
+}
+.madding-intext{
+  margin-left: 2px;
+}
+.madding-intext:hover{
+  cursor:pointer;
+  opacity: 0.5;
+}
+.highrighthistory_gengo {
+  border-bottom: 2px solid #30cfc0 !important;
+}
+.highrighthistory_google {
+  border-bottom: 2px solid #5a95f5 !important;
+}
+.highrighthistory_self {
+  border-bottom: 2px solid #ffa000 !important;
+}
+
+.custom-label{
+  padding: .5rem 1rem;
+}
+.btn{
+  text-transform: none;
+}
+.modal .card-header{
+    padding: 0.5rem 1rem;
+}
+.modal card-title{
+  font-size : 0.9rem;
+}
+.modal .card-body{
+  padding: 0.6rem;
+}
+@media (max-width:576px){
+  .modal-dialog {
+      max-width: 500px;
+      margin: 1.75rem auto;
+  }
+}
+@media screen and (min-width:0px){
+  /*0px以上で適用する内容*/
+}
+
+@media screen and (min-width:300px){
+  /*300px以上で適用する内容*/
+}
+
+@media screen and (min-width:600px){
+  /*600px以上で適用する内容*/
+}

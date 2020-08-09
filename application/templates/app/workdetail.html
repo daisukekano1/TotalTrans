@@ -1,203 +1,662 @@
 {% extends "app/base_site.html" %}
+{% load i18n %}
 
-{% block title %} Project Details {% endblock title %}
-
-{% block sidebar_class %}menu_fixed{% endblock sidebar_class %}
+{% block title %} Dashboard 1 {% endblock title %}
 
 {% block stylesheets %}
-  {{ block.super }}
+    {{ block.super }}
 {% endblock stylesheets %}
-
 {% block content %}
-  <div class="right_col" role="main">
-    <div class="">
-      <div class="page-title">
-        <div class="title_left">
-          <h3>Project Detail <small> design</small></h3>
-        </div>
-
-        <div class="title_right">
-          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for...">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Go!</button>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="clearfix"></div>
-
-      <div class="row">
-        <div class="col-md-12">
-          <div class="x_panel">
-            <div class="x_title">
-              <h2>New Partner Contracts Consultancy</h2>
-              <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Settings 1</a>
-                    </li>
-                    <li><a href="#">Settings 2</a>
-                    </li>
-                  </ul>
-                </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-              </ul>
-              <div class="clearfix"></div>
-            </div>
-
-            <div class="x_content">
-
-              <div class="col-md-9 col-sm-9 col-xs-12">
-
-                <ul class="stats-overview">
-                  <li>
-                    <span class="name"> Estimated budget </span>
-                    <span class="value text-success"> 2300 </span>
-                  </li>
-                  <li>
-                    <span class="name"> Total amount spent </span>
-                    <span class="value text-success"> 2000 </span>
-                  </li>
-                  <li class="hidden-phone">
-                    <span class="name"> Estimated project duration </span>
-                    <span class="value text-success"> 20 </span>
-                  </li>
-                </ul>
-                <br />
-
-                <div id="mainb" style="height:350px;"></div>
-
-                <div>
-
-                  <h4>Recent Activity</h4>
-
-                  <!-- end of user messages -->
-                  <ul class="messages">
-                    <li>
-                      <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-info">24</h3>
-                        <p class="month">May</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">Desmond Davison</h4>
-                        <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                          <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                        </p>
-                      </div>
-                    </li>
-                    <li>
-                      <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-error">21</h3>
-                        <p class="month">May</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">Brian Michaels</h4>
-                        <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1" aria-hidden="true" data-icon=""></span>
-                          <a href="#" data-original-title="">Download</a>
-                        </p>
-                      </div>
-                    </li>
-                    <li>
-                      <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-info">24</h3>
-                        <p class="month">May</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">Desmond Davison</h4>
-                        <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                          <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                        </p>
-                      </div>
-                    </li>
-                  </ul>
-                  <!-- end of user messages -->
-
-
+<div class="content-wrapper workdetail">
+    <section class="content">
+        <form id="workform" class="form-inline" action="#" method="post">
+            {% csrf_token %}
+            <div class="container-fluid" style="padding-top:10px;">
+                <div class="card">
+                    <div class="card-header h5 sitecolor-bcolor">#Translation Work#</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-sm-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text info-color" style="color:white;">#language#</div>
+                                    </div>
+                                    <div style="padding:4px; border: 1px solid lightgrey; min-width: 300px;">
+                                        <div class="d-inline">
+                                            {{ work.srclang }}
+                                        </div>
+                                        <div class="d-inline">
+                                            <i class="fas fa-long-arrow-alt-right"></i>
+                                        </div>
+                                        <div class="d-inline">
+                                            {{ work.tgtlang }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text info-color" style="color:white;">#Tags#</div>
+                                    </div>
+                                    <div style="padding:4px; border: 1px solid lightgrey; min-width: 300px;">
+                                        <div class="d-inline" style="padding-bottom: 6px;">
+                                            <input type="text" class="form-control" id="tags" name="tags" value="" style="width: 100%;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card card-cyan card-tabs">
+                                <div class="card-header p-0 pt-1 info-color">
+                                    <div class="card-title">
+                                        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
+                                                    #Original#
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
+                                                    #History#
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                                    #Translated#
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-tools">
+                                        #Progress# : <span id="progress">{{ work.progress }}</span>%
+                                        #status# : {{ work.status }}
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                                        <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                            <textarea class='wordsOriginalAll' id='wordsOriginalAll' name='wordsOriginalAll' rows='10' style="visibility:hidden; white-space: pre-wrap;">{{ work.wordsOriginal }}</textarea>
+                                        </div>
+                                        <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                            <div class="x_panel">
+                                                <div class="x_content">
+                                                    <table id="history" class="table table-striped projects">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>#</th>
+                                                        <th>createdDate</th>
+                                                        <th>TranslationType</th>
+                                                        <th>beforeTranslation</th>
+                                                        <th>afterTranslation</th>
+                                                        <th>jobid</th>
+                                                      </tr>
+                                                    </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                            <div class="card-body wordsOriginal" id="wordsTranslatedAll" style="white-space: pre-wrap;">{{ work.wordsTranslated }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-
-              </div>
-
-              <!-- start project-detail sidebar -->
-              <div class="col-md-3 col-sm-3 col-xs-12">
-
-                <section class="panel">
-
-                  <div class="x_title">
-                    <h2>Project Description</h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="panel-body">
-                    <h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>
-
-                    <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr.</p>
-                    <br />
-
-                    <div class="project_detail">
-
-                      <p class="title">Client Company</p>
-                      <p>Deveint Inc</p>
-                      <p class="title">Project Leader</p>
-                      <p>Tony Chicken</p>
-                    </div>
-
-                    <br />
-                    <h5>Project files</h5>
-                    <ul class="list-unstyled project_files">
-                      <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-mail-forward"></i> Email-from-flatbal.mln</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
-                      </li>
-                    </ul>
-                    <br />
-
-                    <div class="text-center mtop20">
-                      <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                      <a href="#" class="btn btn-sm btn-warning">Report contact</a>
-                    </div>
-                  </div>
-
-                </section>
-
-              </div>
-              <!-- end project-detail sidebar -->
-
             </div>
-          </div>
+            <input type="hidden" id="tagsinfo" name="tagsinfo" />
+        </form>
+    </section>
+</div>
+<div class="modal fade right" id="openGengoRequest" tabindex="-1" role="dialog" aria-labelledby="openGengoRequest" data-backdrop="true" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-success" role="document">
+        <div class="modal-content">
+            <div class="modal-header color-trans-request">
+                <p class="heading lead">#TransReqest#</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea class='gengoRequestText' id='gengoRequestText' name='gengoRequestText' rows='10' style="white-space: pre-wrap;"></textarea>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a type="button" class="btn btn-default waves-effect waves-light">Get it now<i class="far fa-gem ml-1"></i></a>
+                <a type="button" class="btn btn-outline-default waves-effect" data-dismiss="modal">No, thanks</a>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-{% endblock content %}
-
+</div>
+<div class="modal fade right" id="openGoogleRequest" tabindex="-1" role="dialog" aria-labelledby="openGoogleRequest" data-backdrop="true" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-full-height modal-right modal-notify" role="document">
+        <div class="modal-content">
+            <div class="modal-header color-trans-google">
+                <p class="heading lead">#GoogleTrans#</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header card-outline card-primary">
+                        <h4 class="card-title">#OriginalText#</h4>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body prewrap" id="googleRequestText"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header color-trans-google">
+                        <h4 class="card-title">#TranslatedText#</h4>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="googleResponseText" name='googleResponseText' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a type="button" class="btn btn-outline-primary btn-lg waves-effect" data-dismiss="modal">#Cancel#</a>
+                <a type="button" class="btn btn-primary btn-lg waves-effect" id="btnGoogleSave">#Refrect#<i class="fas fa-share"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade right" id="openSelfTranslate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-full-height modal-right modal-notify" role="document">
+        <div class="modal-content">
+            <div class="modal-header color-trans-self">
+                <p class="heading lead">#SelfTrans#</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header card-outline card-self">
+                        <h4 class="card-title">#OriginalText#</h4>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" ><i class="fas fa-minus" style="color:#999"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body prewrap" id="selfOriginalText"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header color-trans-self">
+                        <h4 class="card-title" style="color:white;">#TranslatedText#</h4>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="selfTranslateText" name='selfTranslateText' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a type="button" class="btn btn-outline-self btn-lg waves-effect" data-dismiss="modal">#Cancel#</a>
+                <a type="button" class="btn btn-self btn-lg waves-effect" id="btnSelfSave">#Refrect#<i class="fas fa-share"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade right" id="modal-GengoDeleteHistory">
+    <div class="modal-dialog modal-side modal-top-right modal-notify modal-success">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">#ConfirmationMessage#</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p>#TranslateDeleteConfirmationMessage#</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">#Cancel#</button>
+                <button type="button" class="btn btn-primary" onclick="deleteHistory()">#RemoveTranslation#</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade top" id="modal-GoogleDeleteHistory">
+    <div class="modal-dialog modal-dialog-centered modal-notify modal-primary">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title">#ConfirmationMessage#</h4>
+            </div>
+            <div class="modal-body">
+                <p>#TranslateDeleteConfirmationMessage#</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">#Cancel#</button>
+                <button type="button" class="btn btn-primary" onclick="deleteHistory()">#RemoveTranslation#</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade top" id="modal-SelfDeleteHistory">
+    <div class="modal-dialog modal-dialog-centered modal-notify modal-amber">
+        <div class="modal-content">
+            <div class="modal-header color-trans-self">
+                <div class="modal-title">#ConfirmationMessage#</div>
+            </div>
+            <div class="modal-body">
+                <p>#TranslateDeleteConfirmationMessage#111111111</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-amber" data-dismiss="modal">#Cancel#</button>
+                <button type="button" class="btn btn-amber" onclick="deleteHistory()">#RemoveTranslation#</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% block javascripts %}
-  {{ block.super }}
-  <!-- ECharts -->
-  <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
+    {{ block.super }}
 {% endblock javascripts %}
+<script>
+    var tokens = [];
+    var wordsOriginal = "{{ work.wordsOriginal }}";
+    var HightlightButton = function(context) {
+      var ui = $.summernote.ui;
+      var button = ui.button({
+        contents: '<i class="fa fa-ban"/>&nbsp選択した箇所を翻訳しない',
+        click: function() {
+          context.invoke('editor.backColor', 'gray');
+        }
+      });
+
+      return button.render();
+    }
+    $(document).ready(function() {
+        $("#lc_src").select2({
+            placeholder: "Translate From",
+            selectOnClose: true,
+        });
+        $("#lc_tgt").select2({
+            placeholder: "Translate To",
+            selectOnClose: true,
+        });
+        var worktags = JSON.parse("{{ worktags  | safe | escapejs }}");
+        var worktagsArr = [];
+        for(var vals of worktags){
+            worktagsArr.push(vals.tag__tagname);
+        }
+        var usertags = JSON.parse("{{ usertags  | safe | escapejs }}");
+        var usertagsArr = [];
+        for(var vals of usertags){
+            usertagsArr.push(vals.tagname);
+        }
+        var initFlag = true;
+        $('#tags')
+            .on('tokenfield:createtoken', function (event) {
+                var existingTokens = $(this).tokenfield('getTokens');
+                $.each(existingTokens, function(index, token) {
+                    if (token.value === event.attrs.value){
+                        event.preventDefault();
+                        return false;
+                    }
+                })
+            })
+            .on('tokenfield:createdtoken', function(e) {
+                value = e.attrs.value;
+                bgcolor = '#aaaaaa';
+                for(var tag of usertags){
+                    if (tag.tagname == value)
+                        bgcolor = tag.backgroundcolor;
+                }
+                $(e.relatedTarget).css('background-color', bgcolor);
+                var vals = { tagname: value, backgroundcolor: bgcolor };
+                tokens.push(vals);
+                if( initFlag == true ){
+                    initFlag = false
+                }else{
+                    ajaxAddTagRequest(value, bgcolor);
+                }
+            })
+            .on('tokenfield:removedtoken', function(e) {
+                var i = 0;
+                for(var tag of tokens){
+                    if(tag.tagname == e.attrs.value){
+                        ajaxRemoveTagRequest(e.attrs.value);
+                        tokens.splice(i, 1);
+                        break;
+                    }
+                    i++;
+                }
+            })
+            .on('tokenfield:edittoken', function(e) {
+                e.preventDefault();
+            })
+            .tokenfield({
+                tokens:worktagsArr,
+                autocomplete: {
+                    source: usertagsArr,
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true,
+                writeable : false
+        });
+
+        var dtable = $("#history").DataTable({
+            ajax: "gethistory",
+            data : { work_id : '{{ work.work_id }}' },
+            bDeferRender: true,
+            stateSave: false,
+            scrollCollapse : true,
+            paging : false,
+            searching : false,
+            scrollToTop: true,
+            orderClasses: false,
+            "responsive": true,
+            "autoWidth": false,
+            columns: [
+                {   data: 'historyNum', className: "dt-left no-wrap"},
+                {   data: 'createdDate', className: "dt-left small" },
+                {   data: 'TranslationType', className: "dt-left no-wrap"},
+                {   data: 'beforeTranslation', className: "dt-left no-wrap"},
+                {   data: 'afterTranslation', className: "dt-left no-wrap"},
+                {   data: 'jobid', className: "dt-left no-wrap"}
+            ]
+        });
+        $('#wordsOriginalAll').summernote({
+            toolbar: false,
+            buttons: {highlight: HightlightButton},
+            disableDragAndDrop:true,
+            spellCheck: true,
+            callbacks: {
+                onInit: function() {
+                    $(".note-editable").addClass("prewrap");
+                    convertText(1, $("#wordsOriginalAll").val());
+                    $("#wordsOriginalAll").css("visibility", "true");
+                },
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    document.execCommand('insertText', false, bufferText);
+                },
+                onKeydown: function(e) {
+                    e.preventDefault();
+                }
+            }
+        });
+        $('#gengoRequestText').summernote({
+            toolbar: [['style', ['highlight', 'clear']],],
+            buttons: {highlight: HightlightButton},
+            disableDragAndDrop:true,
+            callbacks: {
+                onInit: function() {
+                  $(".note-editable").addClass("prewrap");
+                },
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    document.execCommand('insertText', false, bufferText);
+                },
+                onKeydown: function(e) {
+                    e.preventDefault();
+                }
+            }
+        })
+        $('#openGengoRequest').on('shown.bs.modal', function () {
+            $('#gengoRequestText').summernote('reset');
+            originalText = "";
+            var userAgent = window.navigator.userAgent.toLowerCase();
+            if(userAgent.indexOf('msie') != -1){
+                originalText = document.selection.createRange().htmlText;
+            }else{
+                originalText = window.getSelection().toString();
+            }
+            $('#gengoRequestText').summernote('insertText', originalText);
+        })
+        var googleOriginalText = "";
+        $('#openGoogleRequest').on('shown.bs.modal', function () {
+            $('#googleRequestText').text('');
+            originalText = "";
+            var userAgent = window.navigator.userAgent.toLowerCase();
+            if(userAgent.indexOf('msie') != -1){
+                originalText = document.selection.createRange().htmlText;
+            }else{
+                originalText = window.getSelection().toString();
+            }
+            $('#googleRequestText').text(originalText);
+            googleOriginalText = originalText;
+            $.ajax("/requestGoogleTranslation", {
+                data: {
+                    originalText: originalText,
+                    lc_src: '{{ work.lc_src }}',
+                    lc_tgt: '{{ work.lc_tgt }}'
+                }
+            }).then(
+                function success(data) {
+                    $('#googleResponseText').val(data.data);
+                },
+                function fail(data, status) {
+                    alert('Request failed.  Returned status of ' + status);
+                }
+            )
+        })
+        var selfOriginalText = ""
+        $('#openSelfTranslate').on('shown.bs.modal', function () {
+            var element = document.getElementById("wordsOriginalAll");
+            element.focus();
+            var result = getInputSelection(element);
+            $('#selfOriginalText').text('');
+            $('#selfTranslateText').val('');
+            originalText = "";
+            var userAgent = window.navigator.userAgent.toLowerCase();
+            if(userAgent.indexOf('msie') != -1){
+                originalText = document.selection.createRange().htmlText;
+            }else{
+                originalText = window.getSelection().toString();
+            }
+            alert(originalText)
+            selfOriginalText = originalText;
+            $('#selfOriginalText').text(originalText);
+        })
+        $('#btnGoogleSave').click(function() {
+            translatedText = $("#googleResponseText").val();
+            $.ajax("/saveGoogleTranslation", {
+                data: {
+                    work_id: '{{ work.work_id }}',
+                    googleOriginalText: googleOriginalText,
+                    googleTranslatedText:translatedText
+                }
+            }).then(
+                function success(data) {
+                    wordsOriginal = data.wordsOriginal;
+                    convertText(1, data.wordsOriginal);
+                    convertText(2, data.wordsTranslated);
+                    $('#progress').text(data.progress);
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    $('#openGoogleRequest').modal('hide');
+                },
+                function fail(data, status) {
+                    alert('Request failed.  Returned status of ' + status);
+                }
+            )
+        })
+        $('#btnSelfSave').click(function() {
+            translatedText = $("#selfTranslateText").val();
+            $.ajax("/saveSelfTranslation", {
+                data: {
+                    work_id: '{{ work.work_id }}',
+                    selfOriginalText: selfOriginalText,
+                    selfTranslatedText:translatedText
+                }
+            }).then(
+                function success(data) {
+                    wordsOriginal = data.wordsOriginal;
+                    convertText(1, data.wordsOriginal);
+                    convertText(2, data.wordsTranslated);
+                    $('#progress').text(data.progress)
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    $('#openSelfTranslate').modal('hide');
+                },
+                function fail(data, status) {
+                    alert('Request failed.  Returned status of ' + status);
+                }
+            )
+        })
+        $('.highrighthistory_gengo').select(function(){
+            alert(1)
+        })
+        $('.highrighthistory_google').select(function(){
+            alert(1)
+        })
+        $('.highrighthistory_self').select(function(){
+            alert(1)
+        })
+        wordsOriginalAll = document.getElementById("wordsOriginalAll");
+        textAreaHeightSet(wordsOriginalAll);
+        convertText(2, $("#wordsTranslatedAll").text())
+    });
+    function ajaxAddTagRequest(tagname, backgroundcolor) {
+        $.ajax("/addTag", {
+            data: {
+                work_id: '{{ work.work_id }}',
+                tagname: tagname,
+                backgroundcolor:backgroundcolor
+            }
+        }).then(
+            function success(name) {
+            },
+            function fail(data, status) {
+                alert('Request failed.  Returned status of ' + status);
+            }
+        )
+    };
+    function ajaxRemoveTagRequest(tagname) {
+        actionurl = ""
+        $.ajax("/removeTag", {
+            data: {
+                work_id: '{{ work.work_id }}',
+                tagname: tagname
+            }
+        }).then(
+            function success(name) {
+            },
+            function fail(data, status) {
+                alert('Request failed.  Returned status of ' + status);
+            }
+        )
+    };
+    function getInputSelection(el) {
+        var start = 0, end = 0, normalizedValue, range, textInputRange, len, endRange;
+        if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
+            start = el.selectionStart;
+            end = el.selectionEnd;
+        } else {
+            range = document.selection.createRange();
+
+            if (range && range.parentElement() == el) {
+                len = el.value.length;
+                normalizedValue = el.value.replace(/\r\n/g, "\n");
+
+                // Create a working TextRange that lives only in the input
+                textInputRange = el.createTextRange();
+                textInputRange.moveToBookmark(range.getBookmark());
+
+                // Check if the start and end of the selection are at the very end
+                // of the input, since moveStart/moveEnd doesn't return what we want
+                // in those cases
+                endRange = el.createTextRange();
+                endRange.collapse(false);
+
+                if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+                    start = end = len;
+                } else {
+                    start = -textInputRange.moveStart("character", -len);
+                    start += normalizedValue.slice(0, start).split("\n").length - 1;
+
+                    if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+                        end = len;
+                    } else {
+                        end = -textInputRange.moveEnd("character", -len);
+                        end += normalizedValue.slice(0, end).split("\n").length - 1;
+                    }
+                }
+            }
+        }
+        return {
+            start: start,
+            end: end
+        };
+    }
+    function convertText(type, word){
+        const reqstartregex = /\[r:s:[0-9]{1,}\]/gi;
+        const reqendregex = /\[r:e:[0-9]{1,}\]/gi;
+        const googlestartregex = /\[g:s:[0-9]{1,}\]/gi;
+        const googleendregex = /\[g:e:[0-9]{1,}\]/gi;
+        const selfstartregex = /\[s:s:[0-9]{1,}\]/gi;
+        const selfendregex = /\[s:e:[0-9]{1,}\]/gi;
+        word = word.replace(reqstartregex, function(s) {
+            number = s.match(/[0-9]{1,}/)
+            return "<span class='highrighthistory_gengo madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"gengo\")'>";
+        })
+        word = word.replace(reqendregex, "</span>");
+        word = word.replace(googlestartregex, function(s) {
+            number = s.match(/[0-9]{1,}/);
+            return "<span class='highrighthistory_google madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"google\")'>";
+        })
+        word = word.replace(googleendregex, "</span>");
+        word = word.replace(selfstartregex, function(s) {
+            number = s.match(/[0-9]{1,}/);
+            return "<span class='highrighthistory_self madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"self\")'>";
+        })
+        word = word.replace(selfendregex, "</span>");
+        if(type == 1){
+            $('#wordsOriginalAll').summernote('reset');
+            $('#wordsOriginalAll').summernote('pasteHTML', word);
+        }else{
+            $("#wordsTranslatedAll").html(word);
+        }
+    }
+    var historynumber = 0
+    function deleteConfirmation(number, deletetype){
+        historynumber = number;
+        if(deletetype=='gengo')
+            $('#modal-GengoDeleteHistory').modal('show');
+        else if (deletetype=='google')
+            $('#modal-GoogleDeleteHistory').modal('show');
+        else if (deletetype=='self')
+            $('#modal-SelfDeleteHistory').modal('show');
+    }
+    function deleteHistory(){
+        $.ajax("/deleteHistory", {
+            data: {
+                work_id: '{{ work.work_id }}',
+                historyNum: historynumber
+            }
+        }).then(
+            function success(data) {
+                wordsOriginal = datawordsOriginal;
+                convertText(1, data.wordsOriginal);
+                convertText(2, data.wordsTranslated);
+                $('#progress').text(data.progress);
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                $('#modal-GengoDeleteHistory').modal('hide');
+                $('#modal-GoogleDeleteHistory').modal('hide');
+                $('#modal-SelfDeleteHistory').modal('hide');
+            },
+            function fail(data, status) {
+                alert('Request failed.  Returned status of ' + status);
+            }
+        )
+    };
+    function openGengoRequest(){
+        $('#gengoRequestText').summernote('reset');
+        originalText = "";
+        var userAgent = window.navigator.userAgent.toLowerCase();
+        if(userAgent.indexOf('msie') != -1){
+            originalText = document.selection.createRange().htmlText;
+        }else{
+            originalText = window.getSelection().toString();
+        }
+        $('#gengoRequestText').summernote('insertText', originalText);
+    }
+</script>
+{% endblock content %}

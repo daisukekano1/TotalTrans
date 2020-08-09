@@ -1,0 +1,110 @@
+{% extends "app/base_site.html" %}
+{% load i18n %}
+
+{% block title %} Dashboard 1 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+    <link rel="stylesheet" href="/static/vendors/summernote/summernote-bs4.min.css">
+{% endblock stylesheets %}
+{% block content %}
+<div class="content-wrapper">
+<section class="content">
+    <form class="form-inline">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-6" style="padding-bottom:2px;">
+                                    <input type="text" id="title" required="required" class="form-control" placeholder="#PleaseInputTitle#" style="width:100%">
+                                </div>
+                                <div class="col-md-3" style="padding-bottom:2px;">
+                                    <select id="lc_src" class="form-control select2" style="width: 100%;">
+                                        <option></option>
+                                        {% for vals in data.languages.response %}
+                                            <option value="{{ vals.lc }}">{{ vals.language }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3" style="padding-bottom:2px;">
+                                    <select id="lc_tgt" class="form-control select2" style="width: 100%;">
+                                        <option></option>
+                                        {% for vals in data.languages.response %}
+                                            <option value="{{ vals.lc }}">{{ vals.language }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title" style="padding-top:10px;">
+                            <h5>翻訳文</h5>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <textarea class='summernote' id='summernote' rows='10'></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</section>
+</div>
+{% block javascripts %}
+  {{ block.super }}
+    <script src="/static/vendors/summernote/summernote-bs4.min.js"></script>
+{% endblock javascripts %}
+<script>
+    var HightlightButton = function(context) {
+      var ui = $.summernote.ui;
+      var button = ui.button({
+        contents: '<i class="fa fa-ban"/>&nbsp選択した箇所を翻訳しない',
+        click: function() {
+          context.invoke('editor.backColor', 'gray');
+        }
+      });
+
+      return button.render();
+    }
+    $(document).ready(function() {
+      $('#summernote').summernote({
+        toolbar: [
+          ['style', ['highlight', 'clear']],
+        ],
+        buttons: {
+          highlight: HightlightButton
+        },
+        callbacks: {
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
+            }
+        }
+      });
+        $("#lc_src").select2({
+            placeholder: "Select a source language",
+            allowClear: true
+        });
+        $("#lc_tgt").select2({
+            placeholder: "Select a target language",
+            allowClear: true
+        });
+    });
+</script>
+<style>
+    p {
+        margin-bottom: 0rem;
+    }
+</style>
+{% endblock content %}
