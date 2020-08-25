@@ -1,7 +1,7 @@
-{% extends "app/base_site.html" %}
+{% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %} Dashboard 1 {% endblock title %}
+{% block title %}#PageTitle_WorkAdd#{% endblock title %}
 
 {% block stylesheets %}
     {{ block.super }}
@@ -13,35 +13,24 @@
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
-                    <div class="card-header h5 sitecolor-bcolor">#New Translation#</div>
+                    <div class="card-header h6 sitecolor-bcolor">#PageTitle_WorkAdd#</div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-sm-4">
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text info-color" style="color:white;">#language#</div>
-                                    </div>
-                                    <div style="padding:4px; border: 1px solid lightgrey; min-width: 300px;">
-                                        <div class="d-inline" style="padding-bottom: 6px;">
-                                            <select id="lc_src" name="lc_src" class="form-control select2">
-                                                <option value="">&nbsp</option>
-                                                {% for vals in langs %}
-                                                <option value="{{ vals.lc }}">{{ vals.displaylang }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="d-inline">
-                                            <i class="fas fa-long-arrow-alt-right"></i>
-                                        </div>
-                                        <div class="d-inline" style="padding-bottom: 6px;">
-                                            <select id="lc_tgt" name="lc_tgt" class="form-control select2">
-                                                <option value="">&nbsp</option>
-                                                {% for vals in langs %}
-                                                <option value="{{ vals.lc }}">{{ vals.displaylang }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text">#language#</span></div>
+                                    <select id="lc_src" name="lc_src" class="form-control select2">
+                                        <option value="">&nbsp</option>
+                                        {% for vals in langs %}
+                                        <option value="{{ vals.lc }}">{{ vals.displaylang }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select id="lc_tgt" name="lc_tgt" class="form-control select2">
+                                        <option value="">&nbsp</option>
+                                        {% for vals in langs %}
+                                        <option value="{{ vals.lc }}">{{ vals.displaylang }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group col-sm-8">

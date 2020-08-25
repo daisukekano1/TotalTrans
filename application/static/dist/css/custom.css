@@ -1,5 +1,6 @@
 html, body{
   font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+  font-size:14px;
 }
 .index table thead{
   background-color: #7f94a7;
@@ -11,6 +12,13 @@ html, body{
 .index table.tabletype1 {
   background-color: #f5f0d330;
 }
+.modal .selectedLang{
+  cursor: pointer;
+}
+.modal .selectedLang:hover{
+  opacity: 0.6;
+  color : red;
+}
 .workdetail .card-tools{
   font-size-adjust: inherit;
 }
@@ -21,7 +29,7 @@ html, body{
   display: inline-block;
 }
 .workdetail .tokenfield{
-  background-color: #f9fbf3;
+  background-color: #f5f8f8;
 }
 .workdetail .tokenfield .token{
   border: 0px;
@@ -92,7 +100,7 @@ html, body{
   color:white;
 }
 .editableColor{
-  background-color: #f9fbf3;
+  background-color: #f5f8f8;
 }
 .uneditableColor{
   background-color: #f3f3f3;
@@ -169,4 +177,22 @@ html, body{
 
 @media screen and (min-width:600px){
   /*600px以上で適用する内容*/
+}
+.card-title .nav-tabs{
+  font-size : .8rem;
+}
+.note-editor .note-editing-area{
+  font-size : .8rem;
+}
+.modal-right {
+
+}
+@media (min-width: 992px){
+  .modal .modal-full-height {
+    width:100%;
+  }
+  .modal-dialog {
+      max-width: 700px;
+      margin: 1.75rem auto;
+  }
 }

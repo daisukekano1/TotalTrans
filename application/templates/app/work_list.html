@@ -1,7 +1,7 @@
-{% extends "app/base_site.html" %}
+{% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %} Dashboard 1 {% endblock title %}
+{% block title %}#PageTitle_WorkList#{% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="card-header h5 sitecolor-bcolor">#TranslationRequestList#</div>
+                        <div class="card-header h6 sitecolor-bcolor">#PageTitle_WorkList#</div>
                         <div class="card-body">
                             <div>
                                 <a role="button" href="{% url 'addwork' %}" class="btn btn-outline-info btn-lg">#New Translation#<i class="fas fa-plus-square pl-1"></i></a>

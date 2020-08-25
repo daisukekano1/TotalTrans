@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        {% block meta %}
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% endblock meta %}
+
+        <title>#SiteName# | {% block title %}{% endblock %}</title>
+
+        {% block stylesheets %}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <link rel="stylesheet" href="/static/vendors/fontawesome5/css/all.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-select@1.12.4/dist/css/bootstrap-select.min.css" type="text/css" />
+        <link rel="stylesheet" href="/static/dist/css/adminlte.min.css">
+        <link rel="stylesheet" href="/static/dist/css/custom.css">
+        {% endblock stylesheets %}
+        {% endblock head %}
+    </head>
+    {% block content %}
+    {% endblock content %}
+</html>

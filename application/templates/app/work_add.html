@@ -1,0 +1,180 @@
+{% extends "app/common_base_site.html" %}
+{% load i18n %}
+
+{% block title %}#PageTitle_WorkAdd#{% endblock title %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+{% block content %}
+<div class="content-wrapper workdetail">
+    <section class="content">
+        <form id="workform" class="form-inline" action="saveWork" method="post">
+            {% csrf_token %}
+            <div class="container-fluid" style="padding-top:10px;">
+                <div class="card">
+                    <div class="card-header h6 sitecolor-bcolor">#PageTitle_WorkAdd#</div>
+                    <div class="card-body">
+                        <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
+                            <div class="form-group col-4" style="margin-right:10px;">
+                                <div class="input-group" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#Title#</span></div>
+                                    <input type="text" class="form-control editableColor" id="workTitle" name="workTitle" value="" style="width:100%;   "/>
+                                </div>
+                            </div>
+                            <div class="form-group col-3" style="margin-right:10px;">
+                                <div class="input-group" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#language#</span></div>
+                                    <select class="form-control editableColor" id="lc_src" name="lc_src"  readonly style="min-width:150px; background-color: #f5f8f8;">
+                                        <option id="lc_src_selected" value="1" selected>From</option>
+                                    </select>
+                                    <select class="form-control" id="lc_tgt" name="lc_tgt"  readonly style="min-width:150px; background-color: #f5f8f8;">
+                                        <option id="lc_tgt_selected" value="1" selected>To</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-2" style="margin-right:10px;">
+                                <div class="input-group" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#ETA#</span></div>
+                                    <input type="text" id="eta" name="eta" class="form-control editableColor "/>
+                                    <div class="input-group-append" data-target="#eta" data-toggle="datepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-2" style="margin-right:10px;">
+                                <div class="input-group" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#Tags#</span></div>
+                                    <input type="text" class="form-control editableColor" id="tags" name="tags" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="wordsOriginal" name='wordsOriginal' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="tagsinfo" name="tagsinfo" />
+        </form>
+    </section>
+</div>
+<div class="modal fade top" id="modal-SelectLang">
+    <div class="modal-dialog modal-dialog-centered modal-notify modal-primary">
+        <div class="modal-content">
+            <div class="modal-header sitecolor-bcolor">
+                <h4 class="modal-title">#Language Selection#</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    {% for lang in langs %}
+                        <div class="col-sm-4 selectedLang" data-id="{{ lang.lc }}">{{ lang.displaylang }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascripts %}
+    {{ block.super }}
+{% endblock javascripts %}
+<script>
+    var tokens = []
+    function submitAction(url) {
+        $('#tagsinfo').val(JSON.stringify(tokens));
+        $('#workform').submit();
+    }
+    var targetElement = ""
+    $(document).ready(function() {
+        $('#lc_src').on('click', function(){
+            targetElement = 'lc_src_selected'
+            $('#modal-SelectLang').modal();
+        });
+        $('#lc_tgt').on('click',function(){
+            targetElement = 'lc_tgt_selected'
+            $('#modal-SelectLang').modal();
+        });
+        $(document).on('click','.selectedLang',function(){
+            var option_text = $(this).text();
+            var option_val = $(this).data("id");
+            $('#'+targetElement).text(option_text).val(option_val);
+            $('#modal-SelectLang').modal('hide');
+        });
+        $('#eta').datepicker({});
+        $('[data-toggle=datepicker]').each(function () {
+            var target = $(this).data('target') || '';
+            if (target) {
+                $(target).datepicker();
+                $(this).bind("click", function () {
+                    $(target).datepicker("show");
+                });
+            }
+        });
+        {#$("#lc_src").on('change.select2', function(){#}
+        {#    $('#lc_tgt').val(null).trigger('change');#}
+        {#    $('#lc_tgt').empty().select2();#}
+        {#    $.ajax("/getTargetLang", {#}
+        {#        data: {lc_src: this.value}#}
+        {#    }).then(#}
+        {#        function success(data) {#}
+        {#            $("#lc_tgt").select2({#}
+        {#                val : null,#}
+        {#                data: data['langs'],#}
+        {#                theme : 'bootstrap form-control editableColor'#}
+        {#            });#}
+        {#        },#}
+        {#        function fail(data, status) {#}
+        {#            alert('Request failed.  Returned status of ' + status);#}
+        {#        }#}
+        {#    )#}
+        var tags = JSON.parse("{{ tags  | safe | escapejs }}");
+        var tagsource = [];
+        for(var vals of tags){
+            tagsource.push(vals.tagname);
+        }
+        $('#tags')
+            .on('tokenfield:createtoken', function (event) {
+                var existingTokens = $(this).tokenfield('getTokens');
+                $.each(existingTokens, function(index, token) {
+                    if (token.value === event.attrs.value){
+                        event.preventDefault();
+                        return false;
+                    }
+                })
+            })
+            .on('tokenfield:createdtoken', function(e) {
+                value = e.attrs.value;
+                bgcolor = '#5f5353';
+                for(var tag of tags){
+                    if (tag.tagname == value)
+                        bgcolor = tag.backgroundcolor;
+                }
+                $(e.relatedTarget).addClass('badge');
+                $(e.relatedTarget).css('background-color', bgcolor);
+                var vals = { tagname: value, backgroundcolor: bgcolor }
+                tokens.push(vals);
+            }).on('tokenfield:removedtoken', function(e) {
+                var i = 0;
+                for(var tag of tokens){
+                    if(tag.tagname == e.attrs.value){
+                        tokens.splice(i, 1);
+                        break;
+                    }
+                    i++;
+                }
+            }).on('tokenfield:edittoken', function(e) {
+                e.preventDefault();
+            }).tokenfield({
+                autocomplete: {
+                    source: tagsource,
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true,
+                writeable : false
+        });
+    });
+</script>
+{% endblock content %}

@@ -1,7 +1,7 @@
-{% extends "app/base_site.html" %}
+{% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %} Dashboard 1 {% endblock title %}
+{% block title %}#PageTitle_WorkDetail#{% endblock title %}
 
 {% block stylesheets %}
     {{ block.super }}
@@ -13,7 +13,7 @@
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
-                    <div class="card-header h5 sitecolor-bcolor">#Translation Work#</div>
+                    <div class="card-header h6 sitecolor-bcolor">#PageTitle_WorkDetail#</div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-sm-4">
@@ -202,10 +202,10 @@
         </div>
     </div>
 </div>
-<div class="modal fade right" id="modal-GengoDeleteHistory">
-    <div class="modal-dialog modal-side modal-top-right modal-notify modal-success">
+<div class="modal fade top" id="modal-GengoDeleteHistory">
+    <div class="modal-dialog modal-dialog-centered modal-notify modal-default">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-default">
                 <h4 class="modal-title">#ConfirmationMessage#</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
@@ -213,8 +213,8 @@
                 <p>#TranslateDeleteConfirmationMessage#</p>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">#Cancel#</button>
-                <button type="button" class="btn btn-primary" onclick="deleteHistory()">#RemoveTranslation#</button>
+                <button type="button" class="btn btn-outline-default" data-dismiss="modal">#Cancel#</button>
+                <button type="button" class="btn btn-default" onclick="deleteHistory()">#RemoveTranslation#</button>
             </div>
         </div>
     </div>
@@ -242,11 +242,26 @@
                 <div class="modal-title">#ConfirmationMessage#</div>
             </div>
             <div class="modal-body">
-                <p>#TranslateDeleteConfirmationMessage#111111111</p>
+                <p>#TranslateDeleteConfirmationMessage#</p>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-outline-amber" data-dismiss="modal">#Cancel#</button>
                 <button type="button" class="btn btn-amber" onclick="deleteHistory()">#RemoveTranslation#</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade top" id="modal-Message">
+    <div class="modal-dialog modal-dialog-centered modal-notify modal-info">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <div class="modal-title">#ConfirmationMessage#</div>
+            </div>
+            <div class="modal-body">
+                <p id="ModalMessage"></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-info" data-dismiss="modal">#Cancel#</button>
             </div>
         </div>
     </div>
@@ -256,8 +271,8 @@
 {% endblock javascripts %}
 <script>
     var tokens = [];
-    var wordsOriginal = "{{ work.wordsOriginal }}";
-    var HightlightButton = function(context) {
+    var wordsOriginal = "";
+    var SummernoteHightlightButton = function(context) {
       var ui = $.summernote.ui;
       var button = ui.button({
         contents: '<i class="fa fa-ban"/>&nbsp選択した箇所を翻訳しない',
@@ -265,7 +280,16 @@
           context.invoke('editor.backColor', 'gray');
         }
       });
-
+      return button.render();
+    }
+    var SummernoteSelectAllButton = function() {
+      var ui = $.summernote.ui;
+      var button = ui.button({
+        contents: '#Select All#',
+        click: function() {
+            this.select()
+        }
+      });
       return button.render();
     }
     $(document).ready(function() {
@@ -279,21 +303,24 @@
         });
         var worktags = JSON.parse("{{ worktags  | safe | escapejs }}");
         var worktagsArr = [];
-        for(var vals of worktags){
-            worktagsArr.push(vals.tag__tagname);
+        for(let i in worktags){
+            worktagsArr.push(worktags[i].tag__tagname);
         }
         var usertags = JSON.parse("{{ usertags  | safe | escapejs }}");
         var usertagsArr = [];
-        for(var vals of usertags){
-            usertagsArr.push(vals.tagname);
+        for(let i in usertags){
+            usertagsArr.push(usertags[i].tagname);
         }
         var initFlag = true;
         $('#tags')
-            .on('tokenfield:createtoken', function (event) {
+            .on('tokenfield:initialize', function(e){
+                initFlag = false;
+            })
+            .on('tokenfield:createtoken', function (e) {
                 var existingTokens = $(this).tokenfield('getTokens');
                 $.each(existingTokens, function(index, token) {
-                    if (token.value === event.attrs.value){
-                        event.preventDefault();
+                    if (token.value === e.attrs.value){
+                        e.preventDefault();
                         return false;
                     }
                 })
@@ -301,23 +328,21 @@
             .on('tokenfield:createdtoken', function(e) {
                 value = e.attrs.value;
                 bgcolor = '#aaaaaa';
-                for(var tag of usertags){
-                    if (tag.tagname == value)
-                        bgcolor = tag.backgroundcolor;
+                for(let i in usertags){
+                    if (usertags[i].tagname == value)
+                        bgcolor = usertags[i].backgroundcolor;
                 }
                 $(e.relatedTarget).css('background-color', bgcolor);
                 var vals = { tagname: value, backgroundcolor: bgcolor };
                 tokens.push(vals);
-                if( initFlag == true ){
-                    initFlag = false
-                }else{
+                if( initFlag == false ){
                     ajaxAddTagRequest(value, bgcolor);
                 }
             })
             .on('tokenfield:removedtoken', function(e) {
                 var i = 0;
-                for(var tag of tokens){
-                    if(tag.tagname == e.attrs.value){
+                for(let i in tokens){
+                    if(tokens[i].tagname == e.attrs.value){
                         ajaxRemoveTagRequest(e.attrs.value);
                         tokens.splice(i, 1);
                         break;
@@ -361,13 +386,14 @@
         });
         $('#wordsOriginalAll').summernote({
             toolbar: false,
-            buttons: {highlight: HightlightButton},
+            buttons: {selectAll: SummernoteSelectAllButton},
             disableDragAndDrop:true,
             spellCheck: true,
             callbacks: {
                 onInit: function() {
                     $(".note-editable").addClass("prewrap");
-                    convertText(1, $("#wordsOriginalAll").val());
+                    wordsOriginal = $("#wordsOriginalAll").val();
+                    convertText(1, wordsOriginal);
                     $("#wordsOriginalAll").css("visibility", "true");
                 },
                 onPaste: function (e) {
@@ -382,7 +408,7 @@
         });
         $('#gengoRequestText').summernote({
             toolbar: [['style', ['highlight', 'clear']],],
-            buttons: {highlight: HightlightButton},
+            buttons: {highlight: SummernoteHightlightButton},
             disableDragAndDrop:true,
             callbacks: {
                 onInit: function() {
@@ -398,32 +424,41 @@
                 }
             }
         })
+        var gengoOriginalText = "";
+        $('#btnOpenGengoRequest').on('click', function () {
+            gengoOriginalText = getSelectedText();
+            alert(gengoOriginalText)
+            if( gengoOriginalText == ""){
+                $("#ModalMessage").text("#Message_PleaseSelectText#");
+                $('#modal-Message').modal('show');
+                return false;
+            }
+            $('#openGengoRequest').modal('show');
+        })
         $('#openGengoRequest').on('shown.bs.modal', function () {
             $('#gengoRequestText').summernote('reset');
-            originalText = "";
-            var userAgent = window.navigator.userAgent.toLowerCase();
-            if(userAgent.indexOf('msie') != -1){
-                originalText = document.selection.createRange().htmlText;
-            }else{
-                originalText = window.getSelection().toString();
-            }
-            $('#gengoRequestText').summernote('insertText', originalText);
+            $('#gengoRequestText').summernote('insertText', gengoOriginalText);
         })
         var googleOriginalText = "";
-        $('#openGoogleRequest').on('shown.bs.modal', function () {
-            $('#googleRequestText').text('');
-            originalText = "";
-            var userAgent = window.navigator.userAgent.toLowerCase();
-            if(userAgent.indexOf('msie') != -1){
-                originalText = document.selection.createRange().htmlText;
-            }else{
-                originalText = window.getSelection().toString();
+        $('#btnOpenGoogleRequest').on('click', function () {
+            googleOriginalText = getSelectedText();
+            if( googleOriginalText == ""){
+                $("#ModalMessage").text("#Message_PleaseSelectText#");
+                $('#modal-Message').modal('show');
+                return false;
             }
-            $('#googleRequestText').text(originalText);
-            googleOriginalText = originalText;
+            if( !wordsOriginal.includes(googleOriginalText)){
+                $("#ModalMessage").text("#Message_NotAllwedforTranslatedText#");
+                $('#modal-Message').modal('show');
+                return false;
+            }
+            $('#openGoogleRequest').modal('show');
+        })
+        $('#openGoogleRequest').on('shown.bs.modal', function (e) {
+            $('#googleRequestText').text(googleOriginalText);
             $.ajax("/requestGoogleTranslation", {
                 data: {
-                    originalText: originalText,
+                    originalText: googleOriginalText,
                     lc_src: '{{ work.lc_src }}',
                     lc_tgt: '{{ work.lc_tgt }}'
                 }
@@ -437,22 +472,23 @@
             )
         })
         var selfOriginalText = ""
-        $('#openSelfTranslate').on('shown.bs.modal', function () {
-            var element = document.getElementById("wordsOriginalAll");
-            element.focus();
-            var result = getInputSelection(element);
-            $('#selfOriginalText').text('');
-            $('#selfTranslateText').val('');
-            originalText = "";
-            var userAgent = window.navigator.userAgent.toLowerCase();
-            if(userAgent.indexOf('msie') != -1){
-                originalText = document.selection.createRange().htmlText;
-            }else{
-                originalText = window.getSelection().toString();
+        $('#btnOpenSelfTranslate').on('click', function () {
+            selfOriginalText = getSelectedText();
+            if( selfOriginalText == ""){
+                $("#ModalMessage").text("#Message_PleaseSelectText#");
+                $('#modal-Message').modal('show');
+                return false;
             }
-            alert(originalText)
-            selfOriginalText = originalText;
-            $('#selfOriginalText').text(originalText);
+            if( !wordsOriginal.includes(selfOriginalText)){
+                $("#ModalMessage").text("#Message_NotAllwedforTranslatedText#");
+                $('#modal-Message').modal('show');
+                return false;
+            }
+            $('#openSelfTranslate').modal('show');
+        })
+        $('#openSelfTranslate').on('shown.bs.modal', function () {
+            $('#selfTranslateText').val('');
+            $('#selfOriginalText').text(selfOriginalText);
         })
         $('#btnGoogleSave').click(function() {
             translatedText = $("#googleResponseText").val();
@@ -465,6 +501,8 @@
             }).then(
                 function success(data) {
                     wordsOriginal = data.wordsOriginal;
+                    $("#wordsOriginalAll").val(wordsOriginal);
+                    wordsOriginal = $("#wordsOriginalAll").val();
                     convertText(1, data.wordsOriginal);
                     convertText(2, data.wordsTranslated);
                     $('#progress').text(data.progress);
@@ -488,6 +526,8 @@
             }).then(
                 function success(data) {
                     wordsOriginal = data.wordsOriginal;
+                    $("#wordsOriginalAll").val(wordsOriginal);
+                    wordsOriginal = $("#wordsOriginalAll").val();
                     convertText(1, data.wordsOriginal);
                     convertText(2, data.wordsTranslated);
                     $('#progress').text(data.progress)
@@ -543,48 +583,6 @@
             }
         )
     };
-    function getInputSelection(el) {
-        var start = 0, end = 0, normalizedValue, range, textInputRange, len, endRange;
-        if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
-            start = el.selectionStart;
-            end = el.selectionEnd;
-        } else {
-            range = document.selection.createRange();
-
-            if (range && range.parentElement() == el) {
-                len = el.value.length;
-                normalizedValue = el.value.replace(/\r\n/g, "\n");
-
-                // Create a working TextRange that lives only in the input
-                textInputRange = el.createTextRange();
-                textInputRange.moveToBookmark(range.getBookmark());
-
-                // Check if the start and end of the selection are at the very end
-                // of the input, since moveStart/moveEnd doesn't return what we want
-                // in those cases
-                endRange = el.createTextRange();
-                endRange.collapse(false);
-
-                if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
-                    start = end = len;
-                } else {
-                    start = -textInputRange.moveStart("character", -len);
-                    start += normalizedValue.slice(0, start).split("\n").length - 1;
-
-                    if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
-                        end = len;
-                    } else {
-                        end = -textInputRange.moveEnd("character", -len);
-                        end += normalizedValue.slice(0, end).split("\n").length - 1;
-                    }
-                }
-            }
-        }
-        return {
-            start: start,
-            end: end
-        };
-    }
     function convertText(type, word){
         const reqstartregex = /\[r:s:[0-9]{1,}\]/gi;
         const reqendregex = /\[r:e:[0-9]{1,}\]/gi;
@@ -593,7 +591,7 @@
         const selfstartregex = /\[s:s:[0-9]{1,}\]/gi;
         const selfendregex = /\[s:e:[0-9]{1,}\]/gi;
         word = word.replace(reqstartregex, function(s) {
-            number = s.match(/[0-9]{1,}/)
+            number = s.match(/[0-9]{1,}/);
             return "<span class='highrighthistory_gengo madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"gengo\")'>";
         })
         word = word.replace(reqendregex, "</span>");
@@ -632,7 +630,9 @@
             }
         }).then(
             function success(data) {
-                wordsOriginal = datawordsOriginal;
+                wordsOriginal = data.wordsOriginal;
+                $("#wordsOriginalAll").val(wordsOriginal);
+                wordsOriginal = $("#wordsOriginalAll").val();
                 convertText(1, data.wordsOriginal);
                 convertText(2, data.wordsTranslated);
                 $('#progress').text(data.progress);

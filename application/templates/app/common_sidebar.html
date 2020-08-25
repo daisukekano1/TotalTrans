@@ -1,0 +1,38 @@
+<a href="{% url 'home' %}" class="brand-link">
+    <img src="/static/dist/img/logo_small.png" alt="AdminLTE Logo" class="brand-image img-rounded elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light">Honyaku.site</span>
+</a>
+<div class="sidebar">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li class="nav-item">
+            <a href="{% url 'worklist' %}" class="nav-link">
+                <i class="fas fa-tasks"></i>
+                <p>#Menu_WorkList#(<span class="right badge badge-danger">99</span>)</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'tag' %}" class="nav-link">
+                <i class="fas fa-tags"></i>
+                <p>#Menu_Tag#</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'glossary' %}" class="nav-link">
+                <i class="fas fa-book"></i>
+                <p>#Menu_Glossary#</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'manual' %}" class="nav-link">
+                <i class="nav-icon fas fa-th"></i>
+                <p>#Menu_Manual#</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'termsanduse' %}" class="nav-link">
+                <i class="nav-icon fas fa-th"></i>
+                <p>#Menu_Termsanduse#</p>
+            </a>
+        </li>
+    </ul>
+</div>

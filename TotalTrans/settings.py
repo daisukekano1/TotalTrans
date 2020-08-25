@@ -15,6 +15,7 @@ import posixpath
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+AUTH_USER_MODEL = 'application.CustomUser'
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,8 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
+    'localhost',
     'honyaku.site',
-    'www.honyaku.site'
+    'www.honyaku.site',
 ]
 
 # Application definition
@@ -177,6 +179,11 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = ''
 
-
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'application.backend.EmailAuthBackend',
+]
