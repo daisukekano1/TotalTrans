@@ -35,6 +35,28 @@
                     <div class="card">
                         <div class="card-header h6 sitecolor-bcolor">#Glossary-Glossary List#</div>
                         <div class="card-body">
+                            <table class="table table-hover table-responsive-lg tabletype1">
+                                <thead>
+                                  <tr>
+                                    <th>#gl_srclang#</th>
+                                    <th>#gl_tgtlang#</th>
+                                    <th>#gl_numberofcount#</th>
+                                    <th style="width: 20%">#index_Edit#</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for row in glossary %}
+                                      <tr>
+                                        <td>{{ row.srclang }}</td>
+                                        <td>{{ row.tgtlang }}</td>
+                                        <td>{{ row.numberofcount }}</td>
+                                        <td>
+                                          <a href="{% url 'glossarydetail' row.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        </td>
+                                      </tr>
+                                  {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -12,15 +12,25 @@ from django.core.serializers.json import DjangoJSONEncoder
 folder_id = '1z22K4kWicecG81sCPUOgnL1zwlOFKt5D'
 message = ""
 @login_required
-def glossary(request):
-    glossary = UserGlossary.objects.filter(user=request.user.id).all()
+def glossarylist(request):
+    glossary = []
+    for ug in UserGlossary.objects.filter(user=request.user.id):
+        onedata = {}
+        onedata['id'] = ug.id
+        srclang = Language.objects.filter(lc__exact=ug.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
+        tgtlang = Language.objects.filter(lc__exact=ug.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
+        onedata['srclang'] = srclang['displaylang']
+        onedata['tgtlang'] = tgtlang['displaylang']
+        onedata['numberofcount'] = ug.numberofcount
+        glossary.append(onedata)
+
     langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language','flagId', 'displaylang').order_by('displaylang')
     data = {
         'glossary' : glossary,
         'message' : message,
         'langs' : langs
     }
-    return render(request, 'app/settings_glossary.html', data)
+    return render(request, 'app/glossary_list.html', data)
 
 def createGlossary(request):
     gauth = getGoogleAuth()
@@ -75,12 +85,14 @@ def updateGlossary(request):
     # スプレッドシートを更新
     worksheet.update_cells(cell_list)
 
-    return render(request, 'app/settings_glossary.html')
+    return render(request, 'app/glossary_list.html')
 
 @login_required
 def glossarydetail(request, glossary_id):
     ug = UserGlossary.objects.filter(user=request.user.id).filter(id=glossary_id).first()
     glossary = {}
+    lc_src_displayname = ''
+    lc_tgt_displayname = ''
     if ug != None:
         gauth = getGoogleAuth()
         gc = gspread.authorize(gauth.credentials)
@@ -88,15 +100,20 @@ def glossarydetail(request, glossary_id):
         worksheet = workbook.sheet1
         wklist = worksheet.get_all_values()
         glossary = json.dumps(wklist, cls=DjangoJSONEncoder)
+        lc_src_display = Language.objects.filter(lc=ug.lc_src).extra(select = { 'displaylang' : request.user.userLanguage}).values('displaylang').first()
+        lc_tgt_display = Language.objects.filter(lc=ug.lc_tgt).extra(select = { 'displaylang' : request.user.userLanguage}).values('displaylang').first()
+
     data = {
-        'userglossary' : ug,
-        'glossary' : glossary
+        'glossary_id' : glossary_id,
+        'glossary' : glossary,
+        'lc_src_display' : lc_src_display,
+        'lc_tgt_display' : lc_tgt_display
     }
-    return render(request, 'app/settings_glossarydetail.html', data)
+    return render(request, 'app/glossary_detail.html', data)
 
 @login_required
-def tag(request):
-    return render(request, 'app/settings_tag.html')
+def taglist(request):
+    return render(request, 'app/tag_list.html')
 
 def getGoogleAuth():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))

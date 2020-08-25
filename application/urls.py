@@ -38,11 +38,12 @@ urlpatterns = [
     path('worklist/', views_work.worklist, name='worklist'),
 
     # The setting page functions
-    path('glossary/', views_settings.glossary, name='glossary'),
-    path('glossary/createGlossary', views_settings.createGlossary, name='createGlossary'),
+    path('glossarylist/', views_settings.glossarylist, name='glossarylist'),
+    path('glossarylist/createGlossary', views_settings.createGlossary, name='createGlossary'),
+    path('glossarydetail/<int:glossary_id>/', views_settings.glossarydetail, name='glossarydetail'),
     path('updateGlossary/', views_settings.updateGlossary, name='updateGlossary'),
 
-    path('tag/', views_settings.tag, name='tag'),
+    path('taglist/', views_settings.taglist, name='taglist'),
 
     path('i18n/', include('django.conf.urls.i18n'))
 ]
