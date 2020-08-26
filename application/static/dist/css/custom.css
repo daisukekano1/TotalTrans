@@ -196,3 +196,6 @@ html, body{
       margin: 1.75rem auto;
   }
 }
+.editableTable table.table th, table.table td {
+  padding: .75rem;;
+}

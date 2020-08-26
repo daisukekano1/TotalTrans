@@ -9,16 +9,15 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
+from pydrive.auth import GoogleAuth
 
 from gengo import Gengo
 from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag
 from django.contrib.auth.decorators import login_required
+from application.customlib import GoogleApiLib
 
-from oauth2client.client import GoogleCredentials
-from google.cloud import translate_v2 as translate
+from google.cloud import translate_v3 as translate
 import os
-from googleapiclient import discovery
-from googleapiclient import errors
 
 # GENGO Parameter
 # GENGO_SANDBOX_FLG = False
@@ -235,48 +234,13 @@ def requestGengoTranslation(request):
 
 @login_required
 def requestGoogleTranslation(request):
-    url = "https://translation.googleapis.com/language/translate/v2"
-    url += "?key=" + GOOGLEAPI_KEY
+    text = request.GET.get("originalText")
+    lc_src = request.GET.get("lc_src")
+    lc_tgt = request.GET.get("lc_tgt")
+    glossary_id = "glossary-"
 
-    user_id = request.session['user_id']
-
-    work_id = request.GET.get("work_id")
-    tagname = request.GET.get("tagname")
-    backgroundcolor = request.GET.get("backgroundcolor")
-
-    url += "&q=" + request.GET.get("originalText")
-    url += "&source=" + request.GET.get("lc_src")
-    url += "&target=" + request.GET.get("lc_tgt")
-
-    rr = requests.get(url)
-    unit_aa = json.loads(rr.text)
-    result = unit_aa["data"]["translations"][0]["translatedText"]
+    result = GoogleApiLib.requestGoogleTranslation(text, lc_src, lc_tgt)
     return JsonResponse({"data": result})
-
-    # # Imports the Google Cloud client library
-    #
-    # # add environment variable
-    # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "translate-f085d3b42d5b.json"
-    # #AIzaSyD0CNmHW04AtsTTyYJSvcdf5i99MmPzUQ8
-    #
-    # # Certification
-    # credentials = GoogleCredentials.get_application_default()
-    # # Instantiates a client
-    # translate_client = translate.Client()
-    #
-    # # The text to translate
-    # text = u'Hello, world!'
-    # # The source and target language
-    # trans_from = 'en'
-    # trans_to = 'ja'
-    #
-    # # Translates some text into Japanese
-    # translation = translate_client.translate(text, source_language=trans_from, target_language=trans_to, model='nmt')
-    #
-    # print(u'Text: {}'.format(text))
-    # print(u'Translation: {}'.format(translation['translatedText']))
-    # print(translation)
-
 
 @login_required
 def saveGengoTranslation(request):
@@ -417,3 +381,10 @@ def deleteHistory(request):
         'progress':work.progress
     }
     return JsonResponse(data)
+
+def getGoogleAuth():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    gauth = GoogleAuth()
+    gauth.LocalWebserverAuth()
+    return gauth
+

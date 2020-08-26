@@ -41,7 +41,8 @@ urlpatterns = [
     path('glossarylist/', views_settings.glossarylist, name='glossarylist'),
     path('glossarylist/createGlossary', views_settings.createGlossary, name='createGlossary'),
     path('glossarydetail/<int:glossary_id>/', views_settings.glossarydetail, name='glossarydetail'),
-    path('updateGlossary/', views_settings.updateGlossary, name='updateGlossary'),
+    path('getglossarylist/', views_settings.getglossarylist, name='getglossarylist'),
+    path('glossarydetail/<int:glossary_id>/saveGlossary', views_settings.saveGlossary, name='saveGlossary'),
 
     path('taglist/', views_settings.taglist, name='taglist'),
 

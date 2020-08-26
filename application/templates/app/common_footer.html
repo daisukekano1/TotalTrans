@@ -7,5 +7,9 @@
     <button type="button" id="btnOpenGoogleRequest" class="btn btn-md btn-primary" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#GoogleTrans#</button>
     <button type="button" id="btnOpenSelfTranslate" class="btn btn-md btn-self" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#SelfTrans#</button>
 {% endif %}
+{% if "/glossarydetail/" in request.path %}
+    <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> #Cancel#</button>
+    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-share"></i> #Save#</button>
+{% endif %}
 
 
