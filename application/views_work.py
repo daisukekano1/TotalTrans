@@ -237,9 +237,8 @@ def requestGoogleTranslation(request):
     text = request.GET.get("originalText")
     lc_src = request.GET.get("lc_src")
     lc_tgt = request.GET.get("lc_tgt")
-    glossary_id = "glossary-"
-
-    result = GoogleApiLib.requestGoogleTranslation(text, lc_src, lc_tgt)
+    glossary_id = 'glossary-' + str(request.user.id) + "_" + lc_src + "_" + lc_tgt
+    result = GoogleApiLib.requestGoogleTranslation(text, glossary_id, lc_src, lc_tgt)
     return JsonResponse({"data": result})
 
 @login_required

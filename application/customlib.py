@@ -70,18 +70,17 @@ class GoogleApiLib:
         client = translate.TranslationServiceClient()
         parent = "projects/"+project_id+"/locations/global"
         name = client.glossary_path(project_id, "global", glossary_id)
-        language_codes_element = lc_src
-        language_codes_element_2 = lc_tgt
-        language_codes = [language_codes_element, language_codes_element_2]
-        language_codes_set = {"language_codes": language_codes}
+        source_lang_code = lc_src
+        target_lang_code = lc_tgt
+        language_codes_set = translate.types.Glossary.LanguageCodesSet(
+            language_codes=[source_lang_code, target_lang_code]
+        )
         input_uri = "gs://"+gsbucketname+"/"+glossary_id+".csv"
-        gcs_source = {"input_uri": input_uri}
-        input_config = {"gcs_source": gcs_source}
-        glossary = {
-            "name": name,
-            "language_codes_set": language_codes_set,
-            "input_config": input_config,
-        }
+        gcs_source = translate.types.GcsSource(input_uri=input_uri)
+        input_config = translate.types.GlossaryInputConfig(gcs_source=gcs_source)
+        glossary = translate.types.Glossary(
+            name=name, language_codes_set=language_codes_set, input_config=input_config
+        )
         operation = client.create_glossary(parent, glossary)
         return operation.metadata
 
