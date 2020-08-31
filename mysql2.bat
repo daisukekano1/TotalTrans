@@ -1,0 +1,1 @@
+"C:\Program Files\MySQL\MySQL Server 5.7\bin\mysqld" --defaults-file="C:\ProgramData\MySQL\MySQL Server 5.7\my.ini" --console
