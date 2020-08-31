@@ -27,7 +27,6 @@ urlpatterns = [
     path('workdetail/<int:work_id>/', views_work.workdetail, name='workdetail'),
     path('addTag', views_work.addTag, name='addTag'),
     path('removeTag', views_work.removeTag, name='removeTag'),
-    path('getTargetLang', views_work.getTargetLang, name='getTargetLang'),
     path('requestGengoTranslation', views_work.requestGengoTranslation, name='requestGengoTranslation'),
     path('requestGoogleTranslation', views_work.requestGoogleTranslation, name='requestGoogleTranslation'),
     path('workdetail/<int:work_id>/gethistory', views_work.gethistory, name='gethistory'),

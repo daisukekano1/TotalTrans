@@ -31,6 +31,9 @@ def glossarylist(request):
         'message' : message,
         'langs' : langs
     }
+    glossary_id = 'glossary-' + str(request.user.id) + "_ja_en"
+    # GoogleApiLib.createGlossaryInTransClient(glossary_id, "ja", "en")
+    GoogleApiLib.list_glossaries("")
     return render(request, 'app/glossary_list.html', data)
 
 def createGlossary(request):

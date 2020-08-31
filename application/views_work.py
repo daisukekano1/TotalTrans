@@ -11,8 +11,7 @@ from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 from pydrive.auth import GoogleAuth
 
-from gengo import Gengo
-from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag
+from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag, UserGlossary
 from django.contrib.auth.decorators import login_required
 from application.customlib import GoogleApiLib
 
@@ -70,22 +69,6 @@ def addwork(request):
     langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language','flagId', 'displaylang').order_by('displaylang')
     tags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname','backgroundcolor')
     return render(request, 'app/work_add.html', {'langs' : langs, 'tags' : json.dumps(list(tags), cls=DjangoJSONEncoder)})
-
-@login_required
-def getTargetLang(request):
-    lc_src = request.GET.get("lc_src")
-    gengo = Gengo(
-        public_key=GENGO_PUBLIC_KEY,
-        private_key=GENGO_PRIVATE,
-        sandbox=GENGO_SANDBOX_FLG,
-        debug=True
-    )
-    langpair = gengo.getServiceLanguagePairs(lc_src=lc_src)
-    langpairArr = []
-    for val in langpair['response']:
-        langpairArr.append(val['lc_tgt'])
-    langs = Language.objects.filter(lc__in=langpairArr).extra(select = { 'id' :'lc' , 'text' : request.user.userLanguage}).values('id', 'text').order_by('text')
-    return JsonResponse({"langs": list(langs)})
 
 @login_required
 def saveWork(request):
@@ -172,18 +155,7 @@ def removeTag(request):
 
 @login_required
 def requestTranslation(request):
-    gengo = Gengo(
-        public_key=GENGO_PUBLIC_KEY,
-        private_key=GENGO_PRIVATE,
-        sandbox=GENGO_SANDBOX_FLG,
-        debug=True
-    )
-    #     jobs = gengo.getTranslationJobBatch(id="3391238,3391236")
-    languages = gengo.getServiceLanguages();
-    data = {
-        'languages': languages
-    }
-    return render(request, 'app/requestTranslation.html', {'data': data})
+    return render(request, 'app/requestTranslation.html')
 
 @login_required
 def workdetail(request, work_id):
@@ -237,7 +209,10 @@ def requestGoogleTranslation(request):
     text = request.GET.get("originalText")
     lc_src = request.GET.get("lc_src")
     lc_tgt = request.GET.get("lc_tgt")
-    glossary_id = 'glossary-' + str(request.user.id) + "_" + lc_src + "_" + lc_tgt
+    glossary_id = ""
+    ug = UserGlossary.objects.filter(user=request.user.id).filter(lc_src=lc_src).filter(lc_tgt=lc_tgt).first()
+    if ug != None:
+        glossary_id = ug.filename
     result = GoogleApiLib.requestGoogleTranslation(text, glossary_id, lc_src, lc_tgt)
     return JsonResponse({"data": result})
 
