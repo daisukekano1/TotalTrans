@@ -14,14 +14,14 @@
             <form action="createGlossary" method="post">
                 {% csrf_token %}
                 <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
-                    <div class="form-group col-3" style="margin-right:10px;">
+                    <div class="form-group col-4" style="margin-right:10px;">
                         <div class="input-group" style="width:100%">
                             <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#language#</span></div>
                             <select class="form-control editableColor" id="lc_src" name="lc_src"  readonly style="min-width:150px; background-color: #f5f8f8;">
-                                <option id="lc_src_selected" value="1" selected>From</option>
+                                <option id="lc_src_selected" value="{{ userlang.srcValue }}" selected>{{ userlang.srcName.displaylang }}</option>
                             </select>
                             <select class="form-control" id="lc_tgt" name="lc_tgt"  readonly style="min-width:150px; background-color: #f5f8f8;">
-                                <option id="lc_tgt_selected" value="1" selected>To</option>
+                                <option id="lc_tgt_selected" value="{{ userlang.tgtValue }}" selected>{{ userlang.tgtName.displaylang }}</option>
                             </select>
                         </div>
                     </div>

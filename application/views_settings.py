@@ -9,39 +9,29 @@ from django.utils import timezone
 import json
 from django.http import JsonResponse
 from application.customlib import GoogleApiLib
+from application.customlib import DataLib
 
 folder_id = '1z22K4kWicecG81sCPUOgnL1zwlOFKt5D'
 message = ""
-@login_required
-def glossarylist(request):
-    glossary = []
-    for ug in UserGlossary.objects.filter(user=request.user.id):
-        onedata = {}
-        onedata['id'] = ug.id
-        srclang = Language.objects.filter(lc__exact=ug.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
-        tgtlang = Language.objects.filter(lc__exact=ug.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
-        onedata['srclang'] = srclang['displaylang']
-        onedata['tgtlang'] = tgtlang['displaylang']
-        onedata['numberofcount'] = ug.numberofcount
-        glossary.append(onedata)
 
-    langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language','flagId', 'displaylang').order_by('displaylang')
+@login_required
+def glossary(request):
+    ug = UserGlossary.objects.filter(user=request.user.id).first()
+    keyid = ""
+    if ug != None:
+        keyid = ug.id
+
     data = {
-        'glossary' : glossary,
+        'keyid' : keyid,
         'message' : message,
-        'langs' : langs
     }
-    glossary_id = 'glossary-' + str(request.user.id) + "_ja_en"
-    # GoogleApiLib.createGlossaryInTransClient(glossary_id, "ja", "en")
-    GoogleApiLib.list_glossaries("")
-    return render(request, 'app/glossary_list.html', data)
+    return render(request, 'app/glossary.html', data)
 
 def createGlossary(request):
-    gauth = GoogleApiLib.getGoogleAuth()
+    lib = GoogleApiLib()
+    gauth = lib.getGoogleAuth()
     drive = GoogleDrive(gauth)
-    lc_src = request.POST['lc_src']
-    lc_tgt = request.POST['lc_tgt']
-    title = 'glossary-' + str(request.user.id) + "_" + lc_src + "_" + lc_tgt
+    title = 'glossary-' + str(request.user.id)
     f = drive.CreateFile({
         'title': title,
         'mimeType': 'application/vnd.google-apps.spreadsheet',
@@ -52,22 +42,21 @@ def createGlossary(request):
     workbook = gc.open_by_key(fileid)
     worksheet = workbook.sheet1
 
-    worksheet.update_acell('A1', lc_src)
-    worksheet.update_acell('B1', lc_tgt)
+    worksheet.update_acell('A1', 'key')
+    worksheet.update_acell('B1', 'value')
+    worksheet.update_acell('C1', 'Category')
 
     t1 = UserGlossary(
         user_id = request.user.id,
         filename = title,
         numberofcount= 0,
-        lc_src = lc_src,
-        lc_tgt=lc_tgt,
         fileid=fileid,
         validFlg=1,
         createdDate = timezone.now(),
     )
     t1.save()
     message = "#Create Glossary is successful#"
-    return redirect('glossarylist')
+    return redirect('glossary')
 
 @login_required
 def glossarydetail(request, glossary_id):
@@ -87,13 +76,12 @@ def glossarydetail(request, glossary_id):
 
 @login_required
 def getglossarylist(request):
-    glossary_id = request.GET['glossary_id']
-    ug = UserGlossary.objects.filter(user=request.user.id).filter(id=glossary_id).first()
+    keyid = request.GET['keyid']
+    ug = UserGlossary.objects.filter(user=request.user.id).filter(id=keyid).first()
     glossary = []
-    lc_src_displayname = ''
-    lc_tgt_displayname = ''
     if ug != None:
-        gauth = GoogleApiLib.getGoogleAuth()
+        glib = GoogleApiLib()
+        gauth = glib.getGoogleAuth()
         gc = gspread.authorize(gauth.credentials)
         workbook = gc.open_by_key(ug.fileid)
         worksheet = workbook.sheet1
@@ -105,6 +93,7 @@ def getglossarylist(request):
             onedata['id'] = str(i)
             onedata['WordName'] = val[0]
             onedata['Translate'] = val[1]
+            onedata['Category'] = val[2]
             glossary.append(onedata)
             i = i + 1
     return JsonResponse({"data": glossary})
@@ -113,7 +102,8 @@ def getglossarylist(request):
 def saveGlossary(request, glossary_id):
     ug = UserGlossary.objects.filter(user=request.user.id).filter(id=glossary_id).first()
     glossaryjson = request.POST['glossaryjson']
-    gauth = GoogleApiLib.getGoogleAuth()
+    glib = GoogleApiLib()
+    gauth = glib.getGoogleAuth()
     drive = GoogleDrive(gauth)
     fileid = ug.fileid
     gc = gspread.authorize(gauth.credentials)
@@ -122,11 +112,11 @@ def saveGlossary(request, glossary_id):
     glossary = json.loads(glossaryjson)
     i = 2
     for val in glossary:
-        worksheet.update('A'+str(i)+':B'+str(i), [[val['#WordName#'], val['#Translate#']]])
+        worksheet.update('A'+str(i) +':C'+str(i), [[val['#WordName#'], val['#Translate#'], val['#Category#']]])
         i = i + 1
     if len(glossary) < ug.numberofcount:
         for j in range(ug.numberofcount - len(glossary)):
-            worksheet.update('A'+str(i+j)+':B'+str(i+j), [['', '']])
+            worksheet.update('A'+str(i+j) +':C'+str(i+j), [['', '', '']])
 
     ug.numberofcount = len(glossary)
     ug.save()

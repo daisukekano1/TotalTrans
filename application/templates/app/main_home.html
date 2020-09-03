@@ -34,90 +34,67 @@
                     <div class="card">
                         <div class="card-header sitecolor-bcolor h6"><i class="fas fa-tags"></i> #Home_Tag_Counts#</div>
                         <div class="card-footer p-0 text-sm">
-                            {% if tags %}
                             <ul class="nav flex-column">
+                            {% if tags %}
                                 {% for tag in tags %}
                                 <li class="nav-item">
                                     <a href="{% url 'worklist' %}?tag={{ tag.tagname }}" class="nav-link">{{ tag.tagname }} <span class="float-right badge bg-primary">{{ tag.workcount }}</span></a>
                                 </li>
                                 {% endfor %}
                             {% else %}
-                                Tag will be listed here, when it is created.
+                                <li class="nav-item">
+                                    <span class="nav-link">No tags are registered yet.</span>
+                                </li>
                             {% endif %}
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card card-widget">
-                    <!-- Add the bg color to the header using any of the bg-* classes -->
-                    <div class="widget-user-header bg-warning">
-                    <div class="widget-user-image">
-                    <img class="img-circle elevation-2" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header sitecolor-bcolor h6"><i class="fas fa-book"></i> #Home_Glossary#</div>
+                        <div class="card-footer p-0 text-sm">
+                            <ul class="nav flex-column">
+                            {% if glossary %}
+                                <li class="nav-item">
+                                    <a href="{% url 'glossary' %}" class="nav-link">Total number of words<span class="float-right badge bg-primary">{{ glossary.count }}</span></a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <span class="nav-link">No glossary is registered.<a href="{% url 'glossary' %}" class="float-right">Create glossary</a></span>
+                                </li>
+                            {% endif %}
+                            </ul>
+                        </div>
                     </div>
-                    <!-- /.widget-user-image -->
-                    <h3 class="widget-user-username">Nadia Carmichael</h3>
-                    <h5 class="widget-user-desc">Lead Developer</h5>
-                    </div>
-                    <div class="card-footer p-0">
-                    <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    Projects <span class="float-right badge bg-primary">31</span>
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    Tasks <span class="float-right badge bg-info">5</span>
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    Completed Projects <span class="float-right badge bg-success">12</span>
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    Followers <span class="float-right badge bg-danger">842</span>
-                    </a>
-                    </li>
-                    </ul>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
                 </div>
             </div>
             <div class="row">
+                <a role="button" href="{% url 'workcreation' %}" class="btn btn-outline-info btn-lg">#New Translation#<i class="fas fa-plus-square pl-1"></i></a>
                 <div class="col-md-12 col-sm-12 col-xs-12">
+                    {%  if works_draft %}
                     <div class="card">
-                        <div class="card-header h6 sitecolor-bcolor"><i class="fas fa-tasks"></i> #TranslationRequestList#</div>
+                        <div class="card-header h6 sitecolor-bcolor"><i class="fas fa-tasks"></i> #Draft#</div>
                         <div class="card-body">
-                            <div>
-                                <a role="button" href="{% url 'addwork' %}" class="btn btn-outline-info btn-lg">#New Translation#<i class="fas fa-plus-square pl-1"></i></a>
-                            </div>
                             <div class="x_content">
                                 <table class="table table-hover table-responsive-lg tabletype1">
                                 <thead>
                                   <tr>
-                                    <th>#index_createdDate#</th>
-                                    <th>#index_Language#</th>
+                                    <th>#index_Title#</th>
+                                    <th>#index_srclang#</th>
+                                    <th>#index_tgtlang#</th>
                                     <th>#index_Tag#</th>
-                                    <th>#index_progress#</th>
-                                    <th>#index_numberofchar#</th>
-                                    <th>#index_status#</th>
+                                    <th>#index_createdDate#</th>
+                                    <th>#index_ETA#</th>
                                     <th style="width: 20%">#index_Edit#</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {% for row in works %}
-                                      {% if row.status == "Closed" %}
-                                          <tr class="closed">
-                                      {% else %}
-                                          <tr>
-                                      {% endif %}
-                                            <td>{{ row.createdDate }}</td>
-                                            <td>{{ row.srclang }}<i class="fas fa-long-arrow-alt-right" style="padding:0px 4px 0px 4px"></i>{{ row.tgtlang }}</td>
+                                  {% for row in works_draft %}
+                                      <tr>
+                                            <td>{{ row.workTitle }}</td>
+                                            <td>{{ row.srclang }}</td>
+                                            <td>{{ row.tgtlang }}</td>
                                             <td>
                                                 <div class="tokenfield">
                                                     {% for tag in row.tags %}
@@ -125,9 +102,52 @@
                                                     {%  endfor %}
                                                 </div>
                                             </td>
+                                            <td>{{ row.createdDate|date:"Y/m/j" }}</td>
+                                            <td>{{ row.eta|date:"Y/m/j" }}</td>
+                                            <td>
+                                                <a href="{% url 'workcreation' %}?id={{ row.id }}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                            </td>
+                                          </tr>
+                                  {% endfor %}
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="card">
+                        <div class="card-header h6 sitecolor-bcolor"><i class="fas fa-tasks"></i> #Open#</div>
+                        <div class="card-body">
+                            <div class="x_content">
+                                <table class="table table-hover table-responsive-lg tabletype1">
+                                <thead>
+                                  <tr>
+                                    <th>#index_worktitle#</th>
+                                    <th>#index_srclang#</th>
+                                    <th>#index_tgtlang#</th>
+                                    <th>#index_Tag#</th>
+                                    <th>#index_createdDate#</th>
+                                    <th>#index_ETA#</th>
+                                    <th>#index_progress#</th>
+                                    <th style="width: 20%">#index_Edit#</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in works_open %}
+                                        <tr>
+                                            <td>{{ row.workTitle }}</td>
+                                            <td>{{ row.srclang }}</td>
+                                            <td>{{ row.tgtlang }}</td>
+                                            <td>
+                                                <div class="tokenfield">
+                                                    {% for tag in row.tags %}
+                                                        <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
+                                                    {%  endfor %}
+                                                </div>
+                                            </td>
+                                            <td>{{ row.createdDate|date:"Y/m/j" }}</td>
+                                            <td>{{ row.eta|date:"Y/m/j"}}</td>
                                             <td>{{ row.progress }}</td>
-                                            <td>{{ row.numberofchar }}</td>
-                                            <td>{{ row.status }}</td>
                                             <td>
                                               <a href="{% url 'workdetail' row.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                             </td>

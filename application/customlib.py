@@ -5,6 +5,7 @@ from pydrive.auth import GoogleAuth
 from google.cloud import translate_v3 as translate
 import os
 from django.contrib.auth.decorators import login_required
+from application.models import Language
 
 GOOGLEAPI_KEY = 'AIzaSyD0CNmHW04AtsTTyYJSvcdf5i99MmPzUQ8'
 project_id = "469662860857"
@@ -12,7 +13,7 @@ project_location = "global"
 gsbucketname = "honyakusiteglossary"
 gslocation = "asia"
 
-class GoogleApiLib:
+class GoogleApiLib():
 
     def requestGoogleTranslation2(originalText, lc_src, lc_tgt):
         url = "https://translation.googleapis.com/language/translate/v2"
@@ -85,6 +86,7 @@ class GoogleApiLib:
         return
 
     def createGlossaryInTransClient(glossary_id, lc_src, lc_tgt):
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.dirname(os.path.abspath(__file__)) +'\cred.json'
         client = translate.TranslationServiceClient()
         parent = "projects/"+project_id+"/locations/us-central1"
         name = client.glossary_path(project_id, "us-central1", glossary_id)
@@ -123,7 +125,8 @@ class GoogleApiLib:
         request = {
             "parent": parent
         }
-        for glossary in client.list_glossaries(request):
+        glist = client.list_glossaries(request)
+        for glossary in glist:
             print("Name: {}".format(glossary.name))
             print("Entry count: {}".format(glossary.entry_count))
             print("Input uri: {}".format(glossary.input_config.gcs_source.input_uri))
@@ -134,3 +137,32 @@ class GoogleApiLib:
             # when creating the glossary.
             for language_code in glossary.language_codes_set.language_codes:
                 print("Language code: {}".format(language_code))
+
+class DataLib():
+    def getUserLang(self, request, emptyFlg = False):
+        userlang = {}
+        if emptyFlg:
+            userlang = {
+                'srcValue': "",
+                'srcName':  "From",
+                'tgtValue': "",
+                'tgtName': "To"
+            }
+        else:
+            if request.user.defaultLcSrc == "":
+                userlang = {
+                    'srcValue': "",
+                    'srcName': "From",
+                    'tgtValue': "",
+                    'tgtName': "To"
+                }
+            else:
+                userlang = {
+                    'srcValue': request.user.defaultLcSrc,
+                    'srcName': Language.objects.filter(lc__exact=request.user.defaultLcSrc).extra(
+                        select={'displaylang': request.user.userLanguage}).values('displaylang').first(),
+                    'tgtValue': request.user.defaultLcTgt,
+                    'tgtName': Language.objects.filter(lc__exact=request.user.defaultLcTgt).extra(
+                        select={'displaylang': request.user.userLanguage}).values('displaylang').first()
+                }
+        return userlang

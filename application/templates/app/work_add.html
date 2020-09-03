@@ -9,7 +9,7 @@
 {% block content %}
 <div class="content-wrapper workdetail">
     <section class="content">
-        <form id="workform" class="form-inline" action="saveWork" method="post">
+        <form id="workform" class="form-inline" action="save" method="post">
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
@@ -19,30 +19,32 @@
                             <div class="form-group col-4" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
                                     <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#Title#</span></div>
-                                    <input type="text" class="form-control editableColor" id="workTitle" name="workTitle" value="" style="width:100%;   "/>
+                                    <input type="text" class="form-control editableColor" id="workTitle" name="workTitle" value="{{ work.workTitle }}" style="width:100%;   "/>
                                 </div>
                             </div>
-                            <div class="form-group col-3" style="margin-right:10px;">
+                            <div class="form-group col-4" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
                                     <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#language#</span></div>
                                     <select class="form-control editableColor" id="lc_src" name="lc_src"  readonly style="min-width:150px; background-color: #f5f8f8;">
-                                        <option id="lc_src_selected" value="1" selected>From</option>
+                                        <option id="lc_src_selected" value="{{ selectedlang.srcValue }}" selected>{{ selectedlang.srcName.displaylang }}</option>
                                     </select>
                                     <select class="form-control" id="lc_tgt" name="lc_tgt"  readonly style="min-width:150px; background-color: #f5f8f8;">
-                                        <option id="lc_tgt_selected" value="1" selected>To</option>
+                                        <option id="lc_tgt_selected" value="{{ selectedlang.tgtValue }}" selected>{{ selectedlang.tgtName.displaylang }}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-2" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
                                     <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#ETA#</span></div>
-                                    <input type="text" id="eta" name="eta" class="form-control editableColor "/>
+                                    <input type="text" id="eta" name="eta" class="form-control editableColor" value="{{ work.eta|date:"Y/m/j" }}"/>
                                     <div class="input-group-append" data-target="#eta" data-toggle="datepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-2" style="margin-right:10px;">
+                        </div>
+                        <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
+                            <div class="form-group col-4" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
                                     <div class="input-group-prepend"><span class="input-group-text bg-gradient-cyan">#Tags#</span></div>
                                     <input type="text" class="form-control editableColor" id="tags" name="tags" value=""/>
@@ -50,12 +52,14 @@
                             </div>
                         </div>
                         <div>
-                            <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="wordsOriginal" name='wordsOriginal' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
+                            <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="wordsOriginal" name='wordsOriginal' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)">{{ work.wordsOriginal }}</textarea>
                         </div>
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="id" name="id" value="{{ work.id }}"/>
             <input type="hidden" id="tagsinfo" name="tagsinfo" />
+            <input type="hidden" id="status" name="status" />
         </form>
     </section>
 </div>
@@ -83,8 +87,9 @@
 {% endblock javascripts %}
 <script>
     var tokens = []
-    function submitAction(url) {
+    function submitAction(status) {
         $('#tagsinfo').val(JSON.stringify(tokens));
+        $('#status').val(status);
         $('#workform').submit();
     }
     var targetElement = ""
@@ -103,7 +108,9 @@
             $('#'+targetElement).text(option_text).val(option_val);
             $('#modal-SelectLang').modal('hide');
         });
-        $('#eta').datepicker({});
+        $('#eta').datepicker({
+            dateFormat: 'yy/mm/dd'
+        });
         $('[data-toggle=datepicker]').each(function () {
             var target = $(this).data('target') || '';
             if (target) {

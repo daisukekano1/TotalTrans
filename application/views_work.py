@@ -3,20 +3,18 @@ import sys
 from django.template import loader
 import json
 import re
-import requests
 import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
-from pydrive.auth import GoogleAuth
 
 from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag, UserGlossary
 from django.contrib.auth.decorators import login_required
-from application.customlib import GoogleApiLib
+from application.customlib import GoogleApiLib, DataLib
 
-from google.cloud import translate_v3 as translate
-import os
+from datetime import datetime as dt
+
 
 # GENGO Parameter
 # GENGO_SANDBOX_FLG = False
@@ -65,57 +63,80 @@ def worklist(request):
     return HttpResponse(template.render({"data": data}, request))
 
 @login_required
-def addwork(request):
+def workcreation(request):
+    id = request.GET.get("id")
+    work = Works.objects.filter(user=request.user.id).filter(id=id).first()
     langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language','flagId', 'displaylang').order_by('displaylang')
     tags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname','backgroundcolor')
-    return render(request, 'app/work_add.html', {'langs' : langs, 'tags' : json.dumps(list(tags), cls=DjangoJSONEncoder)})
+    selectedlang = {}
+    if work == None:
+        dlib = DataLib()
+        selectedlang = dlib.getUserLang(request)
+    else:
+        selectedlang = {
+            'srcValue': work.lc_src,
+            'srcName': Language.objects.filter(lc__exact=work.lc_src).extra(
+                select={'displaylang': request.user.userLanguage}).values('displaylang').first(),
+            'tgtValue': work.lc_tgt,
+            'tgtName': Language.objects.filter(lc__exact=work.lc_tgt).extra(
+                select={'displaylang': request.user.userLanguage}).values('displaylang').first()
+        }
+    data = {
+        'langs' : langs,
+        'tags' : json.dumps(list(tags), cls=DjangoJSONEncoder),
+        'selectedlang' : selectedlang,
+        'work':work
+    }
+    return render(request, 'app/work_add.html', data)
 
 @login_required
-def saveWork(request):
-    # gengo = Gengo(
-    #     public_key=GENGO_PUBLIC_KEY,
-    #     private_key=GENGO_PRIVATE,
-    #     sandbox=GENGO_SANDBOX_FLG,
-    #     debug=True
-    # )
-    # jobs_data = {
-    #     'job_1': {
-    #         'type': 'text',
-    #         'body_src': request.POST['wordsOriginal'],
-    #         'lc_src': request.POST['lc_src'],
-    #         'lc_tgt': request.POST['lc_tgt'],
-    #         'tier': 'standard',
-    #         'auto_approve': 0
-    #     }
-    # }
-    # gengores = gengo.determineTranslationCost(jobs=jobs_data)
-    t1 = Works(
-        user_id = request.user.id,
-        workTitle = request.POST['workTitle'],
-        wordsOriginal = request.POST['wordsOriginal'],
-        lc_src = request.POST['lc_src'],
-        lc_tgt = request.POST['lc_tgt'],
-        progress = 0,
-        createdDate = timezone.now(),
-        numberofchar = len(str(request.POST['wordsOriginal'])),
-        wordsTranslated = request.POST['wordsOriginal'],
-        status = 'Open',
-        eta = request.POST['eta']
-    )
-    t1.save()
-    work = Works.objects.latest('id')
-    tags = json.loads(request.POST['tagsinfo'])
-    for tag in tags:
-        querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
-        if querySet.first() is None:
-            t2 = UserTag(
-                user_id=request.user.id,
-                tagname=tag['tagname'],
-                backgroundcolor=tag['backgroundcolor'],
-                createdDate=timezone.now()
-            )
-            t2.save()
-    return redirect('workdetail', work.id)
+def save(request):
+    etastr = request.POST['eta']
+    eta = dt.strptime(etastr, '%Y/%m/%d')
+    status = request.POST['status']
+    id = request.POST['id']
+    redirecttarget = ""
+    if id == '':
+        t1 = Works(
+            user_id = request.user.id,
+            workTitle = request.POST['workTitle'],
+            wordsOriginal = request.POST['wordsOriginal'],
+            lc_src = request.POST['lc_src'],
+            lc_tgt = request.POST['lc_tgt'],
+            progress = 0,
+            # numberofchar = len(str(request.POST['wordsOriginal'])),
+            wordsTranslated = request.POST['wordsOriginal'],
+            status = status,
+            eta = eta,
+            createdDate = timezone.now()
+        )
+        t1.save()
+        id = Works.objects.latest('id').id
+        tags = json.loads(request.POST['tagsinfo'])
+        for tag in tags:
+            querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
+            if querySet.first() is None:
+                t2 = UserTag(
+                    user_id=request.user.id,
+                    tagname=tag['tagname'],
+                    backgroundcolor=tag['backgroundcolor'],
+                    createdDate=timezone.now()
+                )
+                t2.save()
+        redirecttarget = "workdetail"
+
+    else:
+        t1 = Works.objects.filter(user=request.user.id).filter(id=id).first()
+        t1.workTitle = request.POST['workTitle']
+        t1.wordsOriginal = request.POST['wordsOriginal']
+        t1.lc_src = request.POST['lc_src']
+        t1.lc_tgt = request.POST['lc_tgt']
+        t1.wordsTranslated = request.POST['wordsOriginal']
+        t1.eta = eta
+        status = status
+        t1.save()
+        redirecttarget = "workcreation"
+    return redirect(redirecttarget, id=id)
 
 @login_required
 def addTag(request):
@@ -355,10 +376,4 @@ def deleteHistory(request):
         'progress':work.progress
     }
     return JsonResponse(data)
-
-def getGoogleAuth():
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    gauth = GoogleAuth()
-    gauth.LocalWebserverAuth()
-    return gauth
 

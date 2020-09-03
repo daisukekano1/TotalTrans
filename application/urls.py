@@ -1,6 +1,6 @@
 from django.urls import path, re_path, include
 from application import views_main, views_work, views_user, views_landing, views_settings
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from application.forms import EmailAuthenticationForm
 
 urlpatterns = [
@@ -16,14 +16,15 @@ urlpatterns = [
 
     # The account page functions
     path('signup/', views_user.signup, name='signup'),
-    # path('login/', views_user.customlogin, name='login'),
     path('login/', LoginView.as_view(form_class=EmailAuthenticationForm, template_name='registration/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='registration/login.html'), name='logout'),
+
     path('userMaintenance/', views_user.maintenance, name='userMaintenance'),
     path('forgotPassword/', views_user.forgotPassword, name='forgotPassword'),
 
     # The work page functions
-    path('addwork/', views_work.addwork, name='addwork'),
-    path('addwork/saveWork', views_work.saveWork, name='saveWork'),
+    path('workcreation/', views_work.workcreation, name='workcreation'),
+    path('workcreation/save', views_work.save, name='saveWork'),
     path('workdetail/<int:work_id>/', views_work.workdetail, name='workdetail'),
     path('addTag', views_work.addTag, name='addTag'),
     path('removeTag', views_work.removeTag, name='removeTag'),
@@ -37,11 +38,10 @@ urlpatterns = [
     path('worklist/', views_work.worklist, name='worklist'),
 
     # The setting page functions
-    path('glossarylist/', views_settings.glossarylist, name='glossarylist'),
-    path('glossarylist/createGlossary', views_settings.createGlossary, name='createGlossary'),
-    path('glossarydetail/<int:glossary_id>/', views_settings.glossarydetail, name='glossarydetail'),
+    path('glossary/', views_settings.glossary, name='glossary'),
+    path('glossary/createGlossary', views_settings.createGlossary, name='createGlossary'),
+    path('glossary/save', views_settings.saveGlossary, name='saveGlossary'),
     path('getglossarylist/', views_settings.getglossarylist, name='getglossarylist'),
-    path('glossarydetail/<int:glossary_id>/saveGlossary', views_settings.saveGlossary, name='saveGlossary'),
 
     path('taglist/', views_settings.taglist, name='taglist'),
 
