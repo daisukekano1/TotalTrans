@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 
-from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag, UserGlossary
+from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag, UserGlossary, CustomUser
 from django.contrib.auth.decorators import login_required
 from application.customlib import GoogleApiLib, DataLib
 
@@ -45,7 +45,7 @@ def worklist(request):
     data = []
     for work in Works.objects.filter(**filters).order_by('createdDate').reverse():
         onedata = {}
-        onedata['id'] = work.id
+        onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
         onedata['wordsOriginal'] = work.wordsOriginal
         srclang = Language.objects.filter(lc__exact=work.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
@@ -63,10 +63,9 @@ def worklist(request):
     return HttpResponse(template.render({"data": data}, request))
 
 @login_required
-def workcreation(request):
-    id = request.GET.get("id")
-    work = Works.objects.filter(user=request.user.id).filter(id=id).first()
-    langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language','flagId', 'displaylang').order_by('displaylang')
+def workcreation(request, work_id = 0):
+    work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
+    langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language', 'displaylang').order_by('displaylang')
     tags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname','backgroundcolor')
     selectedlang = {}
     if work == None:
@@ -82,7 +81,7 @@ def workcreation(request):
                 select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         }
     data = {
-        'langs' : langs,
+        'langs' :langs,
         'tags' : json.dumps(list(tags), cls=DjangoJSONEncoder),
         'selectedlang' : selectedlang,
         'work':work
@@ -94,9 +93,9 @@ def save(request):
     etastr = request.POST['eta']
     eta = dt.strptime(etastr, '%Y/%m/%d')
     status = request.POST['status']
-    id = request.POST['id']
-    redirecttarget = ""
-    if id == '':
+    work_id = request.POST['work_id']
+    redirecttarget = ''
+    if work_id == '':
         t1 = Works(
             user_id = request.user.id,
             workTitle = request.POST['workTitle'],
@@ -111,7 +110,7 @@ def save(request):
             createdDate = timezone.now()
         )
         t1.save()
-        id = Works.objects.latest('id').id
+        work_id = Works.objects.latest('id').id
         tags = json.loads(request.POST['tagsinfo'])
         for tag in tags:
             querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
@@ -124,19 +123,19 @@ def save(request):
                 )
                 t2.save()
         redirecttarget = "workdetail"
-
     else:
-        t1 = Works.objects.filter(user=request.user.id).filter(id=id).first()
-        t1.workTitle = request.POST['workTitle']
-        t1.wordsOriginal = request.POST['wordsOriginal']
-        t1.lc_src = request.POST['lc_src']
-        t1.lc_tgt = request.POST['lc_tgt']
-        t1.wordsTranslated = request.POST['wordsOriginal']
-        t1.eta = eta
-        status = status
-        t1.save()
+        t1 = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
+        if t1 != None:
+            t1.workTitle = request.POST['workTitle']
+            t1.wordsOriginal = request.POST['wordsOriginal']
+            t1.lc_src = request.POST['lc_src']
+            t1.lc_tgt = request.POST['lc_tgt']
+            t1.wordsTranslated = request.POST['wordsOriginal']
+            t1.eta = eta
+            status = status
+            t1.save()
         redirecttarget = "workcreation"
-    return redirect(redirecttarget, id=id)
+    return redirect(redirecttarget, work_id=work_id)
 
 @login_required
 def addTag(request):

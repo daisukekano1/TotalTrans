@@ -25,7 +25,6 @@
                                     <th>#index_Language#</th>
                                     <th>#index_Tag#</th>
                                     <th>#index_progress#</th>
-                                    <th>#index_numberofchar#</th>
                                     <th>#index_status#</th>
                                     <th style="width: 20%">#index_Edit#</th>
                                   </tr>
@@ -47,10 +46,9 @@
                                                 </div>
                                             </td>
                                             <td>{{ row.progress }}</td>
-                                            <td>{{ row.numberofchar }}</td>
                                             <td>{{ row.status }}</td>
                                             <td>
-                                              <a href="{% url 'workdetail' row.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                              <a href="{% url 'workcreation' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                             </td>
                                           </tr>
                                   {% endfor %}
@@ -95,7 +93,7 @@
                                             <td>{{ row.numberofchar }}</td>
                                             <td>{{ row.status }}</td>
                                             <td>
-                                              <a href="{% url 'workdetail' row.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                             </td>
                                           </tr>
                                   {% endfor %}
@@ -140,7 +138,7 @@
                                             <td>{{ row.numberofchar }}</td>
                                             <td>{{ row.status }}</td>
                                             <td>
-                                              <a href="{% url 'workdetail' row.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                             </td>
                                           </tr>
                                   {% endfor %}

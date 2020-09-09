@@ -109,7 +109,7 @@ html, body{
   white-space: pre-wrap;
 }
 .sitecolor-bcolor{
-  background-color : #214267;
+  background-color : #d65c80;
   color : white;
 }
 .sitecolor-text{
@@ -198,4 +198,19 @@ html, body{
 }
 .editableTable table.table th, table.table td {
   padding: .75rem;;
+}
+.home-widget-header {
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    text-align: center;
+    padding: .75rem 1.25rem;
+    position: relative;
+}
+.bg-glossary {
+  background-color: #a4ad69;
+  color : white;
+}
+.bg-tag {
+  background-color: #69ad99;
+  color : white;
 }

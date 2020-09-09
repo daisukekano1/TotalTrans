@@ -149,7 +149,7 @@ class DataLib():
                 'tgtName': "To"
             }
         else:
-            if request.user.defaultLcSrc == "":
+            if request.user.defaultLcSrc == None:
                 userlang = {
                     'srcValue': "",
                     'srcName': "From",

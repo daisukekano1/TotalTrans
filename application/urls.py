@@ -25,6 +25,7 @@ urlpatterns = [
     # The work page functions
     path('workcreation/', views_work.workcreation, name='workcreation'),
     path('workcreation/save', views_work.save, name='saveWork'),
+    path('workcreation/<int:work_id>/', views_work.workcreation, name='workcreation'),
     path('workdetail/<int:work_id>/', views_work.workdetail, name='workdetail'),
     path('addTag', views_work.addTag, name='addTag'),
     path('removeTag', views_work.removeTag, name='removeTag'),
