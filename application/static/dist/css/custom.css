@@ -109,14 +109,14 @@ html, body{
   white-space: pre-wrap;
 }
 .sitecolor-bcolor{
-  background-color : #d65c80;
+  background-color : #61a9e8;
   color : white;
 }
 .sitecolor-text{
-  color : #214267 !important;
+  color : #61a9e8 !important;
 }
 .sitecolor-border{
-  border-color : #214267 !important;
+  border-color : #61a9e8 !important;
 }
 .btn-self{
   color: #fff;
