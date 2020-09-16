@@ -9,7 +9,7 @@
 {% block content %}
 <div class="content-wrapper workdetail">
     <section class="content">
-        <form id="workform" class="form-inline" action="save" method="post">
+        <form id="workform" class="form-inline" action="/worksave" method="post">
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">

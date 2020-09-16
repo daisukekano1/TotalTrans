@@ -14,9 +14,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="card card-widget widget-user" style="height:inherit;">
-                        <div class="home-widget-header bg-info">
-                            <h5 class="widget-user-desc">#Translation Works#</h5>
-                        </div>
+                        <div class="card-header h6 bg-info">#Translation Works#</div>
                         <div style="padding-top: 4px;">
                             <div class="row">
                                 <div class="col-sm-4 border-right">
@@ -81,7 +79,6 @@
                 </div>
             </div>
             <div class="row">
-                <a role="button" href="{% url 'workcreation' %}" class="btn btn-outline-info btn-lg">#New Translation#<i class="fas fa-plus-square pl-1"></i></a>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {%  if works_draft %}
                     <div class="card">
@@ -116,7 +113,7 @@
                                             <td>{{ row.createdDate|date:"Y/m/j" }}</td>
                                             <td>{{ row.eta|date:"Y/m/j" }}</td>
                                             <td>
-                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-info btn-md">Edit</a>
                                             </td>
                                           </tr>
                                   {% endfor %}
@@ -158,9 +155,13 @@
                                             </td>
                                             <td>{{ row.createdDate|date:"Y/m/j" }}</td>
                                             <td>{{ row.eta|date:"Y/m/j"}}</td>
-                                            <td>{{ row.progress }}</td>
                                             <td>
-                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <div class="progress progress-striped active">
+                                                    <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-md">Translate</a>
                                             </td>
                                           </tr>
                                   {% endfor %}

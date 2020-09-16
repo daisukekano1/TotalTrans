@@ -122,7 +122,6 @@ def save(request):
                     createdDate=timezone.now()
                 )
                 t2.save()
-        redirecttarget = "workdetail"
     else:
         t1 = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
         if t1 != None:
@@ -134,7 +133,10 @@ def save(request):
             t1.eta = eta
             status = status
             t1.save()
+    if status == "Draft":
         redirecttarget = "workcreation"
+    else:
+        redirecttarget = "workdetail"
     return redirect(redirecttarget, work_id=work_id)
 
 @login_required
@@ -237,11 +239,6 @@ def requestGoogleTranslation(request):
     return JsonResponse({"data": result})
 
 @login_required
-def saveGengoTranslation(request):
-    data = {}
-    return JsonResponse(data)
-
-@login_required
 def saveGoogleTranslation(request):
     work_id = request.GET.get("work_id")
     OriginalText = request.GET.get("googleOriginalText").replace('\n', '\r\n')
@@ -308,20 +305,52 @@ def saveSelfTranslation(request):
     }
     return JsonResponse(data)
 
+@login_required
+def saveIgnoreTranslation(request):
+    work_id = request.GET.get("work_id")
+    OriginalText = request.GET.get("OriginalText").replace('\n', '\r\n')
+    historyNum = 1
+    querySet = TranslationHistory.objects.filter(work_id=work_id).order_by("historyNum")
+    if querySet.first() is not None:
+        historyNum = querySet.last().historyNum + 1
+
+    # Insert History
+    t2 = TranslationHistory(
+        work_id = work_id,
+        beforeTranslation = OriginalText,
+        afterTranslation = OriginalText,
+        TranslationType = "Ignore",
+        historyNum = historyNum,
+        createdDate=timezone.now()
+    )
+    t2.save()
+
+    work = Works.objects.get(pk=work_id)
+    work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "i")
+    work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, OriginalText, historyNum, "i")
+    work.progress = getPercentage2(work.wordsOriginal)
+    work.save()
+    data = {
+        'wordsOriginal': work.wordsOriginal,
+        'wordsTranslated': work.wordsTranslated,
+        'progress': work.progress
+    }
+    return JsonResponse(data)
+
 def getPercentage2(wordsOriginal):
     wkval = wordsOriginal.replace('\r\n','')
     wkval = wkval.replace('\n','')
     wk = ''
     wk2 = ''
-    removeTags = re.sub(r'\[(r|g|s):(e|s):[0-9]+\]','', wkval)
+    removeTags = re.sub(r'\[(s|g|i):(e|s):[0-9]+\]','', wkval)
     totallength = len(removeTags)
-    while bool(re.search('\[(r|g|s):s:[0-9]+\]',wkval)):
-        search = re.search('\[(r|g|s):s:[0-9]+\]',wkval)
+    while bool(re.search('\[(s|g|i):s:[0-9]+\]',wkval)):
+        search = re.search('\[(s|g|i):s:[0-9]+\]',wkval)
         wkval = wkval[search.start():]
-        wk = re.sub('\[(r|g|s):s:[0-9]+\]', '', wkval, 1)
-        wk = re.sub('\[(r|g|s):e:.*$', '', wk)
+        wk = re.sub('\[(s|g|i):s:[0-9]+\]', '', wkval, 1)
+        wk = re.sub('\[(s|g|i):e:.*$', '', wk)
         wk2 = wk2 + wk
-        search = re.search('\[(r|g|s):e:[0-9]+\]', wkval)
+        search = re.search('\[(s|g|i):e:[0-9]+\]', wkval)
         wkval = wkval[search.end():]
     wklen = len(wk2)
     return math.ceil(wklen/totallength * 100)
@@ -355,18 +384,19 @@ def deleteHistory(request):
     history.save()
 
     work = Works.objects.get(pk=work_id)
-    work.wordsOriginal = re.sub('\[(r|g|s):(s|e):'+str(historyNum)+'\]','',work.wordsOriginal)
-    work.wordsTranslated = re.sub('\[(r|g|s):s:'+str(historyNum)+'\]'+afterTranslation+'\[(r|g|s):e:'+str(historyNum)+'\]',
+    work.wordsOriginal = re.sub('\[(s|g|i):(s|e):'+str(historyNum)+'\]','',work.wordsOriginal)
+    work.wordsTranslated = re.sub('\[(s|g|i):s:'+str(historyNum)+'\]'+afterTranslation+'\[(s|g|i):e:'+str(historyNum)+'\]',
                                   beforeTranslation,
                                   work.wordsTranslated)
     history = TranslationHistory.objects.filter(work_id=work_id).filter(historyNum=historyNum).first()
     typeprefix = ""
-    if history.TranslationType == "Request":
-        typeprefix = "r"
+    if history.TranslationType == "Self":
+        typeprefix = "s"
     elif history.TranslationType == "Google":
         typeprefix = "g"
-    elif history.TranslationType == "Self":
-        typeprefix = "s"
+    elif history.TranslationType == "Ignore":
+        typeprefix = "i"
+
     work.progress = getPercentage2(work.wordsOriginal)
     work.save()
     data = {
