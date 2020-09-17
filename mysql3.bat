@@ -1,0 +1,1 @@
+"C:\mysql-5.7.23-winx64\bin\mysqld" --defaults-file="my3.ini" --console
