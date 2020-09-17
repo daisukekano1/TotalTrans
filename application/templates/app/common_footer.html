@@ -1,14 +1,12 @@
-{% if request.path == "/workcreation/" %}
+{% if "/workcreation/" in request.path %}
     <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> #Cancel#</button>
     <button type="button" onclick="javascript:submitAction('Draft')" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-share"></i> #Draft#</button>
     <button type="button" onclick="javascript:submitAction('Open')" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-share"></i> #Save#</button>
-{% endif %}
-{% if "/workdetail/" in request.path %}
+{% elif "/workdetail/" in request.path %}
     <button type="button" id="btnOpenSelfTranslate" class="btn btn-md btn-self" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#SelfTrans#</button>
     <button type="button" id="btnOpenGoogleRequest" class="btn btn-md btn-primary" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#GoogleTrans#</button>
-    <button type="button" id="btnIgnoreTrans" class="btn btn-md btn-grey" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#IgnoreTrans#</button>
-{% endif %}
-{% if "/glossary/" in request.path %}
+    <button type="button" id="btnOpenIgnoreText" class="btn btn-md btn-grey" style="color:white; font-size:1em;"><i class="fas fa-share"></i>#IgnoreTrans#</button>
+{% elif "/glossary/" in request.path %}
     <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> #Cancel#</button>
     <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-share"></i> #Save#</button>
 {% endif %}

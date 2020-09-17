@@ -31,7 +31,7 @@ def home(request):
     works_draft = []
     for work in Works.objects.filter(**filters).filter(status='Draft').order_by('createdDate').reverse():
         onedata = {}
-        onedata['id'] = work.id
+        onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
         srclang = Language.objects.filter(lc__exact=work.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         tgtlang = Language.objects.filter(lc__exact=work.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
@@ -45,7 +45,7 @@ def home(request):
     works_open = []
     for work in Works.objects.filter(**filters).filter(status='Open').order_by('createdDate').reverse():
         onedata = {}
-        onedata['id'] = work.id
+        onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
         srclang = Language.objects.filter(lc__exact=work.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         tgtlang = Language.objects.filter(lc__exact=work.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()

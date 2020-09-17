@@ -24,16 +24,17 @@ urlpatterns = [
 
     # The work page functions
     path('workcreation/', views_work.workcreation, name='workcreation'),
-    path('workcreation/save', views_work.save, name='saveWork'),
+    path('workcreation/<int:work_id>/', views_work.workcreation, name='workcreation'),
+    path('worksave', views_work.save, name='saveWork'),
     path('workdetail/<int:work_id>/', views_work.workdetail, name='workdetail'),
     path('addTag', views_work.addTag, name='addTag'),
     path('removeTag', views_work.removeTag, name='removeTag'),
     path('requestGengoTranslation', views_work.requestGengoTranslation, name='requestGengoTranslation'),
     path('requestGoogleTranslation', views_work.requestGoogleTranslation, name='requestGoogleTranslation'),
     path('workdetail/<int:work_id>/gethistory', views_work.gethistory, name='gethistory'),
-    path('saveGengoTranslation', views_work.saveGengoTranslation, name='saveGengoTranslation'),
     path('saveGoogleTranslation', views_work.saveGoogleTranslation, name='saveGoogleTranslation'),
     path('saveSelfTranslation', views_work.saveSelfTranslation, name='saveSelfTranslation'),
+    path('saveIgnoreTranslation', views_work.saveIgnoreTranslation, name='saveIgnoreTranslation'),
     path('deleteHistory', views_work.deleteHistory, name='deleteHistory'),
     path('worklist/', views_work.worklist, name='worklist'),
 

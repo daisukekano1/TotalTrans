@@ -13,26 +13,35 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card">
-                    <div class="card-header sitecolor-bcolor h6"><i class="fas fa-tasks"></i>    #Home_Work_Counts#</div>
-                    <div class="card-footer p-0 text-sm">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="{% url 'worklist' %}?status=Draft" class="nav-link">#Home_Draft_Cnt# <span class="float-right badge bg-primary">{{ count.DraftCount }} </span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'worklist' %}?status=Open" class="nav-link">#Home_Open_Cnt# <span class="float-right badge bg-info">{{ count.OpenCount }}</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'worklist' %}" class="nav-link">#Home_All_Cnt# <span class="float-right badge bg-success">{{ count.AllCount }}</span></a>
-                        </li>
-                    </ul>
-                    </div>
+                    <div class="card card-widget widget-user" style="height:inherit;">
+                        <div class="card-header h6 bg-info">#Translation Works#</div>
+                        <div style="padding-top: 4px;">
+                            <div class="row">
+                                <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">{{ count.DraftCount }}</h5>
+                                        <span class="description-text"><a href="{% url 'worklist' %}?status=Draft" class="nav-link">#Draft#</a></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">{{ count.OpenCount }}</h5>
+                                        <span class="description-text"><a href="{% url 'worklist' %}?status=Open" class="nav-link">#Open#</a></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="description-block">
+                                        <h5 class="description-header">{{ count.AllCount }}</h5>
+                                        <span class="description-text"><a href="{% url 'worklist' %}" class="nav-link">#Closed#</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <div class="card-header sitecolor-bcolor h6"><i class="fas fa-tags"></i> #Home_Tag_Counts#</div>
+                        <div class="card-header bg-tag h6"><i class="fas fa-tags"></i> #Home_Tag_Counts#</div>
                         <div class="card-footer p-0 text-sm">
                             <ul class="nav flex-column">
                             {% if tags %}
@@ -52,7 +61,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <div class="card-header sitecolor-bcolor h6"><i class="fas fa-book"></i> #Home_Glossary#</div>
+                        <div class="card-header bg-glossary h6"><i class="fas fa-book"></i> #Home_Glossary#</div>
                         <div class="card-footer p-0 text-sm">
                             <ul class="nav flex-column">
                             {% if glossary %}
@@ -70,7 +79,6 @@
                 </div>
             </div>
             <div class="row">
-                <a role="button" href="{% url 'workcreation' %}" class="btn btn-outline-info btn-lg">#New Translation#<i class="fas fa-plus-square pl-1"></i></a>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {%  if works_draft %}
                     <div class="card">
@@ -105,7 +113,7 @@
                                             <td>{{ row.createdDate|date:"Y/m/j" }}</td>
                                             <td>{{ row.eta|date:"Y/m/j" }}</td>
                                             <td>
-                                                <a href="{% url 'workcreation' %}?id={{ row.id }}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-info btn-md">Edit</a>
                                             </td>
                                           </tr>
                                   {% endfor %}
@@ -147,9 +155,13 @@
                                             </td>
                                             <td>{{ row.createdDate|date:"Y/m/j" }}</td>
                                             <td>{{ row.eta|date:"Y/m/j"}}</td>
-                                            <td>{{ row.progress }}</td>
                                             <td>
-                                              <a href="{% url 'workdetail' row.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                                <div class="progress progress-striped active">
+                                                    <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-md">Translate</a>
                                             </td>
                                           </tr>
                                   {% endfor %}

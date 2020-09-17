@@ -109,14 +109,14 @@ html, body{
   white-space: pre-wrap;
 }
 .sitecolor-bcolor{
-  background-color : #214267;
+  background-color : #61a9e8;
   color : white;
 }
 .sitecolor-text{
-  color : #214267 !important;
+  color : #61a9e8 !important;
 }
 .sitecolor-border{
-  border-color : #214267 !important;
+  border-color : #61a9e8 !important;
 }
 .btn-self{
   color: #fff;
@@ -136,14 +136,17 @@ html, body{
   cursor:pointer;
   opacity: 0.5;
 }
-.highrighthistory_gengo {
-  border-bottom: 2px solid #30cfc0 !important;
+.highrighthistory_self {
+  background-color: #ffcc55  !important;
+  border-bottom: 2px solid #ffaa00 !important;
 }
 .highrighthistory_google {
-  border-bottom: 2px solid #5a95f5 !important;
+  background-color: #8bb5fb  !important;
+  border-bottom: 2px solid #5599ff !important;
 }
-.highrighthistory_self {
-  border-bottom: 2px solid #ffa000 !important;
+.highrighthistory_ignore {
+  background-color: #dddddd  !important;
+  border-bottom: 2px solid #aaaaaa !important;
 }
 
 .custom-label{
@@ -198,4 +201,19 @@ html, body{
 }
 .editableTable table.table th, table.table td {
   padding: .75rem;;
+}
+.home-widget-header {
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    text-align: center;
+    padding: .75rem 1.25rem;
+    position: relative;
+}
+.bg-glossary {
+  background-color: #a4ad69;
+  color : white;
+}
+.bg-tag {
+  background-color: #69ad99;
+  color : white;
 }

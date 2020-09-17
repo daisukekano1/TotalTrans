@@ -9,7 +9,7 @@
 {% block content %}
 <div class="content-wrapper workdetail">
     <section class="content">
-        <form id="workform" class="form-inline" action="save" method="post">
+        <form id="workform" class="form-inline" action="/worksave" method="post">
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <input type="hidden" id="id" name="id" value="{{ work.id }}"/>
+            <input type="hidden" id="work_id" name="work_id" value="{{ work.id }}"/>
             <input type="hidden" id="tagsinfo" name="tagsinfo" />
             <input type="hidden" id="status" name="status" />
         </form>
@@ -71,8 +71,8 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    {% for lang in langs %}
-                        <div class="col-sm-4 selectedLang" data-id="{{ lang.lc }}">{{ lang.displaylang }}</div>
+                    {% for lng in langs %}
+                        <div class="col-sm-4 selectedLang" data-id="{{ lng.lc }}">{{ lng.displaylang }}</div>
                     {% endfor %}
                 </div>
             </div>

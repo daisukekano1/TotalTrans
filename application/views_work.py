@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 
-from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag, UserGlossary
+from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag, UserGlossary, CustomUser
 from django.contrib.auth.decorators import login_required
 from application.customlib import GoogleApiLib, DataLib
 
@@ -45,7 +45,7 @@ def worklist(request):
     data = []
     for work in Works.objects.filter(**filters).order_by('createdDate').reverse():
         onedata = {}
-        onedata['id'] = work.id
+        onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
         onedata['wordsOriginal'] = work.wordsOriginal
         srclang = Language.objects.filter(lc__exact=work.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
@@ -63,10 +63,9 @@ def worklist(request):
     return HttpResponse(template.render({"data": data}, request))
 
 @login_required
-def workcreation(request):
-    id = request.GET.get("id")
-    work = Works.objects.filter(user=request.user.id).filter(id=id).first()
-    langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language','flagId', 'displaylang').order_by('displaylang')
+def workcreation(request, work_id = 0):
+    work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
+    langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language', 'displaylang').order_by('displaylang')
     tags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname','backgroundcolor')
     selectedlang = {}
     if work == None:
@@ -82,7 +81,7 @@ def workcreation(request):
                 select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         }
     data = {
-        'langs' : langs,
+        'langs' :langs,
         'tags' : json.dumps(list(tags), cls=DjangoJSONEncoder),
         'selectedlang' : selectedlang,
         'work':work
@@ -94,9 +93,9 @@ def save(request):
     etastr = request.POST['eta']
     eta = dt.strptime(etastr, '%Y/%m/%d')
     status = request.POST['status']
-    id = request.POST['id']
-    redirecttarget = ""
-    if id == '':
+    work_id = request.POST['work_id']
+    redirecttarget = ''
+    if work_id == '':
         t1 = Works(
             user_id = request.user.id,
             workTitle = request.POST['workTitle'],
@@ -111,7 +110,7 @@ def save(request):
             createdDate = timezone.now()
         )
         t1.save()
-        id = Works.objects.latest('id').id
+        work_id = Works.objects.latest('id').id
         tags = json.loads(request.POST['tagsinfo'])
         for tag in tags:
             querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
@@ -123,20 +122,22 @@ def save(request):
                     createdDate=timezone.now()
                 )
                 t2.save()
-        redirecttarget = "workdetail"
-
     else:
-        t1 = Works.objects.filter(user=request.user.id).filter(id=id).first()
-        t1.workTitle = request.POST['workTitle']
-        t1.wordsOriginal = request.POST['wordsOriginal']
-        t1.lc_src = request.POST['lc_src']
-        t1.lc_tgt = request.POST['lc_tgt']
-        t1.wordsTranslated = request.POST['wordsOriginal']
-        t1.eta = eta
-        status = status
-        t1.save()
+        t1 = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
+        if t1 != None:
+            t1.workTitle = request.POST['workTitle']
+            t1.wordsOriginal = request.POST['wordsOriginal']
+            t1.lc_src = request.POST['lc_src']
+            t1.lc_tgt = request.POST['lc_tgt']
+            t1.wordsTranslated = request.POST['wordsOriginal']
+            t1.eta = eta
+            status = status
+            t1.save()
+    if status == "Draft":
         redirecttarget = "workcreation"
-    return redirect(redirecttarget, id=id)
+    else:
+        redirecttarget = "workdetail"
+    return redirect(redirecttarget, work_id=work_id)
 
 @login_required
 def addTag(request):
@@ -238,11 +239,6 @@ def requestGoogleTranslation(request):
     return JsonResponse({"data": result})
 
 @login_required
-def saveGengoTranslation(request):
-    data = {}
-    return JsonResponse(data)
-
-@login_required
 def saveGoogleTranslation(request):
     work_id = request.GET.get("work_id")
     OriginalText = request.GET.get("googleOriginalText").replace('\n', '\r\n')
@@ -309,20 +305,52 @@ def saveSelfTranslation(request):
     }
     return JsonResponse(data)
 
+@login_required
+def saveIgnoreTranslation(request):
+    work_id = request.GET.get("work_id")
+    OriginalText = request.GET.get("OriginalText").replace('\n', '\r\n')
+    historyNum = 1
+    querySet = TranslationHistory.objects.filter(work_id=work_id).order_by("historyNum")
+    if querySet.first() is not None:
+        historyNum = querySet.last().historyNum + 1
+
+    # Insert History
+    t2 = TranslationHistory(
+        work_id = work_id,
+        beforeTranslation = OriginalText,
+        afterTranslation = OriginalText,
+        TranslationType = "Ignore",
+        historyNum = historyNum,
+        createdDate=timezone.now()
+    )
+    t2.save()
+
+    work = Works.objects.get(pk=work_id)
+    work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "i")
+    work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, OriginalText, historyNum, "i")
+    work.progress = getPercentage2(work.wordsOriginal)
+    work.save()
+    data = {
+        'wordsOriginal': work.wordsOriginal,
+        'wordsTranslated': work.wordsTranslated,
+        'progress': work.progress
+    }
+    return JsonResponse(data)
+
 def getPercentage2(wordsOriginal):
     wkval = wordsOriginal.replace('\r\n','')
     wkval = wkval.replace('\n','')
     wk = ''
     wk2 = ''
-    removeTags = re.sub(r'\[(r|g|s):(e|s):[0-9]+\]','', wkval)
+    removeTags = re.sub(r'\[(s|g|i):(e|s):[0-9]+\]','', wkval)
     totallength = len(removeTags)
-    while bool(re.search('\[(r|g|s):s:[0-9]+\]',wkval)):
-        search = re.search('\[(r|g|s):s:[0-9]+\]',wkval)
+    while bool(re.search('\[(s|g|i):s:[0-9]+\]',wkval)):
+        search = re.search('\[(s|g|i):s:[0-9]+\]',wkval)
         wkval = wkval[search.start():]
-        wk = re.sub('\[(r|g|s):s:[0-9]+\]', '', wkval, 1)
-        wk = re.sub('\[(r|g|s):e:.*$', '', wk)
+        wk = re.sub('\[(s|g|i):s:[0-9]+\]', '', wkval, 1)
+        wk = re.sub('\[(s|g|i):e:.*$', '', wk)
         wk2 = wk2 + wk
-        search = re.search('\[(r|g|s):e:[0-9]+\]', wkval)
+        search = re.search('\[(s|g|i):e:[0-9]+\]', wkval)
         wkval = wkval[search.end():]
     wklen = len(wk2)
     return math.ceil(wklen/totallength * 100)
@@ -356,18 +384,19 @@ def deleteHistory(request):
     history.save()
 
     work = Works.objects.get(pk=work_id)
-    work.wordsOriginal = re.sub('\[(r|g|s):(s|e):'+str(historyNum)+'\]','',work.wordsOriginal)
-    work.wordsTranslated = re.sub('\[(r|g|s):s:'+str(historyNum)+'\]'+afterTranslation+'\[(r|g|s):e:'+str(historyNum)+'\]',
+    work.wordsOriginal = re.sub('\[(s|g|i):(s|e):'+str(historyNum)+'\]','',work.wordsOriginal)
+    work.wordsTranslated = re.sub('\[(s|g|i):s:'+str(historyNum)+'\]'+afterTranslation+'\[(s|g|i):e:'+str(historyNum)+'\]',
                                   beforeTranslation,
                                   work.wordsTranslated)
     history = TranslationHistory.objects.filter(work_id=work_id).filter(historyNum=historyNum).first()
     typeprefix = ""
-    if history.TranslationType == "Request":
-        typeprefix = "r"
+    if history.TranslationType == "Self":
+        typeprefix = "s"
     elif history.TranslationType == "Google":
         typeprefix = "g"
-    elif history.TranslationType == "Self":
-        typeprefix = "s"
+    elif history.TranslationType == "Ignore":
+        typeprefix = "i"
+
     work.progress = getPercentage2(work.wordsOriginal)
     work.save()
     data = {

@@ -1,3 +1,6 @@
 /venv/
 /application/migrations/
 /application/credentials.json
+my.ini
+mysql2.bat
+
