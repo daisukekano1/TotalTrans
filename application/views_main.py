@@ -1,8 +1,9 @@
 from django.template import loader
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from application.models import Works, Language, WorkUserTag, UserTag, UserGlossary
+from application.models import Works, Language, WorkUserTag, UserTag, UserGlossary, TranslationHistory
 from django.contrib.auth.decorators import login_required
+import datetime
 
 @login_required
 def home(request):
@@ -27,6 +28,26 @@ def home(request):
     if gl != None:
         glossary['keyid'] = gl.id
         glossary['count'] = gl.numberofcount
+
+    transhistory = []
+    for history in TranslationHistory.objects.select_related('work').filter(work__user_id=request.user.id).order_by('createdDate').reverse()[:3]:
+        onedata = {}
+        onedata['workTitle'] = history.work.workTitle
+        onedata['TranslationType'] = history.TranslationType
+        onedata['beforeTranslation'] = history.beforeTranslation
+        onedata['afterTranslation'] = history.afterTranslation
+        onedata['createdDate'] = history.createdDate
+
+    works_eta = []
+    for work in Works.objects.filter(**filters).filter(eta).order_by('createdDate').reverse():
+        onedata = {}
+        onedata['work_id'] = work.id
+        onedata['workTitle'] = work.workTitle
+        onedata['eta'] = work.eta
+        dt_now = datetime.datetime.now()
+        if work.etagftr
+        onedata['message'] = work.eta
+        works_eta.append(onedata)
 
     works_draft = []
     for work in Works.objects.filter(**filters).filter(status='Draft').order_by('createdDate').reverse():
@@ -61,6 +82,7 @@ def home(request):
         'count': count,
         'tags' : tags,
         'glossary' : glossary,
+        'transwork' : transwork,
         'works_draft': works_draft,
         'works_open': works_open
     }

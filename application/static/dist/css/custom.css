@@ -2,6 +2,15 @@ html, body{
   font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
   font-size:14px;
 }
+.table td, .table th{
+  vertical-align: middle !important;
+}
+table td{
+  font-size: 1rem;
+}
+.btn.btn-md{
+  font-size:1rem;
+}
 .index table thead{
   background-color: #7f94a7;
   color:white;
@@ -216,4 +225,24 @@ html, body{
 .bg-tag {
   background-color: #69ad99;
   color : white;
+}
+ul.nav-statusmenu {
+  background-color: #3e5ca4;
+  -webkit-border-radius: 6px 6px 0px 0px;
+  -moz-border-radius: 6px 6px 0px 0px;
+  border-radius: 6px 6px 0px 0px;
+  height: 46px;
+  line-height: 46px;
+}
+ul.nav-statusmenu li {
+}
+ul.nav-statusmenu li a {
+  color: white;
+  font-size: 16px;
+}
+ul.nav-statusmenu li a.active {
+  background-color: #61a9e8;
+}
+ul.nav-statusmenu li a:hover {
+  background-color: #6e8cd4;
 }
