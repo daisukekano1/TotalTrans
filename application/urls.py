@@ -1,5 +1,5 @@
 from django.urls import path, re_path, include
-from application import views_main, views_work, views_user, views_landing, views_settings
+from application import views_main, views_work, views_user, views_landing, views_settings, views_history
 from django.contrib.auth.views import LoginView, LogoutView
 from application.forms import EmailAuthenticationForm
 
@@ -37,6 +37,8 @@ urlpatterns = [
     path('saveIgnoreTranslation', views_work.saveIgnoreTranslation, name='saveIgnoreTranslation'),
     path('deleteHistory', views_work.deleteHistory, name='deleteHistory'),
     path('worklist/', views_work.worklist, name='worklist'),
+    path('translationHistory/', views_work.history, name='translationHistory'),
+    path('translationHistory/gethistory', views_work.gethistory, name='gethistory'),
 
     # The setting page functions
     path('glossary/', views_settings.glossary, name='glossary'),
@@ -45,6 +47,10 @@ urlpatterns = [
     path('getglossarylist/', views_settings.getglossarylist, name='getglossarylist'),
 
     path('taglist/', views_settings.taglist, name='taglist'),
+    path('taglist/gettags', views_settings.gettags, name='gettags'),
+    path('taglist/<int:tag_id>/deleteTag', views_settings.deleteTag, name='deleteTag'),
+    path('getworksfortag', views_settings.getworksfortag, name='getworksfortag'),
 
     path('i18n/', include('django.conf.urls.i18n'))
+
 ]

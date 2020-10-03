@@ -32,6 +32,7 @@ def home(request):
     transhistory = []
     for history in TranslationHistory.objects.select_related('work').filter(work__user_id=request.user.id).order_by('createdDate').reverse()[:3]:
         onedata = {}
+        onedata['work_id'] = history.work.id
         onedata['workTitle'] = history.work.workTitle
         onedata['TranslationType'] = history.TranslationType
         onedata['beforeTranslation'] = history.beforeTranslation
@@ -39,14 +40,27 @@ def home(request):
         onedata['createdDate'] = history.createdDate
 
     works_eta = []
-    for work in Works.objects.filter(**filters).filter(eta).order_by('createdDate').reverse():
+    dt_now = datetime.datetime.now()
+    for work in Works.objects.filter(**filters).filter(user_id=request.user.id).filter(status__in=['Open','Draft']).order_by('eta').reverse()[:3]:
         onedata = {}
         onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
         onedata['eta'] = work.eta
-        dt_now = datetime.datetime.now()
-        if work.etagftr
-        onedata['message'] = work.eta
+        onedata['status'] = work.status
+        message = ''
+        color = ''
+        diff = (work.eta.date() - dt_now.date()).days
+        if diff < 0:
+            message = str(abs(diff))+ " days past"
+            color = "red"
+        elif diff == 0:
+            message = "Today"
+            color = "yellow"
+        else:
+            message = str(diff)+ " days left"
+            color = "green"
+        onedata['message'] = message
+        onedata['color'] = color
         works_eta.append(onedata)
 
     works_draft = []
@@ -81,8 +95,8 @@ def home(request):
     data = {
         'count': count,
         'tags' : tags,
-        'glossary' : glossary,
-        'transwork' : transwork,
+        'transhistory' : transhistory,
+        'works_eta' : works_eta,
         'works_draft': works_draft,
         'works_open': works_open
     }

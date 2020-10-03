@@ -16,7 +16,16 @@
                     <div class="card">
                         <div class="card-header h6 sitecolor-bcolor">#PageTitle_Tag#</div>
                         <div class="card-body">
-                            To be updated
+                            <table id="tags" class="table display table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>tagname</th>
+                                    <th>color</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -24,8 +33,88 @@
         </div>
     </section>
 </div>
-{% endblock content %}
-
 {% block javascripts %}
   {{ block.super}}
 {% endblock javascripts %}
+<script>
+    $(document).ready(function() {
+        function format(tag_id) {
+            $.ajax("/getworksfortag", {
+                data: { tag_id: tag_id}
+            }).done(
+                function success(data) {
+                    var childTable = ''
+                    for(let i in data){
+                        childTable = childTable + '<tr><td>' + data[i] + '</td></tr>'
+                    }
+                    return childTable;
+                },
+                function fail(data, status) {
+                    alert('Request failed.  Returned status of ' + status);
+                }
+            )
+        }
+        var dtable = $("#tags").DataTable({
+            ajax: "gettags",
+            scrollCollapse : true,
+            paging : false,
+            searching : false,
+            scrollToTop: true,
+            ordering: false,
+            "responsive": true,
+            "autoWidth": false,
+            'dom' : 't',
+            async: false,
+            columns: [
+                {
+                    data: 'tag_id',
+                    className: 'details-control',
+                    "render": function (data, type, row) {
+                        return '<span style="visibility: hidden">'+data+'</span>';
+                    }
+                },
+                { data: 'tagname', className: "dt-left no-wrap" },
+                { data: 'backgroundcolor', className: "dt-left no-wrap"},
+                { data: 'tag_id', className: "dt-left no-wrap",
+                    "render": function (data, type, row) {
+                        url = "{% url 'deleteTag' 0 %}".replace("0", data)
+                        return '<a href="'+url+'">delete</a>';
+                    }
+                }
+            ],
+            'columnDefs': [
+              {
+                'targets': [0],
+                'width': '10px',
+              },
+              {
+                'targets': [1,2],
+                'className' : 'dt-left',
+              },
+              {
+                'targets' : [3],
+                'className' : 'dt-center',
+                'width': '50px',
+              },
+            ]
+        });
+        // Add event listener for opening and closing details
+        $('#tags tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var span = $(this).children('span');
+            tag_id = span.text();
+            var row = dtable.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else
+            {
+                html = format(tag_id);
+                row.child(html).show();
+                tr.addClass('shown');
+            }
+        });
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,83 @@
+{% extends "app/common_base_site.html" %}
+{% load i18n %}
+
+{% block title %}#TranslationHistory#{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="card-header h6 sitecolor-bcolor">#TranslationHistory#</div>
+                        <div class="card-body">
+                            <table id="history" class="display table-striped">
+                            <thead>
+                              <tr>
+                                <th>workTitle</th>
+                                <th>TranslationType</th>
+                                <th>beforeTranslation</th>
+                                <th>afterTranslation</th>
+                                <th>createdDate</th>
+                              </tr>
+                            </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% block javascripts %}
+  {{ block.super}}
+{% endblock javascripts %}
+<script>
+    $(document).ready(function() {
+        var dtable = $("#history").DataTable({
+            ajax: "gethistory",
+            {#bDeferRender: true,#}
+            {#stateSave: false,#}
+            scrollCollapse : true,
+            paging : true,
+            searching : true,
+            scrollToTop: true,
+            orderClasses: false,
+            "responsive": true,
+            "autoWidth": false,
+            columns: [
+                {   data: 'workTitle',
+                    className: "dt-left no-wrap",
+                    "render": function (data, type, row) {
+                        url = "{% url 'workdetail' 0 %}".replace("0", row['work_id'])
+                        return '<a href="'+url+'">'+data+'</a>';
+                    }
+                },
+                {
+                    data: 'TranslationType',
+                    className: "dt-left no-wrap",
+                    "render": function (data, type, row) {
+                        if (row['TranslationType'] == 'Self') {
+                            return '<span class="badge badge-default color-trans-self">'+data+'</span>';
+                        }else if (row['TranslationType'] == 'Google') {
+                            return '<span class="badge badge-default color-trans-google">'+data+'</span>';
+                        }else if (row['TranslationType'] == 'Ignore') {
+                            return '<span class="badge badge-default color-trans-ignore">'+data+'</span>';
+                        }else {
+                            return data;
+                        }
+                    }
+                },
+                {   data: 'beforeTranslation', className: "dt-left no-wrap"},
+                {   data: 'afterTranslation', className: "dt-left no-wrap"},
+                {   data: 'createdDateTime', className: "dt-left small" },
+            ]
+        });
+    });
+</script>
+{% endblock content %}

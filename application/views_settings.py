@@ -1,15 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import gspread
-from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
-import pprint, os
-from application.models import UserGlossary, Language
+from application.models import UserGlossary, Language, UserTag, WorkUserTag
 from django.utils import timezone
 import json
 from django.http import JsonResponse
 from application.customlib import GoogleApiLib
-from application.customlib import DataLib
 
 folder_id = '1z22K4kWicecG81sCPUOgnL1zwlOFKt5D'
 message = ""
@@ -126,3 +123,34 @@ def saveGlossary(request, glossary_id):
 @login_required
 def taglist(request):
     return render(request, 'app/tag_list.html')
+
+@login_required
+def gettags(request):
+    data = []
+    for vals in UserTag.objects.filter(user=request.user.id):
+        onedata = {}
+        onedata['tag_id'] = vals.id
+        onedata['tagname'] = vals.tagname
+        onedata['backgroundcolor'] = vals.backgroundcolor
+        data.append((onedata))
+
+    return JsonResponse({"data": data})
+
+@login_required
+def deleteTag(request, tag_id):
+    data = []
+    WorkUserTag.objects.filter(tag_id=tag_id).delete()
+    UserTag.objects.filter(id=tag_id).delete()
+    return redirect('taglist')
+
+@login_required
+def getworksfortag(request):
+    tag_id = request.GET.get("tag_id")
+    data = []
+    for vals in WorkUserTag.objects.filter(tag_id=tag_id):
+        onedata = {}
+        onedata['work_id'] = vals.work_id
+        onedata['workTitle'] = vals.work.workTitle
+        data.append((onedata))
+
+    return JsonResponse({"data": data})

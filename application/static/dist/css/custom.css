@@ -88,8 +88,8 @@ table td{
 /*    max-width: 100%  !important;*/
 /*  }*/
 /*}*/
-.color-trans-request {
-  background-color: #30cfc0 !important;
+.color-trans-ignore {
+  background-color: #6c757d !important;
   color : white;
 }
 .color-trans-google {
@@ -245,4 +245,12 @@ ul.nav-statusmenu li a.active {
 }
 ul.nav-statusmenu li a:hover {
   background-color: #6e8cd4;
+}
+td.details-control {
+  background: url('../img/details_open.png') no-repeat center center;
+  cursor: pointer;
+}
+tr.shown td.details-control {
+  background: url('../img/details_close.png') no-repeat center center;
+  cursor: pointer;
 }

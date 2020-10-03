@@ -374,7 +374,19 @@
             columns: [
                 {   data: 'historyNum', className: "dt-left no-wrap"},
                 {   data: 'createdDate', className: "dt-left small" },
-                {   data: 'TranslationType', className: "dt-left no-wrap"},
+                {   data: 'TranslationType', className: "dt-left no-wrap",
+                    "render": function (data, type, row) {
+                        if (row['TranslationType'] == 'Self') {
+                            return '<span class="badge badge-default color-trans-self">'+data+'</span>';
+                        }else if (row['TranslationType'] == 'Google') {
+                            return '<span class="badge badge-default color-trans-google">'+data+'</span>';
+                        }else if (row['TranslationType'] == 'Ignore') {
+                            return '<span class="badge badge-default color-trans-ignore">'+data+'</span>';
+                        }else {
+                            return data;
+                        }
+                    }
+                },
                 {   data: 'beforeTranslation', className: "dt-left no-wrap"},
                 {   data: 'afterTranslation', className: "dt-left no-wrap"},
                 {   data: 'jobid', className: "dt-left no-wrap"}

@@ -207,12 +207,20 @@ def workdetail(request, work_id):
     return render(request, 'app/work_detail.html', data)
 
 @login_required
-def gethistory(request, work_id):
+def gethistory(request, work_id = 0):
     data = []
-    for vals in TranslationHistory.objects.filter(work_id=work_id):
+    filters = {}
+    if work_id != 0:
+        filters = {'work_id': work_id}
+
+    data = []
+    for vals in TranslationHistory.objects.filter(**filters):
         onedata = {}
+        onedata['work_id'] = vals.work_id
         onedata['historyNum'] = vals.historyNum
+        onedata['workTitle'] = vals.work.workTitle
         onedata['createdDate'] = vals.createdDate
+        onedata['createdDateTime'] = vals.createdDate.strftime('%Y/%m/%d %H:%M')
         onedata['TranslationType'] = vals.TranslationType
         onedata['beforeTranslation'] = vals.beforeTranslation
         onedata['afterTranslation'] = vals.afterTranslation
@@ -406,3 +414,6 @@ def deleteHistory(request):
     }
     return JsonResponse(data)
 
+@login_required
+def history(request):
+    return render(request, 'app/work_history.html')
