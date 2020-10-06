@@ -122,7 +122,16 @@ def saveGlossary(request, glossary_id):
 
 @login_required
 def taglist(request):
-    return render(request, 'app/tag_list.html')
+    data = []
+    for vals in UserTag.objects.filter(user=request.user.id):
+        onedata = {}
+        onedata['tag_id'] = vals.id
+        onedata['tagname'] = vals.tagname
+        onedata['backgroundcolor'] = vals.backgroundcolor
+        onedata['textcolor'] = vals.textcolor
+        data.append((onedata))
+
+    return render(request, 'app/tag_list.html', {"data": data})
 
 @login_required
 def gettags(request):
@@ -132,6 +141,7 @@ def gettags(request):
         onedata['tag_id'] = vals.id
         onedata['tagname'] = vals.tagname
         onedata['backgroundcolor'] = vals.backgroundcolor
+        onedata['textcolor'] = vals.textcolor
         data.append((onedata))
 
     return JsonResponse({"data": data})
@@ -151,6 +161,8 @@ def getworksfortag(request):
         onedata = {}
         onedata['work_id'] = vals.work_id
         onedata['workTitle'] = vals.work.workTitle
+        onedata['status'] = vals.work.status
+
         data.append((onedata))
 
     return JsonResponse({"data": data})

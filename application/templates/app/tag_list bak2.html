@@ -18,6 +18,7 @@
                         <div class="card-body">
                             <form id="tagsform" class="form" action="save" method="post">
                                 {% csrf_token %}
+                                <button id="addRow">Add a new tag</button>
                                 <table id="tags" class="table display dataTable">
                                 <thead>
                                     <tr>
@@ -29,6 +30,34 @@
                                         <th></th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    {% for row in data %}
+                                        <tr>
+                                            <td class="details-control">
+                                                <input type="hidden" id="tag_id" name="tag_id" value="{{ row.tag_id }}" />
+                                            </td>
+                                            <td class="dt-left no-wrap">
+                                                <div class="token badge" style="background-color:{{ row.backgroundcolor }}; color:{{ row.textcolor }};">
+                                                    <span class="token-label" style="padding:2em;">{{ row.tagname }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="dt-left no-wrap">
+                                                <input type="text" name="tagname" id="tagname" value="{{ row.tagname }}">
+                                            </td>
+                                            <td class="dt-left no-wrap">
+                                                <input type="color" class="backgroundcolor"  value="{{ row.backgroundcolor }}">
+                                                <input type="hidden" name="backgroundcolor" id="backgroundcolor" value="{{ row.backgroundcolor }}">
+                                            </td>
+                                            <td class="dt-left no-wrap">
+                                                <input type="color" class="textcolor"  value="{{ row.textcolor }}">
+                                                <input type="hidden" name="textcolor" id="textcolor" value="{{ row.textcolor }}">
+                                            </td>
+                                            <td class="dt-center no-wrap">
+                                                <button class="btn btn-md btn-outline-blue-grey" onclick='location.href="{% url 'deleteTag' row.tag_id %}"'>Delete</button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
                                 </table>
                                 <input type="hidden" name="tagsjson"/>
                             </form>
@@ -39,11 +68,6 @@
         </div>
     </section>
 </div>
-<div id="customForm">
-<editor-field name="tagText"></editor-field>
-<editor-field name="backColor"></editor-field>
-</div>
-{% endblock content %}
 {% block javascripts %}
     {{ block.super}}
     <script src="/static/vendors/datatables-buttons/js/dataTables.buttons.min.js"></script>
@@ -69,76 +93,29 @@
             });
             editor = new $.fn.dataTable.Editor( {
                 table: "#tags",
-                {#template: '#customForm',#}
+                template: '#customForm',
                 {#idSrc:  'id',#}
                 fields: [
                     {
-                        label: "#tagname#",
-                        name: "tagname"
+                        label: "#tagText#:",
+                        name: "tagText"
                     }, {
-                        label: "#backgroundcolor#",
-                        name: "backgroundcolor"
+                        label: "#backColor#:",
+                        name: "backColor"
                     }, {
-                        label: "#textColor#",
-                        name: "textcolor"
+                        label: "#textColor#:",
+                        name: "textColor"
                     }
                 ]
             });
             var dtable = $("#tags").DataTable({
-                ajax: "gettags",
-                scrollCollapse : true,
+                dom: "Bfrtip",
                 paging : false,
                 searching : false,
                 scrollToTop: true,
                 ordering: false,
-                "responsive": true,
-                "autoWidth": false,
-                async: false,
-                dom: "Bfrtip",
-                columns: [
-                    {
-                        data: 'tag_id',
-                        className: 'details-control',
-                        "render": function (data, type, row) {
-                            return '<input type="hidden" id="tag_id" name="tag_id" value="'+data+'" />'
-                        }
-                    },
-                    { data: 'tagname', className: "dt-left no-wrap",
-                        "render":function (data, type, row) {
-                            html = '<div class="token badge" style="background-color:'+row['backgroundcolor']+'; color:'+row['textcolor']+';">';
-                            html = html + '<span class="token-label" style="padding:2em;">'+row['tagname']+'</span>';
-                            html = html + '</div>';
-                            return html;
-                        }
-                    },
-                    { data: 'tagname', className: "dt-left no-wrap",
-                        "render":function (data, type, row) {
-                            return '<input type="text" name="tagname" id="tagname" value="'+row['tagname']+'">';
-                        }
-                    },
-                    { data: 'backgroundcolor', className: "dt-left no-wrap",
-                        "render":function (data, type, row) {
-                            html = '<input type="color" class="backgroundcolor"  value="'+row['backgroundcolor']+'">';
-                            html = html + '<input type="hidden" name="backgroundcolor" id="backgroundcolor" value="'+row['backgroundcolor']+'">';
-                            return html;
-                        }
-                    },
-                    { data: 'textcolor', className: "dt-left no-wrap",
-                        "render":function (data, type, row) {
-                            html = '<input type="color" class="textcolor"  value="'+row['textcolor']+'">';
-                            html = html + '<input type="hidden" name="textcolor" id="textcolor" value="'+row['textcolor']+'">';
-                            return html;
-                        }
-                    },
-                    { data: 'tag_id', className: "dt-center no-wrap",
-                        "render": function (data, type, row) {
-                            url = "{% url 'deleteTag' 0 %}".replace("0", data)
-                            return '<button class="btn btn-md btn-outline-blue-grey" onclick="location.href=\''+url+'\'">Delete</button>';
-                        }
-                    }
-                ],
                 buttons: [
-                    { extend: "create", editor: editor }
+                    { extend: "create", editor: editor, text : '#Add a new tag#' },
                 ]
             });
             $('#tags tbody').on('click', 'td.details-control', function () {

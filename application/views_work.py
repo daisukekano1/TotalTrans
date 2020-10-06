@@ -224,7 +224,6 @@ def gethistory(request, work_id = 0):
         onedata['TranslationType'] = vals.TranslationType
         onedata['beforeTranslation'] = vals.beforeTranslation
         onedata['afterTranslation'] = vals.afterTranslation
-        onedata['jobid'] = vals.jobid
         data.append((onedata))
 
     return JsonResponse({"data": data})

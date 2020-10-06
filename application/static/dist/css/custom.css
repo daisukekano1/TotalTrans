@@ -109,7 +109,7 @@ table td{
   color:white;
 }
 .editableColor{
-  background-color: #f5f8f8;
+  background-color: #fbfbf3;
 }
 .uneditableColor{
   background-color: #f3f3f3;
@@ -253,4 +253,31 @@ td.details-control {
 tr.shown td.details-control {
   background: url('../img/details_close.png') no-repeat center center;
   cursor: pointer;
+}
+table.taglistchild th, table.taglistchild td{
+    padding-top:.1em !important;
+    padding-bottom:.1em !important;
+    background-color: #abdde5;
+}
+table.taglistchild tr, table.taglistchild td{
+    padding-top:.1em !important;
+    padding-bottom:.1em !important;
+    background-color: white;
+    border-bottom: 1px solid #dee2e6;
+}
+table.taglistchild a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+table.taglistchild a:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+.input-label-color {
+  background-color: #3d7fc5;
+  color : white;
+}
+div.tokenfield {
+  background-color: #fbfbf3 !important;
 }

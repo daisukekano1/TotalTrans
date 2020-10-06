@@ -103,6 +103,7 @@ class UserTag(models.Model):
     user = models.ForeignKey(CustomUser, models.CASCADE, default=1)
     tagname = models.CharField(max_length=100, null=True)
     backgroundcolor = models.CharField(max_length=8, null=True)
+    textcolor = models.CharField(max_length=8, null=True)
     validFlg = models.SmallIntegerField(null=False, default=1)
     createdDate = models.DateTimeField(default=timezone.now)
 

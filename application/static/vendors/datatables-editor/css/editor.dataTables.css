@@ -60,6 +60,7 @@ div.DTE div.DTE_Form_Buttons button {
   margin-left: 0.75em;
   color: inherit;
   font-size: 14px;
+  white-space: nowrap;
   border: 1px solid #999;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -228,6 +229,14 @@ div.DTE_Field input[type="url"],
 div.DTE_Field input[type="week"] {
   padding: 5px 4px;
   width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+}
+div.DTE_Field select {
+  padding: 4px;
+  border-radius: 3px;
+  border: 1px solid #aaa;
+  background: white;
 }
 div.DTE_Field label div.DTE_Label_Info {
   font-size: 0.85em;
@@ -301,6 +310,7 @@ div.DTE_Field_Type_textarea textarea {
   padding: 3px;
   width: 100%;
   height: 80px;
+  border: 1px solid #aaa;
 }
 
 div.DTE_Field.DTE_Field_Type_date img {
@@ -772,7 +782,7 @@ div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_
 
 div.DTED_Lightbox_Wrapper div.DTE_Footer {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 div.DTED_Lightbox_Wrapper div.DTE_Footer_Content {
   display: none;

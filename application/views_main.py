@@ -38,10 +38,11 @@ def home(request):
         onedata['beforeTranslation'] = history.beforeTranslation
         onedata['afterTranslation'] = history.afterTranslation
         onedata['createdDate'] = history.createdDate
+        transhistory.append(onedata)
 
     works_eta = []
     dt_now = datetime.datetime.now()
-    for work in Works.objects.filter(**filters).filter(user_id=request.user.id).filter(status__in=['Open','Draft']).order_by('eta').reverse()[:3]:
+    for work in Works.objects.filter(**filters).filter(user_id=request.user.id).filter(status__in=['Open','Draft']).order_by('eta').reverse()[:5]:
         onedata = {}
         onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
