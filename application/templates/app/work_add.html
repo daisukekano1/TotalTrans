@@ -120,23 +120,6 @@
                 });
             }
         });
-        {#$("#lc_src").on('change.select2', function(){#}
-        {#    $('#lc_tgt').val(null).trigger('change');#}
-        {#    $('#lc_tgt').empty().select2();#}
-        {#    $.ajax("/getTargetLang", {#}
-        {#        data: {lc_src: this.value}#}
-        {#    }).then(#}
-        {#        function success(data) {#}
-        {#            $("#lc_tgt").select2({#}
-        {#                val : null,#}
-        {#                data: data['langs'],#}
-        {#                theme : 'bootstrap form-control editableColor'#}
-        {#            });#}
-        {#        },#}
-        {#        function fail(data, status) {#}
-        {#            alert('Request failed.  Returned status of ' + status);#}
-        {#        }#}
-        {#    )#}
         var tags = JSON.parse("{{ tags  | safe | escapejs }}");
         var tagsource = [];
         for(var vals of tags){
@@ -154,14 +137,18 @@
             })
             .on('tokenfield:createdtoken', function(e) {
                 value = e.attrs.value;
-                bgcolor = '#5f5353';
+                bgcolor = '#aaaaaa';
+                textcolor = '#ffffff';
                 for(var tag of tags){
-                    if (tag.tagname == value)
+                    if (tag.tagname == value){
                         bgcolor = tag.backgroundcolor;
+                        textcolor = tag.textgroundcolor;
+                    }
                 }
                 $(e.relatedTarget).addClass('badge');
                 $(e.relatedTarget).css('background-color', bgcolor);
-                var vals = { tagname: value, backgroundcolor: bgcolor }
+                $(e.relatedTarget).css('color', textcolor);
+                var vals = { tagname: value, backgroundcolor: bgcolor, textcolor : textcolor }
                 tokens.push(vals);
             }).on('tokenfield:removedtoken', function(e) {
                 var i = 0;

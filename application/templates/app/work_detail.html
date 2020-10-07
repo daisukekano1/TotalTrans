@@ -332,15 +332,19 @@
             .on('tokenfield:createdtoken', function(e) {
                 value = e.attrs.value;
                 bgcolor = '#aaaaaa';
+                textcolor = '#ffffff';
                 for(let i in usertags){
-                    if (usertags[i].tagname == value)
+                    if (usertags[i].tagname == value){
                         bgcolor = usertags[i].backgroundcolor;
+                        textcolor = usertags[i].textcolor;
+                    }
                 }
                 $(e.relatedTarget).css('background-color', bgcolor);
-                var vals = { tagname: value, backgroundcolor: bgcolor };
+                $(e.relatedTarget).css('color', textcolor);
+                var vals = { tagname: value, backgroundcolor: bgcolor, textcolor : textcolor };
                 tokens.push(vals);
                 if( initFlag == false ){
-                    ajaxAddTagRequest(value, bgcolor);
+                    ajaxAddTagRequest(value, bgcolor, textcolor);
                 }
             })
             .on('tokenfield:removedtoken', function(e) {
@@ -589,12 +593,13 @@
         textAreaHeightSet(wordsOriginalAll);
         convertText(2, $("#wordsTranslatedAll").text())
     });
-    function ajaxAddTagRequest(tagname, backgroundcolor) {
+    function ajaxAddTagRequest(tagname, backgroundcolor, textcolor) {
         $.ajax("/addTag", {
             data: {
                 work_id: '{{ work.work_id }}',
                 tagname: tagname,
-                backgroundcolor:backgroundcolor
+                backgroundcolor:backgroundcolor,
+                textcolor:textcolor
             }
         }).then(
             function success(name) {

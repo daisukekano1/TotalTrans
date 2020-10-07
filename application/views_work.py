@@ -52,7 +52,7 @@ def worklist(request):
         tgtlang = Language.objects.filter(lc__exact=work.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         onedata['srclang'] = srclang['displaylang']
         onedata['tgtlang'] = tgtlang['displaylang']
-        onedata['tags'] = WorkUserTag.objects.filter(work__exact=work.id).select_related('tag').values('tag__tagname', 'tag__backgroundcolor')
+        onedata['tags'] = WorkUserTag.objects.filter(work__exact=work.id).select_related('tag').values('tag__tagname', 'tag__backgroundcolor', 'tag__textcolor')
         onedata['progress'] = work.progress
         onedata['createdDate'] = work.createdDate
         onedata['numberofchar'] = work.numberofchar
@@ -66,7 +66,7 @@ def worklist(request):
 def workcreation(request, work_id = 0):
     work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
     langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language', 'displaylang').order_by('displaylang')
-    tags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname','backgroundcolor')
+    tags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname','backgroundcolor', 'textcolor')
     selectedlang = {}
     if work == None:
         dlib = DataLib()
@@ -111,17 +111,6 @@ def save(request):
         )
         t1.save()
         work_id = Works.objects.latest('id').id
-        tags = json.loads(request.POST['tagsinfo'])
-        for tag in tags:
-            querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
-            if querySet.first() is None:
-                t2 = UserTag(
-                    user_id=request.user.id,
-                    tagname=tag['tagname'],
-                    backgroundcolor=tag['backgroundcolor'],
-                    createdDate=timezone.now()
-                )
-                t2.save()
     else:
         t1 = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
         if t1 != None:
@@ -133,7 +122,36 @@ def save(request):
             t1.eta = eta
             status = status
             t1.save()
-    if status == "Draft":
+
+
+
+
+    tags = json.loads(request.POST['tagsinfo'])
+    for tag in tags:
+        querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
+        tag_id = 0
+        if querySet.first() is None:
+            t2 = UserTag(
+                user_id=request.user.id,
+                tagname=tag['tagname'],
+                backgroundcolor=tag['backgroundcolor'],
+                textcolor=tag['textcolor'],
+                createdDate=timezone.now()
+            )
+            t2.save()
+            tag_id = UserTag.objects.filter(user=request.user.id).latest().id
+        else:
+            tag_id = querySet.first().id;
+        querySet = WorkUserTag.objects.filter(work=work_id).filter(tag=tagId)
+        if querySet.first() is None:
+            t3 = WorkUserTag(
+                work_id=work_id,
+                tag_id=tagId,
+                createdDate=timezone.now()
+            )
+            t3.save()
+
+    if str(status).lower() == "draft":
         redirecttarget = "workcreation"
     else:
         redirecttarget = "workdetail"
@@ -144,6 +162,7 @@ def addTag(request):
     work_id = request.GET.get("work_id")
     tagname = request.GET.get("tagname")
     backgroundcolor = request.GET.get("backgroundcolor")
+    textcolor = request.GET.get("textcolor")
     querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tagname)
     tagId = None
     if querySet.first() is None:
@@ -151,6 +170,7 @@ def addTag(request):
             user_id=request.user.id,
             tagname=tagname,
             backgroundcolor=backgroundcolor,
+            textcolor=textcolor,
             createdDate=timezone.now()
         )
         t2.save()
@@ -197,8 +217,8 @@ def workdetail(request, work_id):
         work['srclang'] = srclang['displaylang']
         work['tgtlang'] = tgtlang['displaylang']
         work['tags'] = tgtlang['displaylang']
-    worktags = WorkUserTag.objects.filter(work_id=work_id).values('tag__tagname', 'tag__backgroundcolor')
-    usertags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname', 'backgroundcolor')
+    worktags = WorkUserTag.objects.filter(work_id=work_id).values('tag__tagname', 'tag__backgroundcolor', 'tag__textcolor')
+    usertags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname', 'backgroundcolor', 'textcolor')
     data = {
         'work': work,
         'worktags' : json.dumps(list(worktags), cls=DjangoJSONEncoder),
