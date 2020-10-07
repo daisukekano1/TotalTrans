@@ -20,19 +20,19 @@
                                 <div class="col-sm-4 border-right">
                                     <div class="description-block">
                                         <h5 class="description-header">{{ count.DraftCount }}</h5>
-                                        <span class="description-text"><a href='#tab-draft' data-toggle="tab" style="display: block">#Draft#</a></span>
+                                        <a href='#anchor-draft' style="display: block">#Draft# <i class="fas fa-edit"></i></a>
                                     </div>
                                 </div>
                                 <div class="col-sm-4 border-right">
                                     <div class="description-block">
                                         <h5 class="description-header">{{ count.OpenCount }}</h5>
-                                        <span class="description-text"><a href='#tab-open' data-toggle="tab" style="display: block">#Open#</a></span>
+                                        <a href='#anchor-open' style="display: block">Translating <i class="fas fa-random"></i></a>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ count.AllCount }}</h5>
-                                        <span class="description-text"><a href='#tab-closed' data-toggle="tab" style="display: block">#Closed#</a></span>
+                                        <h5 class="description-header">{{ count.ClosedCount }}</h5>
+                                        <a href='#' style="display: block">#Closed# <i class="fas fa-archive"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -129,101 +129,103 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="card-header h6" style="padding:0px;">
-                            <ul class="nav nav-pills nav-justified nav-statusmenu">
-                                <li class="nav-item">
-                                    <a href='#tab-draft' data-toggle="tab" style="display: block">#Draft#</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href='#tab-open' class="active" data-toggle="tab" style="display: block">#Open#</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href='#tab-closed' data-toggle="tab" style="display: block">#Closed#</a>
-                                </li>
-                            </ul>
+                    <div class="card" id="anchor-draft">
+                        <div class="card-header">
+                            <h5 class="card-title color-text-status" style="font-size:1.2em;"><i class="fas fa-edit"></i> #Draft#</h5>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                            </div>
                         </div>
-                        <div class="card-body tab-content">
-                            <div class="tab-pane" id="tab-draft">
-                                <table class="table table-hover table-responsive-lg tabletype1">
-                                <thead>
+                        <div class="card-body">
+                            <table class="table table-hover table-responsive-lg tabletype1">
+                            <thead>
+                              <tr>
+                                <th>#index_Title#</th>
+                                <th>#index_srclang#</th>
+                                <th>#index_tgtlang#</th>
+                                <th>#index_Tag#</th>
+                                <th>#index_createdDate#</th>
+                                <th>#index_ETA#</th>
+                                <th style="width: 20%"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for row in works_draft %}
                                   <tr>
-                                    <th>#index_Title#</th>
+                                        <td>{{ row.workTitle }}</td>
+                                        <td>{{ row.srclang }}</td>
+                                        <td>{{ row.tgtlang }}</td>
+                                        <td>
+                                            <div>
+                                                {% for tag in row.tags %}
+                                                    <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
+                                                {%  endfor %}
+                                            </div>
+                                        </td>
+                                        <td>{{ row.createdDate|date:"Y/m/j" }}</td>
+                                        <td>{{ row.eta|date:"Y/m/j" }}</td>
+                                        <td>
+                                            <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-edit"></i> Edit Draft</a>
+                                            <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Start Translation</a>
+                                        </td>
+                                  </tr>
+                              {% endfor %}
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card" id="anchor-open">
+                        <div class="card-header">
+                            <h5 class="card-title color-text-status" style="font-size:1.2em;"><i class="fas fa-random"></i> #Translating#</h5>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover table-responsive-lg tabletype1">
+                            <thead>
+                                <tr>
+                                    <th>#index_worktitle#</th>
                                     <th>#index_srclang#</th>
                                     <th>#index_tgtlang#</th>
                                     <th>#index_Tag#</th>
                                     <th>#index_createdDate#</th>
                                     <th>#index_ETA#</th>
-                                    <th style="width: 20%">#index_Edit#</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% for row in works_draft %}
-                                      <tr>
-                                            <td>{{ row.workTitle }}</td>
-                                            <td>{{ row.srclang }}</td>
-                                            <td>{{ row.tgtlang }}</td>
-                                            <td>
-                                                <div class="tokenfield">
-                                                    {% for tag in row.tags %}
-                                                        <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
-                                                    {%  endfor %}
-                                                </div>
-                                            </td>
-                                            <td>{{ row.createdDate|date:"Y/m/j" }}</td>
-                                            <td>{{ row.eta|date:"Y/m/j" }}</td>
-                                            <td>
-                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-info btn-md">Edit</a>
-                                            </td>
-                                      </tr>
-                                  {% endfor %}
-                                </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane active" id="tab-open">
-                                <table class="table table-hover table-responsive-lg tabletype1">
-                                <thead>
+                                    <th>#index_progress#</th>
+                                    <th style="width: 20%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in works_open %}
                                     <tr>
-                                        <th>#index_worktitle#</th>
-                                        <th>#index_srclang#</th>
-                                        <th>#index_tgtlang#</th>
-                                        <th>#index_Tag#</th>
-                                        <th>#index_createdDate#</th>
-                                        <th>#index_ETA#</th>
-                                        <th>#index_progress#</th>
-                                        <th style="width: 20%"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for row in works_open %}
-                                        <tr>
-                                            <td>{{ row.workTitle }}</td>
-                                            <td>{{ row.srclang }}</td>
-                                            <td>{{ row.tgtlang }}</td>
-                                            <td>
-                                                <div class="tokenfield">
-                                                    {% for tag in row.tags %}
-                                                        <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
-                                                    {%  endfor %}
-                                                </div>
-                                            </td>
-                                            <td>{{ row.createdDate|date:"Y/m/j" }}</td>
-                                            <td>{{ row.eta|date:"Y/m/j"}}</td>
-                                            <td>
-                                                <div class="progress progress-striped active">
-                                                    <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-md">Translate</a>
-                                            </td>
-                                          </tr>
-                                  {% endfor %}
-                                </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="tab-closed">
-                            </div>
+                                        <td>{{ row.workTitle }}</td>
+                                        <td>{{ row.srclang }}</td>
+                                        <td>{{ row.tgtlang }}</td>
+                                        <td>
+                                            <div>
+                                                {% for tag in row.tags %}
+                                                    <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
+                                                {%  endfor %}
+                                            </div>
+                                        </td>
+                                        <td>{{ row.createdDate|date:"Y/m/j" }}</td>
+                                        <td>{{ row.eta|date:"Y/m/j"}}</td>
+                                        <td>
+                                            <div class="progress progress-striped active">
+                                                <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                          <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-md">Translate</a>
+                                        </td>
+                                      </tr>
+                              {% endfor %}
+                            </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

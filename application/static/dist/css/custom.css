@@ -12,7 +12,7 @@ table td{
   font-size:1rem;
 }
 .index table thead{
-  background-color: #7f94a7;
+  background-color: #3872a6;
   color:white;
 }
 .index table.tabletype1 tbody tr.closed{
@@ -280,4 +280,7 @@ table.taglistchild a:hover {
 }
 div.tokenfield {
   background-color: #fbfbf3 !important;
+}
+.color-text-status{
+  color : #0e54f2;
 }
