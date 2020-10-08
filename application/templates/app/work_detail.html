@@ -339,6 +339,7 @@
                         textcolor = usertags[i].textcolor;
                     }
                 }
+                $(e.relatedTarget).addClass('badge');
                 $(e.relatedTarget).css('background-color', bgcolor);
                 $(e.relatedTarget).css('color', textcolor);
                 var vals = { tagname: value, backgroundcolor: bgcolor, textcolor : textcolor };

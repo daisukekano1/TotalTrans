@@ -284,3 +284,6 @@ div.tokenfield {
 .color-text-status{
   color : #18988c;
 }
+.badge-tag{
+  padding: .8em .8em !important;
+}

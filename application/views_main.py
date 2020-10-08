@@ -42,7 +42,7 @@ def home(request):
 
     works_eta = []
     dt_now = datetime.datetime.now()
-    for work in Works.objects.filter(**filters).filter(user_id=request.user.id).filter(status__in=['Open','Draft']).order_by('eta').reverse()[:5]:
+    for work in Works.objects.filter(**filters).filter(user_id=request.user.id).filter(status__in=['Open','Draft']).filter(eta__isnull=False).order_by('eta').reverse()[:5]:
         onedata = {}
         onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
@@ -73,7 +73,7 @@ def home(request):
         tgtlang = Language.objects.filter(lc__exact=work.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         onedata['srclang'] = srclang['displaylang']
         onedata['tgtlang'] = tgtlang['displaylang']
-        onedata['tags'] = WorkUserTag.objects.filter(work__exact=work.id).select_related('tag').values('tag__tagname', 'tag__backgroundcolor')
+        onedata['tags'] = WorkUserTag.objects.filter(work__exact=work.id).select_related('tag').values('tag__tagname', 'tag__backgroundcolor', 'tag__textcolor')
         onedata['createdDate'] = work.createdDate
         onedata['eta'] = work.eta
         works_draft.append(onedata)
@@ -87,7 +87,7 @@ def home(request):
         tgtlang = Language.objects.filter(lc__exact=work.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         onedata['srclang'] = srclang['displaylang']
         onedata['tgtlang'] = tgtlang['displaylang']
-        onedata['tags'] = WorkUserTag.objects.filter(work__exact=work.id).select_related('tag').values('tag__tagname', 'tag__backgroundcolor')
+        onedata['tags'] = WorkUserTag.objects.filter(work__exact=work.id).select_related('tag').values('tag__tagname', 'tag__backgroundcolor', 'tag__textcolor')
         onedata['progress'] = work.progress
         onedata['createdDate'] = work.createdDate
         onedata['eta'] = work.eta

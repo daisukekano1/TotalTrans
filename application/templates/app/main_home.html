@@ -158,13 +158,13 @@
                                         <td>
                                             <div>
                                                 {% for tag in row.tags %}
-                                                    <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
+                                                    <div class="token badge badge-tag" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}; color:{{ tag.tag__textcolor }}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
                                                 {%  endfor %}
                                             </div>
                                         </td>
                                         <td>{{ row.createdDate|date:"Y/m/j" }}</td>
-                                        <td>{{ row.eta|date:"Y/m/j" }}</td>
-                                        <td>
+                                        <td>{% if row.eta %}{{ row.eta|date:"Y/m/j" }}{% endif %}</td>
+                                        <td style="white-space: nowrap">
                                             <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-edit"></i> Edit Draft</a>
                                             <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Start Translation</a>
                                         </td>
@@ -208,19 +208,20 @@
                                         <td>
                                             <div>
                                                 {% for tag in row.tags %}
-                                                    <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
+                                                    <div class="token badge badge-tag" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}; color:{{ tag.tag__textcolor }};"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
                                                 {%  endfor %}
                                             </div>
                                         </td>
                                         <td>{{ row.createdDate|date:"Y/m/j" }}</td>
-                                        <td>{{ row.eta|date:"Y/m/j"}}</td>
+                                        <td>{% if row.eta %}{{ row.eta|date:"Y/m/j"}}{% endif %}</td>
                                         <td>
                                             <div class="progress progress-striped active">
                                                 <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
                                             </div>
                                         </td>
-                                        <td>
-                                          <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-md">Translate</a>
+                                        <td style="white-space: nowrap">
+                                          <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Translate</a>
+                                          <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> Work Close</a>
                                         </td>
                                       </tr>
                               {% endfor %}

@@ -66,6 +66,7 @@ def worklist(request):
 def workcreation(request, work_id = 0):
     work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
     langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language', 'displaylang').order_by('displaylang')
+    worktags = WorkUserTag.objects.filter(work_id=work_id).values('tag__tagname', 'tag__backgroundcolor', 'tag__textcolor')
     tags = UserTag.objects.filter(user__exact=request.user.id).values('id', 'tagname','backgroundcolor', 'textcolor')
     selectedlang = {}
     if work == None:
@@ -84,14 +85,17 @@ def workcreation(request, work_id = 0):
         'langs' :langs,
         'tags' : json.dumps(list(tags), cls=DjangoJSONEncoder),
         'selectedlang' : selectedlang,
-        'work':work
+        'work' : work,
+        'worktags' : json.dumps(list(worktags), cls=DjangoJSONEncoder)
     }
     return render(request, 'app/work_add.html', data)
 
 @login_required
 def save(request):
     etastr = request.POST['eta']
-    eta = dt.strptime(etastr, '%Y/%m/%d')
+    eta = None
+    if etastr != '':
+        eta = dt.strptime(etastr, '%Y/%m/%d')
     status = request.POST['status']
     work_id = request.POST['work_id']
     redirecttarget = ''
@@ -120,7 +124,7 @@ def save(request):
             t1.lc_tgt = request.POST['lc_tgt']
             t1.wordsTranslated = request.POST['wordsOriginal']
             t1.eta = eta
-            status = status
+            t1.status = status
             t1.save()
 
     tags = json.loads(request.POST['tagsinfo'])
@@ -198,6 +202,7 @@ def workdetail(request, work_id):
     for vals in Works.objects.filter(pk=work_id):
         work = {}
         work['work_id'] = work_id
+        work['workTitle'] = vals.workTitle
         work['wordsOriginal'] = vals.wordsOriginal
         work['progress'] = vals.progress
         work['createdDate'] = vals.createdDate
@@ -205,6 +210,7 @@ def workdetail(request, work_id):
         work['lc_src'] = vals.lc_src
         work['lc_tgt'] = vals.lc_tgt
         work['wordsTranslated'] = vals.wordsTranslated
+        work['eta'] = vals.eta
         work['status'] = vals.status
         srclang = Language.objects.filter(lc__exact=vals.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         tgtlang = Language.objects.filter(lc__exact=vals.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
