@@ -123,9 +123,6 @@ def save(request):
             status = status
             t1.save()
 
-
-
-
     tags = json.loads(request.POST['tagsinfo'])
     for tag in tags:
         querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
@@ -142,15 +139,12 @@ def save(request):
             tag_id = UserTag.objects.filter(user=request.user.id).latest().id
         else:
             tag_id = querySet.first().id;
-        querySet = WorkUserTag.objects.filter(work=work_id).filter(tag=tagId)
-        if querySet.first() is None:
-            t3 = WorkUserTag(
-                work_id=work_id,
-                tag_id=tagId,
-                createdDate=timezone.now()
-            )
-            t3.save()
-
+        t3 = WorkUserTag(
+            work_id=work_id,
+            tag_id=tag_id,
+            createdDate=timezone.now()
+        )
+        t3.save()
     if str(status).lower() == "draft":
         redirecttarget = "workcreation"
     else:
