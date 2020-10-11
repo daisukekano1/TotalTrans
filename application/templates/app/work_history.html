@@ -1,7 +1,7 @@
 {% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %}#TranslationHistory#{% endblock title %}
+{% block title %}{% trans "TranslationHistory" %}{% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -15,18 +15,18 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title" style="font-size:1.2em;"><i class="fas fa-history"></i> #TranslationHistory#</h5>
+                            <h5 class="card-title" style="font-size:1.2em;"><i class="fas fa-history"></i> {% trans "TranslationHistory" %}</h5>
                         </div>
                         <div class="card-body">
                             <table id="history" class="table table-hover table-responsive-lg tabletype1">
-                            <thead>
-                              <tr>
-                                <th width="10%">createdDate</th>
-                                <th width="20%">workTitle</th>
-                                <th width="5%">TranslationType</th>
-                                <th width="65%">Translation</th>
-                              </tr>
-                            </thead>
+                                <thead>
+                                <tr>
+                                    <th width="10%">{% trans "createdDate" %}</th>
+                                    <th width="20%">{% trans "workTitle" %}</th>
+                                    <th width="5%">{% trans "TranslationType" %}</th>
+                                    <th width="65%">{% trans "Translation" %}</th>
+                                </tr>
+                                </thead>
                             </table>
                         </div>
                     </div>

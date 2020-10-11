@@ -14,19 +14,19 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="card-header h6 sitecolor-bcolor">#PageTitle_Tag#</div>
+                        <div class="card-header h6 sitecolor-bcolor">{% trans "taglist" %}</div>
                         <div class="card-body">
-                            <button id="addRow" class="btn btn-lg btn-success">Add a new Tag</button>
+                            <button id="addRow" class="btn btn-lg btn-success">{% trans "Add a new Tag" %}</button>
                             <form id="tagsform" class="form" action="savetaglist" method="post">
                                 {% csrf_token %}
                                 <table id="tags" class="table display dataTable">
                                 <thead>
                                     <tr>
                                         <th style="width:10px"></th>
-                                        <th>tag image</th>
-                                        <th>tag text</th>
-                                        <th>back color</th>
-                                        <th>text color</th>
+                                        <th>{% trans "tag image" %}</th>
+                                        <th>{% trans "tag text" %}</th>
+                                        <th>{% trans "background color" %}</th>
+                                        <th>{% trans "text color" %}</th>
                                         <th></th>
                                         <th style="visibility: hidden">@tag_id</th>
                                         <th style="visibility: hidden">@tagname</th>
@@ -159,7 +159,7 @@
                     .done( (data) => {
                         result = data.data
                         if (result.length > 0){
-                            childTable = childTable + '<table class="taglistchild"><thead><tr><th>WorkTitle</th><th>Status</th></tr></thead><tbody>'
+                            childTable = childTable + '<table class="taglistchild"><thead><tr><th>{% trans "WorkTitle" %}</th><th>{% trans "Status" %}</th></tr></thead><tbody>'
                             for (let i = 0; i < result.length; ++i) {
                                 url = ""
                                 if (result[i].status == "Draft"){

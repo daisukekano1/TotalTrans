@@ -1,7 +1,7 @@
 {% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %}#PageTitle_WorkDetail#{% endblock title %}
+{% block title %}{% trans "WorkDetail" %}{% endblock title %}
 
 {% block stylesheets %}
     {{ block.super }}
@@ -13,18 +13,18 @@
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
-                    <div class="card-header h6 sitecolor-bcolor">#PageTitle_WorkDetail#</div>
+                    <div class="card-header h6 sitecolor-bcolor">{% trans "WorkDetail" %}</div>
                     <div class="card-body">
                         <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
                             <div class="form-group col-4" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">#Title#</span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "Title" %}</span></div>
                                     <input type="text" class="form-control editableColor" id="workTitle" name="workTitle" value="{{ work.workTitle }}" style="width:100%;   "/>
                                 </div>
                             </div>
                             <div class="form-group col-4" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">#language#</span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "language" %}</span></div>
                                     <div style="padding:4px; border: 1px solid lightgrey; min-width: 300px;">
                                         <div class="d-inline">
                                             {{ work.srclang }}
@@ -40,7 +40,7 @@
                             </div>
                             <div class="form-group col-2" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">#ETA#</span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "ETA" %}</span></div>
                                     <input type="text" id="eta" name="eta" class="form-control editableColor" value="{{ work.eta|date:"Y/m/j" }}"/>
                                     <div class="input-group-append" data-target="#eta" data-toggle="datepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -51,7 +51,7 @@
                         <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
                             <div class="form-group col-4" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">#Tags#</span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "Tags" %}</span></div>
                                     <input type="text" class="form-control editableColor" id="tags" name="tags" value=""/>
                                 </div>
                             </div>
@@ -63,24 +63,24 @@
                                         <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                             <li class="nav-item">
                                                 <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
-                                                    #Original#
+                                                    {% trans "Original" %}
                                                 </a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
-                                                    #History#
+                                                    {% trans "History" %}
                                                 </a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
-                                                    #Translated#
+                                                    {% trans "Translated" %}
                                                 </a>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="card-tools">
-                                        #Progress# : <span id="progress">{{ work.progress }}</span>%
-                                        #status# : {{ work.status }}
+                                        {% trans "Progress" %} : <span id="progress">{{ work.progress }}</span>%
+                                        {% trans "status" %} : {{ work.status }}
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -95,10 +95,10 @@
                                                     <thead>
                                                       <tr>
                                                         <th>#</th>
-                                                        <th>TranslationType</th>
-                                                        <th>beforeTranslation</th>
-                                                        <th>afterTranslation</th>
-                                                        <th>createdDate</th>
+                                                        <th>{% trans "TranslationType" %}</th>
+                                                        <th>{% trans "beforeTranslation" %}</th>
+                                                        <th>{% trans "afterTranslation" %}</th>
+                                                        <th>{% trans "createdDate" %}</th>
                                                       </tr>
                                                     </thead>
                                                     </table>
@@ -123,7 +123,7 @@
     <div class="modal-dialog modal-full-height modal-right modal-notify" role="document">
         <div class="modal-content">
             <div class="modal-header color-trans-self">
-                <p class="heading lead">#SelfTrans#</p>
+                <p class="heading lead">{% trans "SelfTrans" %}</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="white-text">×</span>
                 </button>
@@ -131,7 +131,7 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-header card-outline card-self">
-                        <h4 class="card-title">#OriginalText#</h4>
+                        <h4 class="card-title">{% trans "OriginalText" %}</h4>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" ><i class="fas fa-minus" style="color:#999"></i></button>
                         </div>
@@ -140,7 +140,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header color-trans-self">
-                        <h4 class="card-title" style="color:white;">#TranslatedText#</h4>
+                        <h4 class="card-title" style="color:white;">{% trans "TranslatedText" %}</h4>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                         </div>
@@ -149,8 +149,8 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
-                <a type="button" class="btn btn-outline-self btn-lg waves-effect" data-dismiss="modal">#Cancel#</a>
-                <a type="button" class="btn btn-self btn-lg waves-effect" id="btnSelfSave">#Refrect#<i class="fas fa-share"></i></a>
+                <a type="button" class="btn btn-outline-self btn-lg waves-effect" data-dismiss="modal">{% trans "Cancel" %}</a>
+                <a type="button" class="btn btn-self btn-lg waves-effect" id="btnSelfSave">{% trans "Reflect" %}<i class="fas fa-share"></i></a>
             </div>
         </div>
     </div>
@@ -159,7 +159,7 @@
     <div class="modal-dialog modal-full-height modal-right modal-notify" role="document">
         <div class="modal-content">
             <div class="modal-header color-trans-google">
-                <p class="heading lead">#GoogleTrans#</p>
+                <p class="heading lead">{% trans "GoogleTrans" %}</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="white-text">×</span>
                 </button>
@@ -167,7 +167,7 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-header card-outline card-primary">
-                        <h4 class="card-title">#OriginalText#</h4>
+                        <h4 class="card-title">{% trans "OriginalText" %}</h4>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
                         </div>
@@ -176,7 +176,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header color-trans-google">
-                        <h4 class="card-title">#TranslatedText#</h4>
+                        <h4 class="card-title">{% trans "TranslatedText" %}</h4>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                         </div>
@@ -185,8 +185,8 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
-                <a type="button" class="btn btn-md btn-outline-primary" data-dismiss="modal">#Cancel#</a>
-                <a type="button" class="btn btn-md color-trans-google" id="btnGoogleSave">#Refrect#<i class="fas fa-share"></i></a>
+                <a type="button" class="btn btn-md btn-outline-primary" data-dismiss="modal">{% trans "Cancel" %}</a>
+                <a type="button" class="btn btn-md color-trans-google" id="btnGoogleSave">{% trans "Reflect" %}<i class="fas fa-share"></i></a>
             </div>
         </div>
     </div>
@@ -195,14 +195,14 @@
     <div class="modal-dialog modal-dialog-centered modal-notify modal-primary">
         <div class="modal-content">
             <div class="modal-header color-trans-ignore">
-                <h4 class="modal-title">#ConfirmationMessage#</h4>
+                <h4 class="modal-title">{% trans "ConfirmationMessage" %}</h4>
             </div>
             <div class="modal-body">
-                <p>#TranslateIgnoreConfirmationMessage#</p>
+                <p>{% trans "TranslateIgnoreConfirmationMessage" %}</p>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">#Cancel#</button>
-                <button type="button" id="btnIgnoreSave" class="btn btn-md color-trans-ignore">#OK#</button>
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" id="btnIgnoreSave" class="btn btn-md color-trans-ignore">{% trans "OK" %}</button>
             </div>
         </div>
     </div>
@@ -211,14 +211,14 @@
     <div class="modal-dialog modal-dialog-centered modal-notify modal-amber">
         <div class="modal-content">
             <div class="modal-header color-trans-self">
-                <div class="modal-title">#ConfirmationMessage#</div>
+                <div class="modal-title">{% trans "ConfirmationMessage" %}</div>
             </div>
             <div class="modal-body">
-                <p>#TranslateDeleteConfirmationMessage#</p>
+                <p>{% trans "TranslateDeleteConfirmationMessage" %}</p>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-amber" data-dismiss="modal">#Cancel#</button>
-                <button type="button" class="btn btn-amber" onclick="deleteHistory()">#RemoveTranslation#</button>
+                <button type="button" class="btn btn-outline-amber" data-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-amber" onclick="deleteHistory()">{% trans "RemoveTranslation" %}</button>
             </div>
         </div>
     </div>
@@ -227,14 +227,14 @@
     <div class="modal-dialog modal-dialog-centered modal-notify modal-primary">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h4 class="modal-title">#ConfirmationMessage#</h4>
+                <h4 class="modal-title">{% trans "ConfirmationMessage" %}</h4>
             </div>
             <div class="modal-body">
-                <p>#TranslateDeleteConfirmationMessage#</p>
+                <p>{% trans "TranslateDeleteConfirmationMessage" %}</p>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">#Cancel#</button>
-                <button type="button" class="btn btn-primary" onclick="deleteHistory()">#RemoveTranslation#</button>
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" onclick="deleteHistory()">{% trans "RemoveTranslation" %}</button>
             </div>
         </div>
     </div>
@@ -243,14 +243,14 @@
     <div class="modal-dialog modal-dialog-centered modal-notify modal-amber">
         <div class="modal-content">
             <div class="modal-header color-trans-ignore">
-                <div class="modal-title">#ConfirmationMessage#</div>
+                <div class="modal-title">{% trans "ConfirmationMessage" %}</div>
             </div>
             <div class="modal-body">
-                <p>#TranslateDeleteConfirmationMessage#</p>
+                <p>{% trans "TranslateDeleteConfirmationMessage" %}</p>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-grey" data-dismiss="modal">#Cancel#</button>
-                <button type="button" class="btn btn-md color-trans-ignore" onclick="deleteHistory()">#RemoveTranslation#</button>
+                <button type="button" class="btn btn-outline-grey" data-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-md color-trans-ignore" onclick="deleteHistory()">{% trans "RemoveTranslation" %}</button>
             </div>
         </div>
     </div>
@@ -259,13 +259,13 @@
     <div class="modal-dialog modal-dialog-centered modal-notify modal-info">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <div class="modal-title">#ConfirmationMessage#</div>
+                <div class="modal-title">{% trans "ConfirmationMessage" %}</div>
             </div>
             <div class="modal-body">
                 <p id="ModalMessage"></p>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-info" data-dismiss="modal">#Cancel#</button>
+                <button type="button" class="btn btn-outline-info" data-dismiss="modal">{% trans "Cancel" %}</button>
             </div>
         </div>
     </div>
@@ -279,7 +279,7 @@
     var SummernoteHightlightButton = function(context) {
       var ui = $.summernote.ui;
       var button = ui.button({
-        contents: '<i class="fa fa-ban"/>&nbsp選択した箇所を翻訳しない',
+        contents: '<i class="fa fa-ban"/>&nbsp{% trans "Not translate for the selected text" %}',
         click: function() {
           context.invoke('editor.backColor', 'gray');
         }
@@ -289,7 +289,7 @@
     var SummernoteSelectAllButton = function() {
       var ui = $.summernote.ui;
       var button = ui.button({
-        contents: '#Select All#',
+        contents: '{% trans "Select All" %}',
         click: function() {
             this.select()
         }
@@ -298,11 +298,11 @@
     }
     $(document).ready(function() {
         $("#lc_src").select2({
-            placeholder: "Translate From",
+            placeholder: '{% trans "Translate From" %}',
             selectOnClose: true,
         });
         $("#lc_tgt").select2({
-            placeholder: "Translate To",
+            placeholder: '{% trans "Translate To" %}',
             selectOnClose: true,
         });
         var worktags = JSON.parse("{{ worktags  | safe | escapejs }}");
@@ -449,12 +449,12 @@
         $('#btnOpenSelfTranslate').on('click', function () {
             OriginalText = getSelectedText();
             if( OriginalText == ""){
-                $("#ModalMessage").text("#Message_PleaseSelectText#");
+                $("#ModalMessage").text('{% trans "Please select translating text." %}');
                 $('#modal-Message').modal('show');
                 return false;
             }
             if( !wordsOriginal.includes(OriginalText)){
-                $("#ModalMessage").text("#Message_NotAllwedforTranslatedText#");
+                $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
                 $('#modal-Message').modal('show');
                 return false;
             }
@@ -466,12 +466,12 @@
         $('#btnOpenGoogleRequest').on('click', function () {
             OriginalText = getSelectedText();
             if( OriginalText == ""){
-                $("#ModalMessage").text("#Message_PleaseSelectText#");
+                $("#ModalMessage").text('{% trans "Please select translating text." %}');
                 $('#modal-Message').modal('show');
                 return false;
             }
             if( !wordsOriginal.includes(OriginalText)){
-                $("#ModalMessage").text("#Message_NotAllwedforTranslatedText#");
+                $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
                 $('#modal-Message').modal('show');
                 return false;
             }
@@ -490,19 +490,19 @@
                     $('#googleResponseText').val(data.data);
                 },
                 function fail(data, status) {
-                    alert('Request failed.  Returned status of ' + status);
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
                 }
             )
         })
         $('#btnOpenIgnoreText').on('click', function () {
             OriginalText = getSelectedText();
             if( OriginalText == ""){
-                $("#ModalMessage").text("#Message_PleaseSelectText#");
+                $("#ModalMessage").text('{% trans "Please select translating text." %}');
                 $('#modal-Message').modal('show');
                 return false;
             }
             if( !wordsOriginal.includes(OriginalText)){
-                $("#ModalMessage").text("#Message_NotAllwedforTranslatedText#");
+                $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
                 $('#modal-Message').modal('show');
                 return false;
             }
@@ -529,7 +529,7 @@
                     $('#openSelfTranslate').modal('hide');
                 },
                 function fail(data, status) {
-                    alert('Request failed.  Returned status of ' + status);
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
                 }
             )
         })
@@ -554,7 +554,7 @@
                     $('#openGoogleRequest').modal('hide');
                 },
                 function fail(data, status) {
-                    alert('Request failed.  Returned status of ' + status);
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
                 }
             )
         })
@@ -577,7 +577,7 @@
                     $('#openIgnoreText').modal('hide');
                 },
                 function fail(data, status) {
-                    alert('Request failed.  Returned status of ' + status);
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
                 }
             )
         })
@@ -606,7 +606,7 @@
             function success(name) {
             },
             function fail(data, status) {
-                alert('Request failed.  Returned status of ' + status);
+                alert('{% trans "Request failed. Returned status : " %}' + status);
             }
         )
     };
@@ -621,7 +621,7 @@
             function success(name) {
             },
             function fail(data, status) {
-                alert('Request failed.  Returned status of ' + status);
+                alert('{% trans "Request failed. Returned status : " %}' + status);
             }
         )
     };
@@ -689,7 +689,7 @@
                 $('#modal-IgnoreDeleteHistory').modal('hide');
             },
             function fail(data, status) {
-                alert('Request failed.  Returned status of ' + status);
+                alert('{% trans "Request failed. Returned status : " %}' + status);
             }
         )
     }

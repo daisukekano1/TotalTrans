@@ -1,7 +1,7 @@
 {% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %}#PageTitle_WorkList#{% endblock title %}
+{% block title %}{% trans "WorkList" %}{% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -18,14 +18,14 @@
                             <table id="table" class="table table-hover table-responsive-lg tabletype1">
                             <thead>
                                 <tr>
-                                    <th>#index_Title#</th>
-                                    <th>#index_srclang#</th>
-                                    <th>#index_tgtlang#</th>
-                                    <th>#index_Tag#</th>
-                                    <th>#index_progress#</th>
-                                    <th>#index_status#</th>
-                                    <th>#index_createdDate#</th>
-                                    <th>#index_ETA#</th>
+                                    <th>{% trans "Title" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                    <th>{% trans "Progress" %}</th>
+                                    <th>{% trans "srclang" %}</th>
+                                    <th>{% trans "tgtlang" %}</th>
+                                    <th>{% trans "Tag" %}</th>
+                                    <th>{% trans "createdDate" %}</th>
+                                    <th>{% trans "ETA" %}</th>
                                     <th style="width: 20%"></th>
                                 </tr>
                             </thead>
@@ -39,6 +39,20 @@
                                         <tr style="background-color:#19161614">
                                     {% endif %}
                                         <td>{{ row.workTitle }}</td>
+                                        <td>
+                                            {% if row.status == "Draft" %}
+                                                <span class="color-status-draft" ><i class="fas fa-edit"></i> {% trans "Draft" %}</span>
+                                            {% elif row.status == "Open" %}
+                                                <span class="color-status-open" ><i class="fas fa-random"></i> {% trans "Translating" %}</span>
+                                            {% elif row.status == "Closed" %}
+                                                <span class="color-status-closed" ><i class="fas fa-archive"></i> {% trans "Closed" %}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="progress progress-striped active">
+                                                <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
+                                            </div>
+                                        </td>
                                         <td>{{ row.srclang }}</td>
                                         <td>{{ row.tgtlang }}</td>
                                         <td>
@@ -48,32 +62,18 @@
                                                 {%  endfor %}
                                             </div>
                                         </td>
-                                        <td>
-                                            <div class="progress progress-striped active">
-                                                <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {% if row.status == "Draft" %}
-                                                <span class="color-status-draft" ><i class="fas fa-edit"></i> #Draft#</span>
-                                            {% elif row.status == "Open" %}
-                                                <span class="color-status-open" ><i class="fas fa-random"></i> #Translating#</span>
-                                            {% elif row.status == "Closed" %}
-                                                <span class="color-status-closed" ><i class="fas fa-archive"></i> #Closed#</span>
-                                            {% endif %}
-                                        </td>
                                         <td>{{ row.createdDate|date:"Y/m/j" }}</td>
                                         <td>{% if row.eta %}{{ row.eta|date:"Y/m/j" }}{% endif %}</td>
                                         <td style="white-space: nowrap">
                                             {% if row.status == "Draft" %}
-                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-edit"></i> Edit Draft</a>
-                                                <a href="{% url 'workstart' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Start Translation</a>
+                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-edit"></i> {% trans "Edit Draft" %}</a>
+                                                <a href="{% url 'workstart' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> {% trans "Start Translation" %}</a>
                                             {% elif row.status == "Open" %}
-                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Translate</a>
-                                                <a href="{% url 'workclose' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> Work Close</a>
+                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> {% trans "Translate" %}</a>
+                                                <a href="{% url 'workclose' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> {% trans "Work Close" %}</a>
                                             {% elif row.status == "Closed" %}
-                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> View</a>
-                                                <a href="{% url 'workreopen' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Reopen</a>
+                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> {% trans "View" %}</a>
+                                                <a href="{% url 'workreopen' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> {% trans "Reopen" %}</a>
                                             {% endif %}
                                         </td>
                                   </tr>

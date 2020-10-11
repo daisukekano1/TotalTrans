@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 19:31+0900\n"
+"POT-Creation-Date: 2020-10-11 19:23+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,429 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-#: .\HonyakuService\settings.py:156
-msgid "Japanese"
-msgstr "日本語"
 
-#: .\HonyakuService\settings.py:157
-msgid "English"
-msgstr "英語"
+#: .\forms.py:17
+msgid "Required. Inform a valid email address."
+msgstr "必須。有効なEmailアドレスを入力してください。"
+
+#: .\forms.py:21
+msgid "Signup-Email address"
+msgstr "Emailアドレス"
+
+#: .\forms.py:23
+msgid "Signup-User name"
+msgstr "ユーザー名"
+
+#: .\forms.py:25
+msgid "Signup-Password"
+msgstr "パスワード"
+
+#: .\forms.py:27
+msgid "Signup-Password confirmation"
+msgstr "パスワード確認"
+
+#: .\forms.py:37
+msgid "Password"
+msgstr "パスワード"
+
+#: .\forms.py:39
+msgid "It is wrong Email address or password."
+msgstr "Emailアドレスかパスワードが違います"
+
+#: .\forms.py:40
+msgid "This account is inactive."
+msgstr "アカウントは停止されています。"
+
+#: .\forms.py:53
+msgid "Login-Email address"
+msgstr "Emailアドレス"
+
+#: .\forms.py:55
+msgid "Login-Password"
+msgstr "パスワード"
+
+#: .\templates\app\common_footer.html:2 .\templates\app\common_footer.html:10
+#: .\templates\app\common_footer.html:13 .\templates\app\work_detail.html:152
+#: .\templates\app\work_detail.html:188 .\templates\app\work_detail.html:204
+#: .\templates\app\work_detail.html:220 .\templates\app\work_detail.html:236
+#: .\templates\app\work_detail.html:252 .\templates\app\work_detail.html:268
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: .\templates\app\common_footer.html:3
+msgid "Save as Draft"
+msgstr "下書き保存"
+
+#: .\templates\app\common_footer.html:4 .\templates\app\main_home.html:155
+#: .\templates\app\work_list.html:70
+msgid "Start Translation"
+msgstr "翻訳開始"
+
+#: .\templates\app\common_footer.html:6 .\templates\app\work_detail.html:126
+msgid "SelfTrans"
+msgstr "自身で訳す"
+
+#: .\templates\app\common_footer.html:7 .\templates\app\work_detail.html:162
+msgid "GoogleTrans"
+msgstr "Google翻訳"
+
+#: .\templates\app\common_footer.html:8
+msgid "IgnoreTrans"
+msgstr "除外する"
+
+#: .\templates\app\common_footer.html:11 .\templates\app\common_footer.html:14
+msgid "Save"
+msgstr "保存"
+
+#: .\templates\app\common_sidebar.html:10
+msgid "worklist"
+msgstr "翻訳作業リスト"
+
+#: .\templates\app\common_sidebar.html:16 .\templates\app\main_home.html:80
+#: .\templates\app\work_history.html:4 .\templates\app\work_history.html:18
+msgid "TranslationHistory"
+msgstr "翻訳履歴"
+
+#: .\templates\app\common_sidebar.html:22
+msgid "Taglist"
+msgstr "タグリスト"
+
+#: .\templates\app\common_sidebar.html:28 .\templates\app\glossary.html:30
+msgid "Glossary"
+msgstr "語彙集"
+
+#: .\templates\app\common_sidebar.html:34
+msgid "Manual"
+msgstr "マニュアル"
+
+#: .\templates\app\common_sidebar.html:40
+msgid "TermsAndConditions"
+msgstr "利用規約"
+
+#: .\templates\app\common_top_navigation.html:7
+msgid "Home"
+msgstr "ホーム"
+
+#: .\templates\app\common_top_navigation.html:10
+msgid "Create_a_New_Work"
+msgstr "翻訳作業作成"
+
+#: .\templates\app\glossary.html:4
+msgid "glossary"
+msgstr "語彙集"
+
+#: .\templates\app\glossary.html:22
+msgid "Create Glossary"
+msgstr "語彙集作成"
+
+#: .\templates\app\glossary.html:40
+msgid "Keyword"
+msgstr "キーワード"
+
+#: .\templates\app\glossary.html:41 .\templates\app\main_home.html:209
+#: .\templates\app\work_list.html:72
+msgid "Translate"
+msgstr "翻訳"
+
+#: .\templates\app\glossary.html:42
+msgid "Category"
+msgstr "カテゴリー"
+
+#: .\templates\app\glossary.html:98
+msgid "Map CSV fields"
+msgstr "CSVの項目をマッピング"
+
+#: .\templates\app\glossary.html:106
+msgid "Confirm import"
+msgstr "インポート確認"
+
+#: .\templates\app\glossary.html:108
+msgid "submitCompleteMessage"
+msgstr "<i>Submit</i>をクリックして確認。 Optionally, override the value for a field to set a common value by clicking on the field below."
+
+#: .\templates\app\main_home.html:17
+msgid "Translation Works"
+msgstr "翻訳作業"
+
+#: .\templates\app\main_home.html:23 .\templates\app\main_home.html:60
+#: .\templates\app\main_home.html:120 .\templates\app\work_list.html:44
+msgid "Draft"
+msgstr "下書き"
+
+#: .\templates\app\main_home.html:29 .\templates\app\main_home.html:62
+#: .\templates\app\main_home.html:169 .\templates\app\work_list.html:46
+msgid "Translating"
+msgstr "翻訳中"
+
+#: .\templates\app\main_home.html:35 .\templates\app\work_list.html:48
+msgid "Closed"
+msgstr "完了"
+
+#: .\templates\app\main_home.html:44 .\templates\app\main_home.html:134
+#: .\templates\app\main_home.html:183 .\templates\app\work_add.html:38
+#: .\templates\app\work_detail.html:43 .\templates\app\work_list.html:28
+msgid "ETA"
+msgstr "期限"
+
+#: .\templates\app\main_home.html:71
+msgid "No_Tags_are_registered_yet."
+msgstr "未だタグが登録されていません。"
+
+#: .\templates\app\main_home.html:108
+msgid "No_translation_history."
+msgstr "未だ翻訳履歴はありません。"
+
+#: .\templates\app\main_home.html:129 .\templates\app\main_home.html:178
+#: .\templates\app\work_add.html:21 .\templates\app\work_detail.html:21
+#: .\templates\app\work_list.html:21
+msgid "Title"
+msgstr "タイトル"
+
+#: .\templates\app\main_home.html:130 .\templates\app\main_home.html:179
+#: .\templates\app\work_list.html:24
+msgid "srclang"
+msgstr "原文言語"
+
+#: .\templates\app\main_home.html:131 .\templates\app\main_home.html:180
+#: .\templates\app\work_list.html:25
+msgid "tgtlang"
+msgstr "訳文言語"
+
+#: .\templates\app\main_home.html:132 .\templates\app\main_home.html:181
+#: .\templates\app\work_list.html:26
+msgid "Tag"
+msgstr "タグ"
+
+#: .\templates\app\main_home.html:133 .\templates\app\main_home.html:182
+#: .\templates\app\work_detail.html:101 .\templates\app\work_history.html:24
+#: .\templates\app\work_list.html:27
+msgid "createdDate"
+msgstr "作成日"
+
+#: .\templates\app\main_home.html:154 .\templates\app\work_list.html:69
+msgid "Edit Draft"
+msgstr "下書き編集"
+
+#: .\templates\app\main_home.html:184 .\templates\app\work_detail.html:82
+#: .\templates\app\work_list.html:23
+msgid "Progress"
+msgstr "進捗率"
+
+#: .\templates\app\main_home.html:210 .\templates\app\work_list.html:73
+msgid "Work Close"
+msgstr "作業完了"
+
+#: .\templates\app\tag_list.html:17
+msgid "taglist"
+msgstr "タグリスト"
+
+#: .\templates\app\tag_list.html:19
+msgid "Add a new Tag"
+msgstr "新規タグを追加"
+
+#: .\templates\app\tag_list.html:26
+msgid "tag image"
+msgstr "タグイメージ"
+
+#: .\templates\app\tag_list.html:27
+msgid "tag text"
+msgstr "タグ名"
+
+#: .\templates\app\tag_list.html:28
+msgid "background color"
+msgstr "背景色"
+
+#: .\templates\app\tag_list.html:29
+msgid "text color"
+msgstr "文字色"
+
+#: .\templates\app\tag_list.html:162
+msgid "WorkTitle"
+msgstr "作業タイトル"
+
+#: .\templates\app\tag_list.html:162 .\templates\app\work_list.html:22
+msgid "Status"
+msgstr "ステータス"
+
+#: .\templates\app\user_signup.html:11 .\templates\app\user_signup.html:26
+msgid "Sign up"
+msgstr "サインアップ"
+
+#: .\templates\app\work_add.html:16
+msgid "Create a new Work"
+msgstr "新規に翻訳作業を作成する"
+
+#: .\templates\app\work_add.html:27 .\templates\app\work_detail.html:27
+msgid "language"
+msgstr "言語"
+
+#: .\templates\app\work_add.html:49 .\templates\app\work_detail.html:54
+msgid "Tags"
+msgstr "タグ"
+
+#: .\templates\app\work_add.html:70
+msgid "Language Selection"
+msgstr "言語選択"
+
+#: .\templates\app\work_add.html:80
+msgid "CloseModal"
+msgstr "閉じる"
+
+#: .\templates\app\work_add.html:193 .\templates\app\work_detail.html:493
+#: .\templates\app\work_detail.html:532 .\templates\app\work_detail.html:557
+#: .\templates\app\work_detail.html:580 .\templates\app\work_detail.html:609
+#: .\templates\app\work_detail.html:624 .\templates\app\work_detail.html:692
+msgid "Request failed. Returned status : "
+msgstr "リクエストエラー。ステータス："
+
+#: .\templates\app\work_detail.html:4 .\templates\app\work_detail.html:16
+msgid "WorkDetail"
+msgstr "翻訳作業詳細"
+
+#: .\templates\app\work_detail.html:66
+msgid "Original"
+msgstr "原文"
+
+#: .\templates\app\work_detail.html:71
+msgid "History"
+msgstr "履歴"
+
+#: .\templates\app\work_detail.html:76
+msgid "Translated"
+msgstr "訳文"
+
+#: .\templates\app\work_detail.html:83
+msgid "status"
+msgstr "ステータス"
+
+#: .\templates\app\work_detail.html:98 .\templates\app\work_history.html:26
+msgid "TranslationType"
+msgstr "翻訳方法"
+
+#: .\templates\app\work_detail.html:99
+msgid "beforeTranslation"
+msgstr "原文"
+
+#: .\templates\app\work_detail.html:100
+msgid "afterTranslation"
+msgstr "訳文"
+
+#: .\templates\app\work_detail.html:134 .\templates\app\work_detail.html:170
+msgid "OriginalText"
+msgstr "原文"
+
+#: .\templates\app\work_detail.html:143 .\templates\app\work_detail.html:179
+msgid "TranslatedText"
+msgstr "訳文"
+
+#: .\templates\app\work_detail.html:153 .\templates\app\work_detail.html:189
+msgid "Reflect"
+msgstr "反映"
+
+#: .\templates\app\work_detail.html:198 .\templates\app\work_detail.html:214
+#: .\templates\app\work_detail.html:230 .\templates\app\work_detail.html:246
+#: .\templates\app\work_detail.html:262
+msgid "ConfirmationMessage"
+msgstr "確認メッセージ"
+
+#: .\templates\app\work_detail.html:201
+msgid "TranslateIgnoreConfirmationMessage"
+msgstr "選択したテキストを翻訳対象外にします。よろしければOKをクリックしてください。"
+
+#: .\templates\app\work_detail.html:205
+msgid "OK"
+msgstr "OK"
+
+#: .\templates\app\work_detail.html:217 .\templates\app\work_detail.html:233
+#: .\templates\app\work_detail.html:249
+msgid "TranslateDeleteConfirmationMessage"
+msgstr "選択した翻訳の履歴を削除します。よろしければOKをクリックしてください。"
+
+#: .\templates\app\work_detail.html:221 .\templates\app\work_detail.html:237
+#: .\templates\app\work_detail.html:253
+msgid "RemoveTranslation"
+msgstr "翻訳をキャンセル"
+
+#: .\templates\app\work_detail.html:282
+msgid "Not translate for the selected text"
+msgstr "選択したテキストを翻訳しない"
+
+#: .\templates\app\work_detail.html:292
+msgid "Select All"
+msgstr "全て選択"
+
+#: .\templates\app\work_detail.html:301
+msgid "Translate From"
+msgstr "原文言語"
+
+#: .\templates\app\work_detail.html:305
+msgid "Translate To"
+msgstr "訳文言語"
+
+#: .\templates\app\work_detail.html:452 .\templates\app\work_detail.html:469
+#: .\templates\app\work_detail.html:500
+msgid "Please select translating text."
+msgstr "テキストエリアからドラッグしながらテキストを選択してください。選択したテキストに対して翻訳をします。"
+
+#: .\templates\app\work_detail.html:457 .\templates\app\work_detail.html:474
+#: .\templates\app\work_detail.html:505
+msgid "CannotIncludeTranslatedText"
+msgstr "既に翻訳済みの箇所を含むことはできません。再選択してください。"
+
+#: .\templates\app\work_history.html:25
+msgid "workTitle"
+msgstr "作業タイトル"
+
+#: .\templates\app\work_history.html:27
+msgid "Translation"
+msgstr "翻訳"
+
+#: .\templates\app\work_list.html:4
+msgid "WorkList"
+msgstr "作業リスト"
+
+#: .\templates\app\work_list.html:75
+msgid "View"
+msgstr "参照"
+
+#: .\templates\app\work_list.html:76
+msgid "Reopen"
+msgstr "翻訳中に戻す"
+
+#: .\templates\registration\login.html:4
+msgid "login"
+msgstr "ログイン"
+
+#: .\templates\registration\login.html:17
+msgid "Login_Sign_in_to_start_your_session"
+msgstr "サインインしてセッションを開始する"
+
+#: .\templates\registration\login.html:36
+msgid "Remember Me"
+msgstr "ログインを覚えておく"
+
+#: .\templates\registration\login.html:40
+msgid "Sign In"
+msgstr "サインイン"
+
+#: .\templates\registration\login.html:46
+msgid "Login_Sign_in_using_Facebook"
+msgstr "Facebookでサインイン"
+
+#: .\templates\registration\login.html:47
+msgid "Login_Sign_in_using_Google+"
+msgstr "Google+でサインイン"
+
+#: .\templates\registration\login.html:50
+msgid "Login_I_forgot_my_password"
+msgstr "パスワードを忘れた方はこちら"
+
+#: .\templates\registration\login.html:53
+msgid "Login_Register_a_new_membership"
+msgstr "新規会員登録"
+
+#~ msgid "Japanese"
+#~ msgstr "日本語"
+
+#~ msgid "English"
+#~ msgstr "英語"

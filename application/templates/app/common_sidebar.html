@@ -1,3 +1,4 @@
+{% load i18n %}
 <a href="{% url 'home' %}" class="brand-link">
     <img src="/static/dist/img/logo_small.png" alt="AdminLTE Logo" class="brand-image img-rounded elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">Honyaku.site</span>
@@ -7,37 +8,37 @@
         <li class="nav-item">
             <a href="{% url 'worklist' %}" class="nav-link">
                 <i class="nav-icon fas fa-tasks"></i>
-                <p>#Menu_worklist#</p>
+                <p>{% trans "worklist" %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'translationHistory' %}" class="nav-link">
                 <i class="nav-icon fas fa-history"></i>
-                <p>#Menu_History#</p>
+                <p>{% trans "TranslationHistory" %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'taglist' %}" class="nav-link">
                 <i class="nav-icon fas fa-tags"></i>
-                <p>#Menu_Tag#</p>
+                <p>{% trans "Taglist" %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'glossary' %}" class="nav-link">
                 <i class="nav-icon fas fa-book"></i>
-                <p>#Menu_Glossary#</p>
+                <p>{% trans "Glossary" %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'manual' %}" class="nav-link">
                 <i class="nav-icon fas fa-th"></i>
-                <p>#Menu_Manual#</p>
+                <p>{% trans "Manual" %}</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="{% url 'termsanduse' %}" class="nav-link">
                 <i class="nav-icon fas fa-th"></i>
-                <p>#Menu_Termsanduse#</p>
+                <p>{% trans "TermsAndConditions" %}</p>
             </a>
         </li>
     </ul>

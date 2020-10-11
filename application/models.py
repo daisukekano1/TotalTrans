@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError(_('The Email must be set'))
+            raise ValueError('The Email must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -22,15 +22,15 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('Superuser must have is_staff=True.'))
+            raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
+            raise ValueError('Superuser must have is_superuser=True.')
         return self.create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
     username = None
-    email = models.EmailField(_('Email address'), unique=True)
-    username2 = models.CharField(_('User name'), max_length=30, blank=False, default='')
+    email = models.EmailField('Email address', unique=True)
+    username2 = models.CharField('User name', max_length=30, blank=False, default='')
     userCreditCardNumber = models.CharField(max_length=20, null=True)
     userLanguage = models.CharField(max_length=20, null=True)
     defaultLcSrc = models.CharField(max_length=5, null=True)

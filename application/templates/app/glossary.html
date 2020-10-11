@@ -1,7 +1,7 @@
 {% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %}#PageTitle_glossary#{% endblock title %}
+{% block title %}{% trans "glossary" %}{% endblock title %}
 
 {% block stylesheets %}
     {{ block.super }}
@@ -19,7 +19,7 @@
                 {% csrf_token %}
                 <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
                     <div class="form-group col-2" style="margin-right:10px;">
-                        <button class="btn btn-primary" style="margin:0px;">#Create Glossary#</button>
+                        <button class="btn btn-primary" style="margin:0px;">{% trans "Create Glossary" %}</button>
                     </div>
                 </div>
             </form>
@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="card-header h6 sitecolor-bcolor">#Glossary#</div>
+                        <div class="card-header h6 sitecolor-bcolor">{% trans "Glossary" %}</div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -37,9 +37,9 @@
                                             <thead>
                                                 <tr>
                                                     <th></th>
-                                                    <th>#WordName#</th>
-                                                    <th>#Translate#</th>
-                                                    <th>#Category#</th>
+                                                    <th>{% trans "Keyword" %}</th>
+                                                    <th>{% trans "Translate" %}</th>
+                                                    <th>{% trans "Category" %}</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -95,7 +95,7 @@
             }
 
             selectEditor.create({
-                title: 'Map CSV fields',
+                title: '{% trans "Map CSV fields" %}',
                 buttons: 'Import '+csv.length+' records',
                 message: 'Select the CSV column you want to use the data from for each field.'
             });
@@ -103,9 +103,9 @@
             selectEditor.on('submitComplete', function (e, json, data, action) {
                 // Use the host Editor instance to show a multi-row create form allowing the user to submit the data.
                 editor.create( csv.length, {
-                    title: 'Confirm import',
+                    title: '{% trans "Confirm import" %}',
                     buttons: 'Submit',
-                    message: 'Click the <i>Submit</i> button to confirm the import of '+csv.length+' rows of data. Optionally, override the value for a field to set a common value by clicking on the field below.'
+                    message: '{% trans "submitCompleteMessage" %}'
                 } );
 
                 for ( var i=0 ; i<fields.length ; i++ ) {

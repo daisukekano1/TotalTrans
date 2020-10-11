@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 
 class SignupForm(UserCreationForm):
 
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    email = forms.EmailField(max_length=254, help_text=_('Required. Inform a valid email address.'))
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].widget.attrs['class'] = 'form-control'
@@ -36,7 +36,7 @@ class EmailAuthenticationForm(forms.Form):
     email = forms.EmailField(max_length=254, widget=forms.TextInput(attrs={'autofocus': True}))
     password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput)
     error_messages = {
-        'invalid_login': "Eメールアドレス または パスワードに誤りがあります。",
+        'invalid_login': _("It is wrong Email address or password."),
         'inactive': _("This account is inactive."),
     }
 

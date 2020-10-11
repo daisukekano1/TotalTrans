@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 19:55+0900\n"
+"POT-Creation-Date: 2020-10-11 19:23+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,424 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: .\HonyakuService\settings.py:156 .\Honyaku\templates\app\index.html:12
-msgid "Japanese"
-msgstr "Japanese"
 
-#: .\HonyakuService\settings.py:157
-msgid "English"
-msgstr "English"
+#: .\forms.py:17
+msgid "Required. Inform a valid email address."
+msgstr "Required. Inform a valid email address."
+
+#: .\forms.py:21
+msgid "Signup-Email address"
+msgstr "Email Address"
+
+#: .\forms.py:23
+msgid "Signup-User name"
+msgstr "User Name"
+
+#: .\forms.py:25
+msgid "Signup-Password"
+msgstr "Password"
+
+#: .\forms.py:27
+msgid "Signup-Password confirmation"
+msgstr "Password confirmation"
+
+#: .\forms.py:37
+msgid "Password"
+msgstr "Password"
+
+#: .\forms.py:39
+msgid "It is wrong Email address or password."
+msgstr "It is wrong Email address or password."
+
+#: .\forms.py:40
+msgid "This account is inactive."
+msgstr "This account is inactive"
+
+#: .\forms.py:53
+msgid "Login-Email address"
+msgstr "Email address"
+
+#: .\forms.py:55
+msgid "Login-Password"
+msgstr "Password"
+
+#: .\templates\app\common_footer.html:2 .\templates\app\common_footer.html:10
+#: .\templates\app\common_footer.html:13 .\templates\app\work_detail.html:152
+#: .\templates\app\work_detail.html:188 .\templates\app\work_detail.html:204
+#: .\templates\app\work_detail.html:220 .\templates\app\work_detail.html:236
+#: .\templates\app\work_detail.html:252 .\templates\app\work_detail.html:268
+msgid "Cancel"
+msgstr "Cancel"
+
+#: .\templates\app\common_footer.html:3
+msgid "Save as Draft"
+msgstr "Save as Draft"
+
+#: .\templates\app\common_footer.html:4 .\templates\app\main_home.html:155
+#: .\templates\app\work_list.html:70
+msgid "Start Translation"
+msgstr "Start Translation"
+
+#: .\templates\app\common_footer.html:6 .\templates\app\work_detail.html:126
+msgid "SelfTrans"
+msgstr "Self Trans"
+
+#: .\templates\app\common_footer.html:7 .\templates\app\work_detail.html:162
+msgid "GoogleTrans"
+msgstr "Google Trans"
+
+#: .\templates\app\common_footer.html:8
+msgid "IgnoreTrans"
+msgstr "Ignore Trans"
+
+#: .\templates\app\common_footer.html:11 .\templates\app\common_footer.html:14
+msgid "Save"
+msgstr "Save"
+
+#: .\templates\app\common_sidebar.html:10
+msgid "worklist"
+msgstr "Work List"
+
+#: .\templates\app\common_sidebar.html:16 .\templates\app\main_home.html:80
+#: .\templates\app\work_history.html:4 .\templates\app\work_history.html:18
+msgid "TranslationHistory"
+msgstr "Translation History"
+
+#: .\templates\app\common_sidebar.html:22
+msgid "Taglist"
+msgstr "Tag list"
+
+#: .\templates\app\common_sidebar.html:28 .\templates\app\glossary.html:30
+msgid "Glossary"
+msgstr "Glossary"
+
+#: .\templates\app\common_sidebar.html:34
+msgid "Manual"
+msgstr "Manual"
+
+#: .\templates\app\common_sidebar.html:40
+msgid "TermsAndConditions"
+msgstr "Terms and conditions"
+
+#: .\templates\app\common_top_navigation.html:7
+msgid "Home"
+msgstr "Home"
+
+#: .\templates\app\common_top_navigation.html:10
+msgid "Create_a_New_Work"
+msgstr "Create a new Work"
+
+#: .\templates\app\glossary.html:4
+msgid "glossary"
+msgstr "glossary"
+
+#: .\templates\app\glossary.html:22
+msgid "Create Glossary"
+msgstr "Create glossary"
+
+#: .\templates\app\glossary.html:40
+msgid "Keyword"
+msgstr "Keyword"
+
+#: .\templates\app\glossary.html:41 .\templates\app\main_home.html:209
+#: .\templates\app\work_list.html:72
+msgid "Translate"
+msgstr "Translate"
+
+#: .\templates\app\glossary.html:42
+msgid "Category"
+msgstr "Category"
+
+#: .\templates\app\glossary.html:98
+msgid "Map CSV fields"
+msgstr "Map CSV fields"
+
+#: .\templates\app\glossary.html:106
+msgid "Confirm import"
+msgstr "Confirm import"
+
+#: .\templates\app\glossary.html:108
+msgid "submitCompleteMessage"
+msgstr "Click the <i>Submit</i> button to confirm. Optionally, override the value for a field to set a common value by clicking on the field below."
+
+#: .\templates\app\main_home.html:17
+msgid "Translation Works"
+msgstr "Translation Works"
+
+#: .\templates\app\main_home.html:23 .\templates\app\main_home.html:60
+#: .\templates\app\main_home.html:120 .\templates\app\work_list.html:44
+msgid "Draft"
+msgstr "Draft"
+
+#: .\templates\app\main_home.html:29 .\templates\app\main_home.html:62
+#: .\templates\app\main_home.html:169 .\templates\app\work_list.html:46
+msgid "Translating"
+msgstr "Translating"
+
+#: .\templates\app\main_home.html:35 .\templates\app\work_list.html:48
+msgid "Closed"
+msgstr "Closed"
+
+#: .\templates\app\main_home.html:44 .\templates\app\main_home.html:134
+#: .\templates\app\main_home.html:183 .\templates\app\work_add.html:38
+#: .\templates\app\work_detail.html:43 .\templates\app\work_list.html:28
+msgid "ETA"
+msgstr "ETA"
+
+#: .\templates\app\main_home.html:71
+msgid "No_Tags_are_registered_yet."
+msgstr "No tags are registered yet."
+
+#: .\templates\app\main_home.html:108
+msgid "No_translation_history."
+msgstr "No translation history."
+
+#: .\templates\app\main_home.html:129 .\templates\app\main_home.html:178
+#: .\templates\app\work_add.html:21 .\templates\app\work_detail.html:21
+#: .\templates\app\work_list.html:21
+msgid "Title"
+msgstr "Title"
+
+#: .\templates\app\main_home.html:130 .\templates\app\main_home.html:179
+#: .\templates\app\work_list.html:24
+msgid "srclang"
+msgstr "srclang"
+
+#: .\templates\app\main_home.html:131 .\templates\app\main_home.html:180
+#: .\templates\app\work_list.html:25
+msgid "tgtlang"
+msgstr "tgtlang"
+
+#: .\templates\app\main_home.html:132 .\templates\app\main_home.html:181
+#: .\templates\app\work_list.html:26
+msgid "Tag"
+msgstr "Tag"
+
+#: .\templates\app\main_home.html:133 .\templates\app\main_home.html:182
+#: .\templates\app\work_detail.html:101 .\templates\app\work_history.html:24
+#: .\templates\app\work_list.html:27
+msgid "createdDate"
+msgstr "Created date"
+
+#: .\templates\app\main_home.html:154 .\templates\app\work_list.html:69
+msgid "Edit Draft"
+msgstr "Edit Draft"
+
+#: .\templates\app\main_home.html:184 .\templates\app\work_detail.html:82
+#: .\templates\app\work_list.html:23
+msgid "Progress"
+msgstr "Progress"
+
+#: .\templates\app\main_home.html:210 .\templates\app\work_list.html:73
+msgid "Work Close"
+msgstr "Close Work"
+
+#: .\templates\app\tag_list.html:17
+msgid "taglist"
+msgstr "Tag List"
+
+#: .\templates\app\tag_list.html:19
+msgid "Add a new Tag"
+msgstr "Add a new Tag"
+
+#: .\templates\app\tag_list.html:26
+msgid "tag image"
+msgstr "Tag image"
+
+#: .\templates\app\tag_list.html:27
+msgid "tag text"
+msgstr "Tag text"
+
+#: .\templates\app\tag_list.html:28
+msgid "background color"
+msgstr "Background color"
+
+#: .\templates\app\tag_list.html:29
+msgid "text color"
+msgstr "Text color"
+
+#: .\templates\app\tag_list.html:162
+msgid "WorkTitle"
+msgstr "Work title"
+
+#: .\templates\app\tag_list.html:162 .\templates\app\work_list.html:22
+msgid "Status"
+msgstr "Status"
+
+#: .\templates\app\user_signup.html:11 .\templates\app\user_signup.html:26
+msgid "Sign up"
+msgstr "Sign up"
+
+#: .\templates\app\work_add.html:16
+msgid "Create a new Work"
+msgstr "Create a new Work"
+
+#: .\templates\app\work_add.html:27 .\templates\app\work_detail.html:27
+msgid "language"
+msgstr "language"
+
+#: .\templates\app\work_add.html:49 .\templates\app\work_detail.html:54
+msgid "Tags"
+msgstr "Tags"
+
+#: .\templates\app\work_add.html:70
+msgid "Language Selection"
+msgstr "Language selection"
+
+#: .\templates\app\work_add.html:80
+msgid "CloseModal"
+msgstr "Close Modal"
+
+#: .\templates\app\work_add.html:193 .\templates\app\work_detail.html:493
+#: .\templates\app\work_detail.html:532 .\templates\app\work_detail.html:557
+#: .\templates\app\work_detail.html:580 .\templates\app\work_detail.html:609
+#: .\templates\app\work_detail.html:624 .\templates\app\work_detail.html:692
+msgid "Request failed. Returned status : "
+msgstr "Request failed. Returned status : "
+
+#: .\templates\app\work_detail.html:4 .\templates\app\work_detail.html:16
+msgid "WorkDetail"
+msgstr "Work detail"
+
+#: .\templates\app\work_detail.html:66
+msgid "Original"
+msgstr "Original"
+
+#: .\templates\app\work_detail.html:71
+msgid "History"
+msgstr "History"
+
+#: .\templates\app\work_detail.html:76
+msgid "Translated"
+msgstr "Translated"
+
+#: .\templates\app\work_detail.html:83
+msgid "status"
+msgstr "Status"
+
+#: .\templates\app\work_detail.html:98 .\templates\app\work_history.html:26
+msgid "TranslationType"
+msgstr "Translation Type"
+
+#: .\templates\app\work_detail.html:99
+msgid "beforeTranslation"
+msgstr "Original"
+
+#: .\templates\app\work_detail.html:100
+msgid "afterTranslation"
+msgstr "Translated"
+
+#: .\templates\app\work_detail.html:134 .\templates\app\work_detail.html:170
+msgid "OriginalText"
+msgstr "Original"
+
+#: .\templates\app\work_detail.html:143 .\templates\app\work_detail.html:179
+msgid "TranslatedText"
+msgstr "Translated"
+
+#: .\templates\app\work_detail.html:153 .\templates\app\work_detail.html:189
+msgid "Reflect"
+msgstr "Reflect"
+
+#: .\templates\app\work_detail.html:198 .\templates\app\work_detail.html:214
+#: .\templates\app\work_detail.html:230 .\templates\app\work_detail.html:246
+#: .\templates\app\work_detail.html:262
+msgid "ConfirmationMessage"
+msgstr "Confirmation message"
+
+#: .\templates\app\work_detail.html:201
+msgid "TranslateIgnoreConfirmationMessage"
+msgstr "Are you sure to set ignore for the selected text?"
+
+#: .\templates\app\work_detail.html:205
+msgid "OK"
+msgstr "OK"
+
+#: .\templates\app\work_detail.html:217 .\templates\app\work_detail.html:233
+#: .\templates\app\work_detail.html:249
+msgid "TranslateDeleteConfirmationMessage"
+msgstr "Are you sure to cancel the translation?"
+
+#: .\templates\app\work_detail.html:221 .\templates\app\work_detail.html:237
+#: .\templates\app\work_detail.html:253
+msgid "RemoveTranslation"
+msgstr "Cancel translation"
+
+#: .\templates\app\work_detail.html:282
+msgid "Not translate for the selected text"
+msgstr "Not translate for the selected text. "
+
+#: .\templates\app\work_detail.html:292
+msgid "Select All"
+msgstr "Select All"
+
+#: .\templates\app\work_detail.html:301
+msgid "Translate From"
+msgstr "Translate From"
+
+#: .\templates\app\work_detail.html:305
+msgid "Translate To"
+msgstr "Translate To"
+
+#: .\templates\app\work_detail.html:452 .\templates\app\work_detail.html:469
+#: .\templates\app\work_detail.html:500
+msgid "Please select translating text."
+msgstr "Please select translating text."
+
+#: .\templates\app\work_detail.html:457 .\templates\app\work_detail.html:474
+#: .\templates\app\work_detail.html:505
+msgid "CannotIncludeTranslatedText"
+msgstr "Cannot include the translated text. Please select again with untranslated text only."
+
+#: .\templates\app\work_history.html:25
+msgid "workTitle"
+msgstr "Work title"
+
+#: .\templates\app\work_history.html:27
+msgid "Translation"
+msgstr "Translation"
+
+#: .\templates\app\work_list.html:4
+msgid "WorkList"
+msgstr "Work list"
+
+#: .\templates\app\work_list.html:75
+msgid "View"
+msgstr "View"
+
+#: .\templates\app\work_list.html:76
+msgid "Reopen"
+msgstr "Reopen"
+
+#: .\templates\registration\login.html:4
+msgid "login"
+msgstr "login"
+
+#: .\templates\registration\login.html:17
+msgid "Login_Sign_in_to_start_your_session"
+msgstr "Sign in to start your_session"
+
+#: .\templates\registration\login.html:36
+msgid "Remember Me"
+msgstr "Remember Me"
+
+#: .\templates\registration\login.html:40
+msgid "Sign In"
+msgstr "Sign In"
+
+#: .\templates\registration\login.html:46
+msgid "Login_Sign_in_using_Facebook"
+msgstr "Sign in using Facebook"
+
+#: .\templates\registration\login.html:47
+msgid "Login_Sign_in_using_Google+"
+msgstr "Sign in using Google+"
+
+#: .\templates\registration\login.html:50
+msgid "Login_I_forgot_my_password"
+msgstr "I forgot my password."
+
+#: .\templates\registration\login.html:53
+msgid "Login_Register_a_new_membership"
+msgstr "Register a new membership"
+
