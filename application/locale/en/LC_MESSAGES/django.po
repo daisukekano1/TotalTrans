@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-11 19:23+0900\n"
+"POT-Creation-Date: 2020-10-12 07:56+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: .\forms.py:17
@@ -58,69 +58,69 @@ msgstr "Email address"
 msgid "Login-Password"
 msgstr "Password"
 
-#: .\templates\app\common_footer.html:2 .\templates\app\common_footer.html:10
-#: .\templates\app\common_footer.html:13 .\templates\app\work_detail.html:152
+#: .\templates\app\common_footer.html:3 .\templates\app\common_footer.html:11
+#: .\templates\app\common_footer.html:14 .\templates\app\work_detail.html:152
 #: .\templates\app\work_detail.html:188 .\templates\app\work_detail.html:204
 #: .\templates\app\work_detail.html:220 .\templates\app\work_detail.html:236
 #: .\templates\app\work_detail.html:252 .\templates\app\work_detail.html:268
 msgid "Cancel"
 msgstr "Cancel"
 
-#: .\templates\app\common_footer.html:3
+#: .\templates\app\common_footer.html:4
 msgid "Save as Draft"
 msgstr "Save as Draft"
 
-#: .\templates\app\common_footer.html:4 .\templates\app\main_home.html:155
+#: .\templates\app\common_footer.html:5 .\templates\app\main_home.html:155
 #: .\templates\app\work_list.html:70
 msgid "Start Translation"
 msgstr "Start Translation"
 
-#: .\templates\app\common_footer.html:6 .\templates\app\work_detail.html:126
+#: .\templates\app\common_footer.html:7 .\templates\app\work_detail.html:126
 msgid "SelfTrans"
 msgstr "Self Trans"
 
-#: .\templates\app\common_footer.html:7 .\templates\app\work_detail.html:162
+#: .\templates\app\common_footer.html:8 .\templates\app\work_detail.html:162
 msgid "GoogleTrans"
 msgstr "Google Trans"
 
-#: .\templates\app\common_footer.html:8
+#: .\templates\app\common_footer.html:9
 msgid "IgnoreTrans"
 msgstr "Ignore Trans"
 
-#: .\templates\app\common_footer.html:11 .\templates\app\common_footer.html:14
+#: .\templates\app\common_footer.html:12 .\templates\app\common_footer.html:15
 msgid "Save"
 msgstr "Save"
 
-#: .\templates\app\common_sidebar.html:10
+#: .\templates\app\common_sidebar.html:11
 msgid "worklist"
 msgstr "Work List"
 
-#: .\templates\app\common_sidebar.html:16 .\templates\app\main_home.html:80
+#: .\templates\app\common_sidebar.html:17 .\templates\app\main_home.html:80
 #: .\templates\app\work_history.html:4 .\templates\app\work_history.html:18
 msgid "TranslationHistory"
 msgstr "Translation History"
 
-#: .\templates\app\common_sidebar.html:22
+#: .\templates\app\common_sidebar.html:23
 msgid "Taglist"
 msgstr "Tag list"
 
-#: .\templates\app\common_sidebar.html:28 .\templates\app\glossary.html:30
+#: .\templates\app\common_sidebar.html:29 .\templates\app\glossary.html:30
 msgid "Glossary"
 msgstr "Glossary"
 
-#: .\templates\app\common_sidebar.html:34
+#: .\templates\app\common_sidebar.html:35
 msgid "Manual"
 msgstr "Manual"
 
-#: .\templates\app\common_sidebar.html:40
+#: .\templates\app\common_sidebar.html:41
 msgid "TermsAndConditions"
 msgstr "Terms and conditions"
 
-#: .\templates\app\common_top_navigation.html:7
+#: .\templates\app\common_top_navigation.html:8
 msgid "Home"
 msgstr "Home"
 
-#: .\templates\app\common_top_navigation.html:10
+#: .\templates\app\common_top_navigation.html:11
 msgid "Create_a_New_Work"
 msgstr "Create a new Work"
 
@@ -155,7 +155,9 @@ msgstr "Confirm import"
 
 #: .\templates\app\glossary.html:108
 msgid "submitCompleteMessage"
-msgstr "Click the <i>Submit</i> button to confirm. Optionally, override the value for a field to set a common value by clicking on the field below."
+msgstr ""
+"Click the <i>Submit</i> button to confirm. Optionally, override the value "
+"for a field to set a common value by clicking on the field below."
 
 #: .\templates\app\main_home.html:17
 msgid "Translation Works"
@@ -198,12 +200,12 @@ msgstr "Title"
 #: .\templates\app\main_home.html:130 .\templates\app\main_home.html:179
 #: .\templates\app\work_list.html:24
 msgid "srclang"
-msgstr "srclang"
+msgstr "Source lang"
 
 #: .\templates\app\main_home.html:131 .\templates\app\main_home.html:180
 #: .\templates\app\work_list.html:25
 msgid "tgtlang"
-msgstr "tgtlang"
+msgstr "Target lang"
 
 #: .\templates\app\main_home.html:132 .\templates\app\main_home.html:181
 #: .\templates\app\work_list.html:26
@@ -314,7 +316,7 @@ msgstr "Status"
 
 #: .\templates\app\work_detail.html:98 .\templates\app\work_history.html:26
 msgid "TranslationType"
-msgstr "Translation Type"
+msgstr "Type"
 
 #: .\templates\app\work_detail.html:99
 msgid "beforeTranslation"
@@ -384,7 +386,9 @@ msgstr "Please select translating text."
 #: .\templates\app\work_detail.html:457 .\templates\app\work_detail.html:474
 #: .\templates\app\work_detail.html:505
 msgid "CannotIncludeTranslatedText"
-msgstr "Cannot include the translated text. Please select again with untranslated text only."
+msgstr ""
+"Cannot include the translated text. Please select again with untranslated "
+"text only."
 
 #: .\templates\app\work_history.html:25
 msgid "workTitle"
@@ -437,4 +441,3 @@ msgstr "I forgot my password."
 #: .\templates\registration\login.html:53
 msgid "Login_Register_a_new_membership"
 msgstr "Register a new membership"
-

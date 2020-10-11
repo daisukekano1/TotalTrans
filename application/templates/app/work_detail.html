@@ -91,14 +91,13 @@
                                         <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                             <div class="x_panel">
                                                 <div class="x_content">
-                                                    <table id="history" class="table table-striped projects">
+                                                    <table id="history" class="table table-hover table-responsive-lg tabletype1">
                                                     <thead>
                                                       <tr>
-                                                        <th>#</th>
-                                                        <th>{% trans "TranslationType" %}</th>
-                                                        <th>{% trans "beforeTranslation" %}</th>
-                                                        <th>{% trans "afterTranslation" %}</th>
-                                                        <th>{% trans "createdDate" %}</th>
+                                                        <th width="3%">#</th>
+                                                        <th width="10%">{% trans "createdDate" %}</th>
+                                                        <th width="5%">{% trans "TranslationType" %}</th>
+                                                        <th width="82%">{% trans "Translation" %}</th>
                                                       </tr>
                                                     </thead>
                                                     </table>
@@ -387,7 +386,8 @@
             "order": [[ 0, "desc" ]],
             columns: [
                 {   data: 'historyNum', className: "dt-left no-wrap"},
-                {   data: 'TranslationType', className: "dt-left no-wrap",
+                {   data: 'createdDateTime', className: "dt-left no-wrap" },
+                {   data: 'TranslationType', className: "dt-left",
                     "render": function (data, type, row) {
                         if (row['TranslationType'] == 'Self') {
                             return '<span class="badge badge-default color-trans-self">'+data+'</span>';
@@ -400,10 +400,18 @@
                         }
                     }
                 },
-                {   data: 'beforeTranslation', className: "dt-left no-wrap"},
-                {   data: 'afterTranslation', className: "dt-left no-wrap"},
-                {   data: 'createdDateTime', className: "dt-left no-wrap" },
-            ]
+                {   data: 'beforeTranslation', className: "dt-left text-overflow-clip",
+                    "render" : function (data, type, row){
+                        html = "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Original' %}：" + row['beforeTranslation'] + "</div>";
+                        html = html + "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Translate' %}：" + row['afterTranslation'] + "</div>";
+                        return html;
+                    }
+                }
+            ],
+            columnDefs: [ {
+                "targets": 3,
+                "orderable": false
+            } ]
         });
         $('#wordsOriginalAll').summernote({
             toolbar: false,
