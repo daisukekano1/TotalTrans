@@ -37,6 +37,10 @@ urlpatterns = [
     path('saveIgnoreTranslation', views_work.saveIgnoreTranslation, name='saveIgnoreTranslation'),
     path('deleteHistory', views_work.deleteHistory, name='deleteHistory'),
     path('worklist/', views_work.worklist, name='worklist'),
+    path('workstart/<int:work_id>/', views_work.workstart, name='workstart'),
+    path('workclose/<int:work_id>/', views_work.workclose, name='workclose'),
+    path('workreopen/<int:work_id>/', views_work.workreopen, name='workreopen'),
+
     path('translationHistory/', views_work.history, name='translationHistory'),
     path('translationHistory/gethistory', views_work.gethistory, name='gethistory'),
 
@@ -50,7 +54,7 @@ urlpatterns = [
     path('taglist/gettags', views_settings.gettags, name='gettags'),
     path('taglist/<int:tag_id>/deleteTag', views_settings.deleteTag, name='deleteTag'),
     path('getworksfortag', views_settings.getworksfortag, name='getworksfortag'),
-
+    path('taglist/savetaglist', views_settings.savetaglist, name='savetaglist'),
     path('i18n/', include('django.conf.urls.i18n'))
 
 ]

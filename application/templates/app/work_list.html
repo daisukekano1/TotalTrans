@@ -14,219 +14,72 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="card-header h6" style="width: 100%; padding:0px;">
-                            <ul class='nav nav-wizard nav-fill'>
-                                <li class='nav-item'><a href='#tab-draft' data-toggle="tab" style="display: block">#Draft#</a></li>
-                                <li class='nav-item active'><a href='#tab-open' data-toggle="tab" style="display: block">#Open#</a></li>
-                                <li class='nav-item'><a href='#tab-closed' data-toggle="tab" style="display: block">#Closed#</a></li>
-                            </ul>
-                        </div>
                         <div class="card-body">
-                            <div id="myTabContent" class="tab-content">
-                                <div class="tab-pane fade" id="tab-draft">
-                                    <table class="table table-hover table-responsive-lg tabletype1">
-                                    <thead>
-                                      <tr>
-                                        <th>#index_createdDate#</th>
-                                        <th>#index_srclang#</th>
-                                        <th>#index_tgtlang#</th>
-                                        <th>#index_Tag#</th>
-                                        <th style="width: 20%">#index_Edit#</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {% for row in data %}
-                                          <tr>
-                                                <td>{{ row.createdDate }}</td>
-                                                <td>{{ row.srclang }}</td>
-                                                <td>{{ row.tgtlang }}</td>
-                                                <td>
-                                                    <div class="tokenfield">
-                                                    {% for tag in row.tags %}
-                                                    <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
-                                                    {%  endfor %}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a href="{% url 'workcreation' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                </td>
-                                            </tr>
-                                      {% endfor %}
-                                    </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane fade" id="tab-open">
-                                    <table class="table table-hover table-responsive-lg tabletype1">
-                                    <thead>
-                                      <tr>
-                                        <th>#index_title#</th>
-                                        <th>#index_srcLang#</th>
-                                        <th>#index_tgtLang#</th>
-                                        <th>#index_Tag#</th>
-                                        <th>#index_progress#</th>
-                                        <th>#index_createdDate#</th>
-                                        <th style="width: 20%">#index_Edit#</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {% for row in data %}
-                                          {% if row.status == "Closed" %}
-                                              <tr class="closed">
-                                          {% else %}
-                                              <tr>
-                                          {% endif %}
-                                                <td>{{ row.createdDate }}</td>
-                                                <td>{{ row.srclang }}<i class="fas fa-long-arrow-alt-right" style="padding:0px 4px 0px 4px"></i>{{ row.tgtlang }}</td>
-                                                <td>
-                                                    <div class="tokenfield">
-                                                        {% for tag in row.tags %}
-                                                            <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
-                                                        {%  endfor %}
-                                                    </div>
-                                                </td>
-                                                <td>{{ row.progress }}</td>
-                                                <td>{{ row.numberofchar }}</td>
-                                                <td>{{ row.status }}</td>
-                                                <td>
-                                                  <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                </td>
-                                              </tr>
-                                      {% endfor %}
-                                    </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane fade" id="tab-closed">
-
-                                </div>
-                            </div>
-                            <div class="x_content">
-                                <table class="table table-hover table-responsive-lg tabletype1">
-                                <thead>
-                                  <tr>
-                                    <th>#index_createdDate#</th>
-                                    <th>#index_Language#</th>
+                            <table id="table" class="table table-hover table-responsive-lg tabletype1">
+                            <thead>
+                                <tr>
+                                    <th>#index_Title#</th>
+                                    <th>#index_srclang#</th>
+                                    <th>#index_tgtlang#</th>
                                     <th>#index_Tag#</th>
                                     <th>#index_progress#</th>
                                     <th>#index_status#</th>
-                                    <th style="width: 20%">#index_Edit#</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% for row in data %}
-                                      {% if row.status == "Closed" %}
-                                          <tr class="closed">
-                                      {% else %}
-                                          <tr>
-                                      {% endif %}
-                                            <td>{{ row.createdDate }}</td>
-                                            <td>{{ row.srclang }}<i class="fas fa-long-arrow-alt-right" style="padding:0px 4px 0px 4px"></i>{{ row.tgtlang }}</td>
-                                            <td>
-                                                <div class="tokenfield">
-                                                    {% for tag in row.tags %}
-                                                        <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
-                                                    {%  endfor %}
-                                                </div>
-                                            </td>
-                                            <td>{{ row.progress }}</td>
-                                            <td>{{ row.status }}</td>
-                                            <td>
-                                              <a href="{% url 'workcreation' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            </td>
-                                          </tr>
-                                  {% endfor %}
-                                </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header h6 sitecolor-bcolor">#Worklist_Open#</div>
-                        <div class="card-body">
-                            <div class="x_content">
-                                <table class="table table-hover table-responsive-lg tabletype1">
-                                <thead>
-                                  <tr>
-                                    <th>#index_title#</th>
-                                    <th>#index_srcLang#</th>
-                                    <th>#index_tgtLang#</th>
-                                    <th>#index_Tag#</th>
-                                    <th>#index_progress#</th>
                                     <th>#index_createdDate#</th>
-                                    <th style="width: 20%">#index_Edit#</th>
+                                    <th>#index_ETA#</th>
+                                    <th style="width: 20%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data %}
+                                    {% if row.status == "Draft" %}
+                                        <tr style="background-color:#7fe08021">
+                                    {% elif row.status == "Open" %}
+                                        <tr style="background-color:#4ec6de12">
+                                    {% elif row.status == "Closed" %}
+                                        <tr style="background-color:#19161614">
+                                    {% endif %}
+                                        <td>{{ row.workTitle }}</td>
+                                        <td>{{ row.srclang }}</td>
+                                        <td>{{ row.tgtlang }}</td>
+                                        <td>
+                                            <div>
+                                                {% for tag in row.tags %}
+                                                    <div class="token badge badge-tag" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}; color:{{ tag.tag__textcolor }}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
+                                                {%  endfor %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="progress progress-striped active">
+                                                <div class="progress-bar bg-primary" style="width:{{ row.progress }}%">{{ row.progress }}%</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if row.status == "Draft" %}
+                                                <span class="color-status-draft" ><i class="fas fa-edit"></i> #Draft#</span>
+                                            {% elif row.status == "Open" %}
+                                                <span class="color-status-open" ><i class="fas fa-random"></i> #Translating#</span>
+                                            {% elif row.status == "Closed" %}
+                                                <span class="color-status-closed" ><i class="fas fa-archive"></i> #Closed#</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ row.createdDate|date:"Y/m/j" }}</td>
+                                        <td>{% if row.eta %}{{ row.eta|date:"Y/m/j" }}{% endif %}</td>
+                                        <td style="white-space: nowrap">
+                                            {% if row.status == "Draft" %}
+                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-edit"></i> Edit Draft</a>
+                                                <a href="{% url 'workstart' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Start Translation</a>
+                                            {% elif row.status == "Open" %}
+                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Translate</a>
+                                                <a href="{% url 'workclose' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> Work Close</a>
+                                            {% elif row.status == "Closed" %}
+                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> View</a>
+                                                <a href="{% url 'workreopen' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> Reopen</a>
+                                            {% endif %}
+                                        </td>
                                   </tr>
-                                </thead>
-                                <tbody>
-                                  {% for row in data %}
-                                      {% if row.status == "Closed" %}
-                                          <tr class="closed">
-                                      {% else %}
-                                          <tr>
-                                      {% endif %}
-                                            <td>{{ row.createdDate }}</td>
-                                            <td>{{ row.srclang }}<i class="fas fa-long-arrow-alt-right" style="padding:0px 4px 0px 4px"></i>{{ row.tgtlang }}</td>
-                                            <td>
-                                                <div class="tokenfield">
-                                                    {% for tag in row.tags %}
-                                                        <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
-                                                    {%  endfor %}
-                                                </div>
-                                            </td>
-                                            <td>{{ row.progress }}</td>
-                                            <td>{{ row.numberofchar }}</td>
-                                            <td>{{ row.status }}</td>
-                                            <td>
-                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            </td>
-                                          </tr>
-                                  {% endfor %}
-                                </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header h6 sitecolor-bcolor">#Worklist_Close#</div>
-                        <div class="card-body">
-                            <div class="x_content">
-                                <table class="table table-hover table-responsive-lg tabletype1">
-                                <thead>
-                                  <tr>
-                                    <th>#index_createdDate#</th>
-                                    <th>#index_Language#</th>
-                                    <th>#index_Tag#</th>
-                                    <th>#index_progress#</th>
-                                    <th>#index_numberofchar#</th>
-                                    <th>#index_status#</th>
-                                    <th style="width: 20%">#index_Edit#</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% for row in data %}
-                                      {% if row.status == "Closed" %}
-                                          <tr class="closed">
-                                      {% else %}
-                                          <tr>
-                                      {% endif %}
-                                            <td>{{ row.createdDate }}</td>
-                                            <td>{{ row.srclang }}<i class="fas fa-long-arrow-alt-right" style="padding:0px 4px 0px 4px"></i>{{ row.tgtlang }}</td>
-                                            <td>
-                                                <div class="tokenfield">
-                                                    {% for tag in row.tags %}
-                                                        <div class="token" style="border:0px; height: inherit; background-color: {{tag.tag__backgroundcolor}}"><span class="token-label" style="padding: .2em 18px .2em .5em">{{ tag.tag__tagname }}</span></div>
-                                                    {%  endfor %}
-                                                </div>
-                                            </td>
-                                            <td>{{ row.progress }}</td>
-                                            <td>{{ row.numberofchar }}</td>
-                                            <td>{{ row.status }}</td>
-                                            <td>
-                                              <a href="{% url 'workdetail' row.work_id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                            </td>
-                                          </tr>
-                                  {% endfor %}
-                                </tbody>
-                                </table>
-                            </div>
+                              {% endfor %}
+                            </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -234,8 +87,26 @@
         </div>
     </section>
 </div>
-{% endblock content %}
 
 {% block javascripts %}
   {{ block.super}}
 {% endblock javascripts %}
+<script>
+    $(document).ready(function() {
+        var dtable = $("#table").DataTable({
+            bDeferRender: true,
+            stateSave: false,
+            scrollCollapse : true,
+            paging : false,
+            searching : true,
+            scrollToTop: true,
+            "responsive": false ,
+            "autoWidth": false,
+            columnDefs: [ {
+                "targets": 8,
+                "orderable": false
+            } ]
+        });
+    });
+</script>
+{% endblock content %}

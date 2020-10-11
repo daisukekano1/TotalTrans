@@ -47,7 +47,6 @@ def worklist(request):
         onedata = {}
         onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
-        onedata['wordsOriginal'] = work.wordsOriginal
         srclang = Language.objects.filter(lc__exact=work.lc_src).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         tgtlang = Language.objects.filter(lc__exact=work.lc_tgt).extra(select={'displaylang': request.user.userLanguage}).values('displaylang').first()
         onedata['srclang'] = srclang['displaylang']
@@ -55,7 +54,6 @@ def worklist(request):
         onedata['tags'] = WorkUserTag.objects.filter(work__exact=work.id).select_related('tag').values('tag__tagname', 'tag__backgroundcolor', 'tag__textcolor')
         onedata['progress'] = work.progress
         onedata['createdDate'] = work.createdDate
-        onedata['numberofchar'] = work.numberofchar
         onedata['status'] = work.status
         onedata['eta'] = work.eta
 
@@ -436,3 +434,24 @@ def deleteHistory(request):
 @login_required
 def history(request):
     return render(request, 'app/work_history.html')
+
+@login_required
+def workstart(request, work_id = 0):
+    work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
+    work.status = "Open"
+    work.save()
+    return redirect("workdetail", work_id=work_id)
+
+@login_required
+def workclose(request, work_id = 0):
+    work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
+    work.status = "Closed"
+    work.save()
+    return redirect("worklist")
+
+@login_required
+def workreopen(request, work_id = 0):
+    work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
+    work.status = "Open"
+    work.save()
+    return redirect("workdetail", work_id=work_id)

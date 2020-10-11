@@ -11,7 +11,7 @@ table td{
 .btn.btn-md{
   font-size:1rem;
 }
-.index table thead{
+table.table thead{
   background-color: #3872a6;
   color:white;
 }
@@ -271,7 +271,7 @@ table.taglistchild a {
     background-color: transparent;
 }
 table.taglistchild a:hover {
-    color: #0056b3;
+    color: #0056b3;/**/
     text-decoration: none;
 }
 .input-label-color {
@@ -281,9 +281,29 @@ table.taglistchild a:hover {
 div.tokenfield {
   background-color: #fbfbf3 !important;
 }
-.color-text-status{
-  color : #18988c;
+.color-status-draft{
+  color : #44a52b;
+}
+.color-status-open{
+  color : #080fef;
+}
+.color-status-closed{
+  color : #536150;
 }
 .badge-tag{
   padding: .8em .8em !important;
+}
+.no-wrap{
+  white-space: nowrap;
+}
+.text-overflow-clip{
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+    max-width: 0;
+}
+.progress-bar{
+  border-radius: 0.4em;
+  padding-top:8px;
+  padding-bottom:8px;
 }

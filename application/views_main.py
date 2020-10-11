@@ -13,7 +13,7 @@ def home(request):
     count = {}
     count['DraftCount'] = Works.objects.filter(**filters).filter(status='Draft').count()
     count['OpenCount'] = Works.objects.filter(**filters).filter(status='Open').count()
-    count['ClosedCount'] = Works.objects.filter(**filters).filter(status='Open').count()
+    count['ClosedCount'] = Works.objects.filter(**filters).filter(status='Closed').count()
     # Tags
     tags = []
     for tag in UserTag.objects.filter(**filters).filter(validFlg=1).order_by('createdDate'):

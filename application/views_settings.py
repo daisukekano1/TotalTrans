@@ -166,3 +166,28 @@ def getworksfortag(request):
         data.append((onedata))
 
     return JsonResponse({"data": data})
+
+@login_required
+def savetaglist(request):
+    ug = UserTag.objects.filter(user=request.user.id)
+    tagsjson = request.POST['tagsjson']
+    tags = json.loads(tagsjson)
+    for val in tags:
+        if val['@tag_id'] != '':
+            ug = UserTag.objects.filter(user=request.user.id).filter(id=val['@tag_id']).first()
+            ug.tagname = val['@tagname']
+            ug.backgroundcolor = val['@backgroundcolor']
+            ug.textcolor = val['@textcolor']
+            ug.save()
+        else:
+            ug = UserTag(
+                user_id = request.user.id,
+                tagname = val['@tagname'],
+                backgroundcolor = val['@backgroundcolor'],
+                textcolor = val['@textcolor'],
+                validFlg = 1,
+                createdDate=timezone.now()
+            )
+            ug.save()
+    message = "#Update Tags is successful#"
+    return redirect('taglist')

@@ -16,8 +16,7 @@
                     <div class="card">
                         <div class="card-header h6 sitecolor-bcolor">#PageTitle_Tag#</div>
                         <div class="card-body">
-                            <button id="addRow" class="btn btn-lg btn-success">Add a new Tag</button>
-                            <form id="tagsform" class="form" action="savetaglist" method="post">
+                            <form id="tagsform" class="form" action="save" method="post">
                                 {% csrf_token %}
                                 <table id="tags" class="table display dataTable">
                                 <thead>
@@ -28,14 +27,10 @@
                                         <th>back color</th>
                                         <th>text color</th>
                                         <th></th>
-                                        <th style="visibility: hidden">@tag_id</th>
-                                        <th style="visibility: hidden">@tagname</th>
-                                        <th style="visibility: hidden">@backgroundcolor</th>
-                                        <th style="visibility: hidden">@textcolor</th>
                                     </tr>
                                 </thead>
                                 </table>
-                                <input type="hidden" name="tagsjson" id="tagsjson"/>
+                                <input type="hidden" name="tagsjson"/>
                             </form>
                         </div>
                     </div>
@@ -44,33 +39,24 @@
         </div>
     </section>
 </div>
-<table id="newRow" style="display:none">
-<tbody>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>#555555</td>
-        <td>#ffffff</td>
-        <td></td>
-        <td style="visibility: hidden"></td>
-        <td style="visibility: hidden"></td>
-        <td style="visibility: hidden">#555555</td>
-        <td style="visibility: hidden">#ffffff</td>
-    </tr>
-</tbody>
-</table>
+<div id="customForm">
+<editor-field name="tagText"></editor-field>
+<editor-field name="backColor"></editor-field>
+</div>
 {% endblock content %}
 {% block javascripts %}
     {{ block.super}}
+    <script src="/static/vendors/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/static/vendors/datatables-select/js/dataTables.select.min.js"></script>
+    <script src="/static/vendors/datatables-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="/static/vendors/datatables-editor/js/dataTables.editor.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.3/js/buttons.html5.min.js"></script>
     <script src="/static/vendors/tabletojson/jquery.tabletojson.min.js"></script>
     <script>
         var editor;
         var TOKEN = ""
         function submitAction(url) {
-            taglist = $('#tags').tableToJSON({
-                onlyColumns : [6,7,8,9]
-            });
+            taglist = $('#tags').tableToJSON();
             $('#tagsjson').val(JSON.stringify(taglist));
             $('#tagsform').submit();
         }
@@ -81,12 +67,27 @@
                     'CSRFToken': TOKEN
                 }
             });
+            editor = new $.fn.dataTable.Editor( {
+                table: "#tags",
+                {#template: '#customForm',#}
+                {#idSrc:  'id',#}
+                fields: [
+                    {
+                        label: "#tagname#",
+                        name: "tagname"
+                    }, {
+                        label: "#backgroundcolor#",
+                        name: "backgroundcolor"
+                    }, {
+                        label: "#textColor#",
+                        name: "textcolor"
+                    }
+                ]
+            });
             var dtable = $("#tags").DataTable({
                 dom: "Bfrtip",
                 ajax: "gettags",
                 paging : false,
-                ordering : false,
-                searching : false,
                 columns: [
                     {
                         data: 'tag_id',
@@ -97,7 +98,7 @@
                     },
                     { data: 'tagname', className: "dt-left no-wrap",
                         "render":function (data, type, row) {
-                            html = '<div class="token badge badge-tag" style="background-color:'+row['backgroundcolor']+'; color:'+row['textcolor']+';">';
+                            html = '<div class="token badge" style="background-color:'+row['backgroundcolor']+'; color:'+row['textcolor']+';">';
                             html = html + '<span class="token-label" style="padding:2em;">'+row['tagname']+'</span>';
                             html = html + '</div>';
                             return html;
@@ -110,7 +111,9 @@
                     },
                     { data: 'backgroundcolor', className: "dt-left no-wrap",
                         "render":function (data, type, row) {
-                            return '<input type="color" class="backgroundcolor"  value="'+row['backgroundcolor']+'">';
+                            html = '<input type="color" class="backgroundcolor"  value="'+row['backgroundcolor']+'">';
+                            html = html + '<input type="hidden" name="backgroundcolor" id="backgroundcolor" value="'+row['backgroundcolor']+'">';
+                            return html;
                         }
                     },
                     { data: 'textcolor', className: "dt-left no-wrap",
@@ -122,28 +125,20 @@
                     },
                     { data: 'tag_id', className: "dt-center no-wrap",
                         "render": function (data, type, row) {
-                            if ( data == "")
-                                return ''
                             url = "{% url 'deleteTag' 0 %}".replace("0", data)
-                            return '<input type="button" class="btn btn-md btn-outline-danger" onclick="location.href=\''+url+'\'" value="Delete"/>';
+                            return '<button class="btn btn-md btn-outline-blue-grey" onclick="location.href=\''+url+'\'">Delete</button>';
                         }
-                    },
-                    { data: 'tag_id', className: "invisible" },
-                    { data: 'tagname', className: "invisible data_tagname" },
-                    { data: 'backgroundcolor', className: "invisible data_backgroundcolor" },
-                    { data: 'textcolor', className: "invisible data_textcolor" }
+                    }
                 ],
-            });
-            $('#addRow').click(function() {
-                var rowHtml = $("#newRow").find("tr")[0].outerHTML
-                dtable.row.add($(rowHtml)).draw();
+                select: true,
+                buttons: [
+                    { extend: "create", editor: editor }
+                ]
             });
             $('#tags tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
                 var input = $(this).children('input');
                 tag_id = input.val();
-                if (tag_id == "")
-                    return false;
                 var row = dtable.row(tr);
                 if (row.child.isShown()) {
                     row.child.hide();
@@ -183,29 +178,24 @@
                 }
             });
 
+
             $('#tags tbody').on('change', 'input#tagname', function () {
                 var text = this.value;
                 var tr = $(this).closest('tr');
                 var span = tr.find('span');
                 span.text(text);
-                var hidden = tr.find('td.data_tagname');
-                hidden.text(text);
             });
             $('#tags tbody').on('change', 'input.backgroundcolor', function () {
                 var color = this.value;
                 var tr = $(this).closest('tr');
                 var div = tr.find('div');
                 div.css('background-color', color);
-                var hidden = tr.find('td.data_backgroundcolor');
-                hidden.text(color);
             });
             $('#tags tbody').on('change', 'input.textcolor', function () {
                 var color = this.value;
                 var tr = $(this).closest('tr');
                 var div = tr.find('div');
                 div.css('color', color);
-                var hidden = tr.find('td.data_textcolor');
-                hidden.text(color);
             });
         });
 
