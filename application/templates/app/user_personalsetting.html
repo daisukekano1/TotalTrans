@@ -1,7 +1,7 @@
 {% extends "app/common_base_site.html" %}
 {% load i18n %}
 
-{% block title %}#PageTitle_AccountMaintenance#{% endblock title %}
+{% block title %}{% trans "PersonalSetting" %}{% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="card-header h6 sitecolor-bcolor">#PageTitle_AccountMaintenance#</div>
+                        <div class="card-header h6 sitecolor-bcolor">{% trans "PersonalSetting" %}</div>
                         <div class="card-body">
                             To be updated
                         </div>

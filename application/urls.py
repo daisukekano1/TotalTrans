@@ -19,7 +19,8 @@ urlpatterns = [
     path('login/', LoginView.as_view(form_class=EmailAuthenticationForm, template_name='registration/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='registration/login.html'), name='logout'),
 
-    path('userMaintenance/', views_user.maintenance, name='userMaintenance'),
+    path('personalsetting/', views_user.personalsetting, name='personalsetting'),
+    path('groupsetting/', views_user.groupsetting, name='groupsetting'),
     path('forgotPassword/', views_user.forgotPassword, name='forgotPassword'),
 
     # The work page functions
@@ -55,6 +56,7 @@ urlpatterns = [
     path('taglist/<int:tag_id>/deleteTag', views_settings.deleteTag, name='deleteTag'),
     path('getworksfortag', views_settings.getworksfortag, name='getworksfortag'),
     path('taglist/savetaglist', views_settings.savetaglist, name='savetaglist'),
+
     path('i18n/', include('django.conf.urls.i18n'))
 
 ]

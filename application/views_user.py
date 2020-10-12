@@ -21,6 +21,9 @@ def forgotPassword(request):
     return render(request, 'app/user_forgotpassword.html')
 
 @login_required
-def maintenance(request):
-    return render(request, 'app/user_maintenance.html')
+def personalsetting(request):
+    return render(request, 'app/user_personalsetting.html')
 
+@login_required
+def groupsetting(request):
+    return render(request, 'app/user_groupsetting.html')
