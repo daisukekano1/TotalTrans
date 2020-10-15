@@ -307,3 +307,6 @@ div.tokenfield {
   padding-top:8px;
   padding-bottom:8px;
 }
+.dropdown-menu-lg .dropdown-item{
+  padding: 1rem 1rem;
+}

@@ -35,6 +35,7 @@ class CustomUser(AbstractUser):
     userLanguage = models.CharField(max_length=20, null=True)
     defaultLcSrc = models.CharField(max_length=5, null=True)
     defaultLcTgt = models.CharField(max_length=5, null=True)
+    usertype = models.CharField(max_length=10, null=True)
 
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'email'
@@ -135,3 +136,12 @@ class UserGlossary(models.Model):
     def __str__(self):
         return self.id
 
+class DisplayLanguage(models.Model):
+    class Meta():
+        index_together = [['language']]
+    language = models.CharField(max_length=50, null=True)
+    listname = models.CharField(max_length=50, null=True)
+    code = models.CharField(max_length=5, null=True)
+
+    def __str__(self):
+        return self.language

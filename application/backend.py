@@ -3,6 +3,8 @@ from .models import CustomUser
 
 class EmailAuthBackend(ModelBackend):
     def authenticate(self, request, email=None, password=None, **kwargs):
+        if email is None or password is None:
+            return
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoseNotExist:

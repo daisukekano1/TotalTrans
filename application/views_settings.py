@@ -6,13 +6,14 @@ from application.models import UserGlossary, Language, UserTag, WorkUserTag
 from django.utils import timezone
 import json
 from django.http import JsonResponse
-from application.customlib import GoogleApiLib
+from application.customlib import GoogleApiLib, CookieLib
 
 folder_id = '1z22K4kWicecG81sCPUOgnL1zwlOFKt5D'
 message = ""
 
 @login_required
 def glossary(request):
+    CookieLib.setLanguage(request)
     ug = UserGlossary.objects.filter(user=request.user.id).first()
     keyid = ""
     if ug != None:
@@ -25,6 +26,7 @@ def glossary(request):
     return render(request, 'app/glossary.html', data)
 
 def createGlossary(request):
+    CookieLib.setLanguage(request)
     lib = GoogleApiLib()
     gauth = lib.getGoogleAuth()
     drive = GoogleDrive(gauth)
@@ -57,6 +59,7 @@ def createGlossary(request):
 
 @login_required
 def glossarydetail(request, glossary_id):
+    CookieLib.setLanguage(request)
     ug = UserGlossary.objects.filter(user=request.user.id).filter(id=glossary_id).first()
     lc_src_displayname = ''
     lc_tgt_displayname = ''
@@ -73,6 +76,7 @@ def glossarydetail(request, glossary_id):
 
 @login_required
 def getglossarylist(request):
+    CookieLib.setLanguage(request)
     keyid = request.GET['keyid']
     ug = UserGlossary.objects.filter(user=request.user.id).filter(id=keyid).first()
     glossary = []
@@ -122,6 +126,7 @@ def saveGlossary(request, glossary_id):
 
 @login_required
 def taglist(request):
+    CookieLib.setLanguage(request)
     data = []
     for vals in UserTag.objects.filter(user=request.user.id):
         onedata = {}

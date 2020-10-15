@@ -5,7 +5,10 @@ from pydrive.auth import GoogleAuth
 from google.cloud import translate_v3 as translate
 import os
 from django.contrib.auth.decorators import login_required
-from application.models import Language
+from application.models import Language, DisplayLanguage
+from django.conf import settings
+from django.http import HttpResponse
+from django.utils import translation
 
 GOOGLEAPI_KEY = 'AIzaSyD0CNmHW04AtsTTyYJSvcdf5i99MmPzUQ8'
 project_id = "469662860857"
@@ -166,3 +169,11 @@ class DataLib():
                         select={'displaylang': request.user.userLanguage}).values('displaylang').first()
                 }
         return userlang
+
+class CookieLib():
+    def setLanguage(request):
+        lang = DisplayLanguage.objects.filter(language=request.user.userLanguage).first()
+        translation.activate(lang.code)
+        response = HttpResponse(...)
+        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang.code)
+        return response

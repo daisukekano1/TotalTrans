@@ -4,9 +4,11 @@ from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from application.models import TranslationHistory
 from django.contrib.auth.decorators import login_required
+from application.customlib import CookieLib
 
 @login_required
 def historylist(request):
+    CookieLib.setLanguage(request)
     template = loader.get_template('app/history_list.html')
     filters = {}
     data = []

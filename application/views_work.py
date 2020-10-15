@@ -11,7 +11,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from application.models import Works, Language, TranslationHistory, WorkUserTag, UserTag, UserGlossary, CustomUser
 from django.contrib.auth.decorators import login_required
-from application.customlib import GoogleApiLib, DataLib
+from application.customlib import GoogleApiLib, DataLib, CookieLib
 
 from datetime import datetime as dt
 
@@ -31,6 +31,7 @@ GOOGLEAPI_KEY = 'AIzaSyD0CNmHW04AtsTTyYJSvcdf5i99MmPzUQ8'
 
 @login_required
 def worklist(request):
+    CookieLib.setLanguage(request)
     template = loader.get_template('app/work_list.html')
     filters = {}
     tag = request.GET.get("tag")
@@ -62,6 +63,7 @@ def worklist(request):
 
 @login_required
 def workcreation(request, work_id = 0):
+    CookieLib.setLanguage(request)
     work = Works.objects.filter(user=request.user.id).filter(id=work_id).first()
     langs = Language.objects.filter(validFlag=1).extra(select = { 'displaylang' : request.user.userLanguage}).values('lc','language', 'displaylang').order_by('displaylang')
     worktags = WorkUserTag.objects.filter(work_id=work_id).values('tag__tagname', 'tag__backgroundcolor', 'tag__textcolor')
@@ -197,6 +199,7 @@ def requestTranslation(request):
 
 @login_required
 def workdetail(request, work_id):
+    CookieLib.setLanguage(request)
     for vals in Works.objects.filter(pk=work_id):
         work = {}
         work['work_id'] = work_id
@@ -433,6 +436,7 @@ def deleteHistory(request):
 
 @login_required
 def history(request):
+    CookieLib.setLanguage(request)
     return render(request, 'app/work_history.html')
 
 @login_required

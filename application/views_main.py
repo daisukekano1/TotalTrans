@@ -1,12 +1,18 @@
 from django.template import loader
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from application.models import Works, Language, WorkUserTag, UserTag, UserGlossary, TranslationHistory
+from application.models import Works, Language, WorkUserTag, UserTag, UserGlossary, TranslationHistory, DisplayLanguage
 from django.contrib.auth.decorators import login_required
 import datetime
+from application.customlib import CookieLib
 
 @login_required
 def home(request):
+    CookieLib.setLanguage(request)
+    # lang = DisplayLanguage.objects.filter(language=request.user.userLanguage).first()
+    # translation.activate(lang.code)
+    # response = HttpResponse(...)
+    # response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang.code)
     filters = {'user_id': request.user.id}
     template = loader.get_template('app/main_home.html')
     # Work counts
@@ -104,13 +110,17 @@ def home(request):
     return HttpResponse(template.render(data, request))
 
 def contact(request):
+    CookieLib.setLanguage(request)
     return render(request, 'app/main_contact.html')
 
 def submitContact(request):
+    CookieLib.setLanguage(request)
     return render(request, 'app/main_contactcompleted.html')
 
 def manual(request):
+    CookieLib.setLanguage(request)
     return render(request, 'app/main_manual.html')
 
 def termsanduse(request):
+    CookieLib.setLanguage(request)
     return render(request, 'app/main_termsanduse.html')
