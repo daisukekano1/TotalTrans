@@ -14,27 +14,28 @@
             <div class="row justify-content-left">
                 <div class="col-md-6 col-sm-6 col-xs-6">
                     <div class="card">
-                        <div class="card-header h6 sitecolor-bcolor">{% trans "PersonalSetting" %}</div>
+                        <div class="card-header h5 sitecolor-bcolor">{% trans "PersonalSetting" %}</div>
                         <div class="card-body">
-                            <form>
+                            <form id="form" action="/personalsettingsave" method="post">
+                                {% csrf_token %}
                                 <h4>Account</h4>
                                 <hr>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label text-right no-wrap" for="EmailAddress">{% trans "EmailAddress" %}</label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="email" class="form-control-plaintext" readonly style="border-bottom:1px solid #cccccc" value="{{ user.email }}">
+                                        <input type="text" id="email" name="email" class="form-control-plaintext" readonly style="border-bottom:1px solid #cccccc" value="{{ user.email }}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label text-right no-wrap" for="usertype">{% trans "UserType" %}</label>
                                     <div class="col-sm-4">
-                                        <input type="text" id="usertype" class="form-control-plaintext" readonly style="border-bottom:1px solid #cccccc" value="{{ user.usertype }}">
+                                        <input type="text" id="usertype" name="usertype" class="form-control-plaintext" readonly style="border-bottom:1px solid #cccccc" value="{{ user.usertype }}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label text-right no-wrap" for="username2">{% trans "UserName" %}</label>
                                     <div class="col-sm-4">
-                                        <input type="text" id='username2' class="form-control editableColor" style="width:300px;" value="{{ user.username2 }}">
+                                        <input type="text" id='username2' name='username2' class="form-control editableColor" style="width:300px;" value="{{ user.username2 }}">
                                     </div>
                                 </div>
                                 <br/>
@@ -70,15 +71,13 @@
                                         </select>
                                     </div>
                                 </div>
+                                <input type="hidden" name="userid" value="{{ user.id }}"/>
                             </form>
                         </div>
                         <div class="card-footer">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
-                                </div>
-                                <div class="col-sm-6 text-right">
-                                    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+                                <div class="offset-sm-2 col-sm-2 text-right">
+                                    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="width:100%; white-space: nowrap;">{% trans "Save" %}<i class="fas fa-save pl-3"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +129,9 @@
   {{ block.super}}
 {% endblock javascripts %}
 <script>
+    function submitAction(status) {
+        $('#form').submit();
+    }
     var targetElement = ""
     $(document).ready(function() {
         $('#lc_src').on('click', function () {

@@ -41,6 +41,18 @@ def personalsetting(request):
     return render(request, 'app/user_personalsetting.html', data)
 
 @login_required
+def savepersonalsetting(request):
+    id = request.POST['userid']
+    cuser = CustomUser.objects.filter(id = id).first()
+    if cuser != None:
+        cuser.username2 = request.POST['username2']
+        cuser.userLanguage = request.POST['DisplayLanguage']
+        cuser.defaultLcSrc = request.POST['lc_src']
+        cuser.defaultLcTgt = request.POST['lc_tgt']
+        cuser.save()
+    return redirect(personalsetting)
+
+@login_required
 def groupsetting(request):
     CookieLib.setLanguage(request)
     return render(request, 'app/user_groupsetting.html')

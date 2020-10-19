@@ -13,7 +13,4 @@
 {% elif "/taglist/" in request.path %}
     <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
     <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-{% elif "/personalsetting/" in request.path %}
-    <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap; font-size:1.5em !important"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
-    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap; font-size:1.5em !important"><i class="fas fa-save"></i> {% trans "Save" %}</button>
 {% endif %}
