@@ -145,3 +145,13 @@ class DisplayLanguage(models.Model):
 
     def __str__(self):
         return self.language
+
+class UserPayment(models.Model):
+    class Meta():
+        index_together = [['user_id']]
+    user = models.ForeignKey(CustomUser, models.CASCADE, default=1)
+    customerid = models.CharField(max_length=30, null=True)
+    tokenid = models.CharField(max_length=30, null=True)
+    cardid = models.CharField(max_length=30, null=True)
+    def __str__(self):
+        return self.user_id

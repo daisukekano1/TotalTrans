@@ -1,5 +1,5 @@
 from django.urls import path, re_path, include
-from application import views_main, views_work, views_user, views_landing, views_settings, views_history
+from application import views_main, views_work, views_user, views_landing, views_settings, views_history, views_lisence
 from django.contrib.auth.views import LoginView, LogoutView
 from application.forms import EmailAuthenticationForm
 
@@ -57,6 +57,10 @@ urlpatterns = [
     path('taglist/<int:tag_id>/deleteTag', views_settings.deleteTag, name='deleteTag'),
     path('getworksfortag', views_settings.getworksfortag, name='getworksfortag'),
     path('taglist/savetaglist', views_settings.savetaglist, name='savetaglist'),
+
+    path('activatelisence/', views_lisence.activatelisence, name='activatelisence'),
+    path('lisenceactivationsave', views_lisence.saveactivatelisence, name='saveactivatelisence'),
+
 
     path('i18n/', include('django.conf.urls.i18n'))
 

@@ -190,3 +190,4 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 payjp.api_key = "sk_test_f606684ccf89682213b11a1e"
+payjp.plan_month = "pln_50a7332afd19d5fe8dd611ac65e6"
