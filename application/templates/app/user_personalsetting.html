@@ -125,29 +125,32 @@
         </div>
     </div>
 </div>
+{% endblock content %}
 {% block javascripts %}
   {{ block.super}}
+    <script>
+        function submitAction(status) {
+            $('#form').submit();
+        }
+        var targetElement = ""
+        $(document).ready(function() {
+            $('#lc_src').on('click', function () {
+                targetElement = 'lc_src_selected'
+                $('#modal-SelectLang').modal();
+            });
+            $('#lc_tgt').on('click', function () {
+                targetElement = 'lc_tgt_selected'
+                $('#modal-SelectLang').modal();
+            });
+            $(document).on('click','.selectedLang',function(){
+                var option_text = $(this).text();
+                var option_val = $(this).data("id");
+                $('#'+targetElement).text(option_text).val(option_val);
+                $('#modal-SelectLang').modal('hide');
+            });
+            if ("{{ message }}" != ""){
+                toastr.success('{{message}}')
+            }
+        });
+    </script>
 {% endblock javascripts %}
-<script>
-    function submitAction(status) {
-        $('#form').submit();
-    }
-    var targetElement = ""
-    $(document).ready(function() {
-        $('#lc_src').on('click', function () {
-            targetElement = 'lc_src_selected'
-            $('#modal-SelectLang').modal();
-        });
-        $('#lc_tgt').on('click', function () {
-            targetElement = 'lc_tgt_selected'
-            $('#modal-SelectLang').modal();
-        });
-        $(document).on('click','.selectedLang',function(){
-            var option_text = $(this).text();
-            var option_val = $(this).data("id");
-            $('#'+targetElement).text(option_text).val(option_val);
-            $('#modal-SelectLang').modal('hide');
-        });
-    });
-</script>
-{% endblock content %}

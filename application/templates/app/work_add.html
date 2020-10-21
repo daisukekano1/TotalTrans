@@ -82,117 +82,117 @@
         </div>
     </div>
 </div>
+{% endblock content %}
 {% block javascripts %}
     {{ block.super }}
-{% endblock javascripts %}
-<script>
-    var tokens = []
-    function submitAction(status) {
-        $('#tagsinfo').val(JSON.stringify(tokens));
-        $('#status').val(status);
-        $('#workform').submit();
-    }
-    var targetElement = ""
-    $(document).ready(function() {
-        $('#lc_src').on('click', function(){
-            targetElement = 'lc_src_selected'
-            $('#modal-SelectLang').modal();
-        });
-        $('#lc_tgt').on('click',function(){
-            targetElement = 'lc_tgt_selected'
-            $('#modal-SelectLang').modal();
-        });
-        $(document).on('click','.selectedLang',function(){
-            var option_text = $(this).text();
-            var option_val = $(this).data("id");
-            $('#'+targetElement).text(option_text).val(option_val);
-            $('#modal-SelectLang').modal('hide');
-        });
-        $('#eta').datepicker({
-            dateFormat: 'yy/mm/dd'
-        });
-        $('[data-toggle=datepicker]').each(function () {
-            var target = $(this).data('target') || '';
-            if (target) {
-                $(target).datepicker();
-                $(this).bind("click", function () {
-                    $(target).datepicker("show");
-                });
+    <script>
+        var tokens = []
+        function submitAction(status) {
+            $('#tagsinfo').val(JSON.stringify(tokens));
+            $('#status').val(status);
+            $('#workform').submit();
+        }
+        var targetElement = ""
+        $(document).ready(function() {
+            $('#lc_src').on('click', function(){
+                targetElement = 'lc_src_selected'
+                $('#modal-SelectLang').modal();
+            });
+            $('#lc_tgt').on('click',function(){
+                targetElement = 'lc_tgt_selected'
+                $('#modal-SelectLang').modal();
+            });
+            $(document).on('click','.selectedLang',function(){
+                var option_text = $(this).text();
+                var option_val = $(this).data("id");
+                $('#'+targetElement).text(option_text).val(option_val);
+                $('#modal-SelectLang').modal('hide');
+            });
+            $('#eta').datepicker({
+                dateFormat: 'yy/mm/dd'
+            });
+            $('[data-toggle=datepicker]').each(function () {
+                var target = $(this).data('target') || '';
+                if (target) {
+                    $(target).datepicker();
+                    $(this).bind("click", function () {
+                        $(target).datepicker("show");
+                    });
+                }
+            });
+            var worktags = JSON.parse("{{ worktags  | safe | escapejs }}");
+            var worktagsArr = [];
+            for(let i in worktags){
+                worktagsArr.push(worktags[i].tag__tagname);
             }
-        });
-        var worktags = JSON.parse("{{ worktags  | safe | escapejs }}");
-        var worktagsArr = [];
-        for(let i in worktags){
-            worktagsArr.push(worktags[i].tag__tagname);
-        }
-        var tags = JSON.parse("{{ tags  | safe | escapejs }}");
-        var tagsource = [];
-        for(var vals of tags){
-            tagsource.push(vals.tagname);
-        }
-        $('#tags')
-            .on('tokenfield:createtoken', function (event) {
-                var existingTokens = $(this).tokenfield('getTokens');
-                $.each(existingTokens, function(index, token) {
-                    if (token.value === event.attrs.value){
-                        event.preventDefault();
-                        return false;
-                    }
+            var tags = JSON.parse("{{ tags  | safe | escapejs }}");
+            var tagsource = [];
+            for(var vals of tags){
+                tagsource.push(vals.tagname);
+            }
+            $('#tags')
+                .on('tokenfield:createtoken', function (event) {
+                    var existingTokens = $(this).tokenfield('getTokens');
+                    $.each(existingTokens, function(index, token) {
+                        if (token.value === event.attrs.value){
+                            event.preventDefault();
+                            return false;
+                        }
+                    })
                 })
-            })
-            .on('tokenfield:createdtoken', function(e) {
-                value = e.attrs.value;
-                bgcolor = '#aaaaaa';
-                textcolor = '#ffffff';
-                for(var tag of tags){
-                    if (tag.tagname == value){
-                        bgcolor = tag.backgroundcolor;
-                        textcolor = tag.textgroundcolor;
+                .on('tokenfield:createdtoken', function(e) {
+                    value = e.attrs.value;
+                    bgcolor = '#aaaaaa';
+                    textcolor = '#ffffff';
+                    for(var tag of tags){
+                        if (tag.tagname == value){
+                            bgcolor = tag.backgroundcolor;
+                            textcolor = tag.textgroundcolor;
+                        }
                     }
-                }
-                $(e.relatedTarget).addClass('badge');
-                $(e.relatedTarget).css('background-color', bgcolor);
-                $(e.relatedTarget).css('color', textcolor);
-                var vals = { tagname: value, backgroundcolor: bgcolor, textcolor : textcolor }
-                tokens.push(vals);
-            }).on('tokenfield:removedtoken', function(e) {
-                var i = 0;
-                for(var tag of tokens){
-                    if(tag.tagname == e.attrs.value){
-                        if ("{{ work.work_id }}" != "")
-                            ajaxRemoveTagRequest(e.attrs.value);
-                        tokens.splice(i, 1);
-                        break;
+                    $(e.relatedTarget).addClass('badge');
+                    $(e.relatedTarget).css('background-color', bgcolor);
+                    $(e.relatedTarget).css('color', textcolor);
+                    var vals = { tagname: value, backgroundcolor: bgcolor, textcolor : textcolor }
+                    tokens.push(vals);
+                }).on('tokenfield:removedtoken', function(e) {
+                    var i = 0;
+                    for(var tag of tokens){
+                        if(tag.tagname == e.attrs.value){
+                            if ("{{ work.work_id }}" != "")
+                                ajaxRemoveTagRequest(e.attrs.value);
+                            tokens.splice(i, 1);
+                            break;
+                        }
+                        i++;
                     }
-                    i++;
-                }
-            }).on('tokenfield:edittoken', function(e) {
-                e.preventDefault();
-            })
-            .tokenfield({
-                tokens:worktagsArr,
-                autocomplete: {
-                    source: tagsource,
-                    delay: 100
-                },
-                showAutocompleteOnFocus: true,
-                writeable : false
+                }).on('tokenfield:edittoken', function(e) {
+                    e.preventDefault();
+                })
+                .tokenfield({
+                    tokens:worktagsArr,
+                    autocomplete: {
+                        source: tagsource,
+                        delay: 100
+                    },
+                    showAutocompleteOnFocus: true,
+                    writeable : false
+            });
         });
-    });
-    function ajaxRemoveTagRequest(tagname) {
-        actionurl = ""
-        $.ajax("/removeTag", {
-            data: {
-                work_id: '{{ work.work_id }}',
-                tagname: tagname
-            }
-        }).then(
-            function success(name) {
-            },
-            function fail(data, status) {
-                alert('{% trans "Request failed. Returned status : " %}' + status);
-            }
-        )
-    };
-</script>
-{% endblock content %}
+        function ajaxRemoveTagRequest(tagname) {
+            actionurl = ""
+            $.ajax("/removeTag", {
+                data: {
+                    work_id: '{{ work.work_id }}',
+                    tagname: tagname
+                }
+            }).then(
+                function success(name) {
+                },
+                function fail(data, status) {
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
+                }
+            )
+        };
+    </script>
+{% endblock javascripts %}

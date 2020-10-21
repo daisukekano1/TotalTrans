@@ -269,285 +269,418 @@
         </div>
     </div>
 </div>
+{% endblock content %}
 {% block javascripts %}
     {{ block.super }}
-{% endblock javascripts %}
-<script>
-    var tokens = [];
-    var wordsOriginal = "";
-    var SummernoteHightlightButton = function(context) {
-      var ui = $.summernote.ui;
-      var button = ui.button({
-        contents: '<i class="fa fa-ban"/>&nbsp{% trans "Not translate for the selected text" %}',
-        click: function() {
-          context.invoke('editor.backColor', 'gray');
+    <script>
+        var tokens = [];
+        var wordsOriginal = "";
+        var SummernoteHightlightButton = function(context) {
+          var ui = $.summernote.ui;
+          var button = ui.button({
+            contents: '<i class="fa fa-ban"/>&nbsp{% trans "Not translate for the selected text" %}',
+            click: function() {
+              context.invoke('editor.backColor', 'gray');
+            }
+          });
+          return button.render();
         }
-      });
-      return button.render();
-    }
-    var SummernoteSelectAllButton = function() {
-      var ui = $.summernote.ui;
-      var button = ui.button({
-        contents: '{% trans "Select All" %}',
-        click: function() {
-            this.select()
+        var SummernoteSelectAllButton = function() {
+          var ui = $.summernote.ui;
+          var button = ui.button({
+            contents: '{% trans "Select All" %}',
+            click: function() {
+                this.select()
+            }
+          });
+          return button.render();
         }
-      });
-      return button.render();
-    }
-    $(document).ready(function() {
-        $("#lc_src").select2({
-            placeholder: '{% trans "Translate From" %}',
-            selectOnClose: true,
-        });
-        $("#lc_tgt").select2({
-            placeholder: '{% trans "Translate To" %}',
-            selectOnClose: true,
-        });
-        var worktags = JSON.parse("{{ worktags  | safe | escapejs }}");
-        var worktagsArr = [];
-        for(let i in worktags){
-            worktagsArr.push(worktags[i].tag__tagname);
-        }
-        var usertags = JSON.parse("{{ usertags  | safe | escapejs }}");
-        var usertagsArr = [];
-        for(let i in usertags){
-            usertagsArr.push(usertags[i].tagname);
-        }
-        var initFlag = true;
-        $('#tags')
-            .on('tokenfield:initialize', function(e){
-                initFlag = false;
-            })
-            .on('tokenfield:createtoken', function (e) {
-                var existingTokens = $(this).tokenfield('getTokens');
-                $.each(existingTokens, function(index, token) {
-                    if (token.value === e.attrs.value){
-                        e.preventDefault();
-                        return false;
-                    }
+        $(document).ready(function() {
+            $("#lc_src").select2({
+                placeholder: '{% trans "Translate From" %}',
+                selectOnClose: true,
+            });
+            $("#lc_tgt").select2({
+                placeholder: '{% trans "Translate To" %}',
+                selectOnClose: true,
+            });
+            var worktags = JSON.parse("{{ worktags  | safe | escapejs }}");
+            var worktagsArr = [];
+            for(let i in worktags){
+                worktagsArr.push(worktags[i].tag__tagname);
+            }
+            var usertags = JSON.parse("{{ usertags  | safe | escapejs }}");
+            var usertagsArr = [];
+            for(let i in usertags){
+                usertagsArr.push(usertags[i].tagname);
+            }
+            var initFlag = true;
+            $('#tags')
+                .on('tokenfield:initialize', function(e){
+                    initFlag = false;
                 })
-            })
-            .on('tokenfield:createdtoken', function(e) {
-                value = e.attrs.value;
-                bgcolor = '#aaaaaa';
-                textcolor = '#ffffff';
-                for(let i in usertags){
-                    if (usertags[i].tagname == value){
-                        bgcolor = usertags[i].backgroundcolor;
-                        textcolor = usertags[i].textcolor;
-                    }
-                }
-                $(e.relatedTarget).addClass('badge');
-                $(e.relatedTarget).css('background-color', bgcolor);
-                $(e.relatedTarget).css('color', textcolor);
-                var vals = { tagname: value, backgroundcolor: bgcolor, textcolor : textcolor };
-                tokens.push(vals);
-                if( initFlag == false ){
-                    ajaxAddTagRequest(value, bgcolor, textcolor);
-                }
-            })
-            .on('tokenfield:removedtoken', function(e) {
-                var i = 0;
-                for(let i in tokens){
-                    if(tokens[i].tagname == e.attrs.value){
-                        ajaxRemoveTagRequest(e.attrs.value);
-                        tokens.splice(i, 1);
-                        break;
-                    }
-                    i++;
-                }
-            })
-            .on('tokenfield:edittoken', function(e) {
-                e.preventDefault();
-            })
-            .tokenfield({
-                tokens:worktagsArr,
-                autocomplete: {
-                    source: usertagsArr,
-                    delay: 100
-                },
-                showAutocompleteOnFocus: true,
-                writeable : false
-        });
-
-        var dtable = $("#history").DataTable({
-            ajax: "gethistory",
-            data : { work_id : '{{ work.work_id }}' },
-            bDeferRender: true,
-            stateSave: false,
-            scrollCollapse : true,
-            paging : false,
-            searching : false,
-            scrollToTop: true,
-            orderClasses: false,
-            "responsive": true,
-            "autoWidth": false,
-            "order": [[ 0, "desc" ]],
-            columns: [
-                {   data: 'historyNum', className: "dt-left no-wrap"},
-                {   data: 'createdDateTime', className: "dt-left no-wrap" },
-                {   data: 'TranslationType', className: "dt-left",
-                    "render": function (data, type, row) {
-                        if (row['TranslationType'] == 'Self') {
-                            return '<span class="badge badge-default color-trans-self">'+data+'</span>';
-                        }else if (row['TranslationType'] == 'Google') {
-                            return '<span class="badge badge-default color-trans-google">'+data+'</span>';
-                        }else if (row['TranslationType'] == 'Ignore') {
-                            return '<span class="badge badge-default color-trans-ignore">'+data+'</span>';
-                        }else {
-                            return data;
+                .on('tokenfield:createtoken', function (e) {
+                    var existingTokens = $(this).tokenfield('getTokens');
+                    $.each(existingTokens, function(index, token) {
+                        if (token.value === e.attrs.value){
+                            e.preventDefault();
+                            return false;
+                        }
+                    })
+                })
+                .on('tokenfield:createdtoken', function(e) {
+                    value = e.attrs.value;
+                    bgcolor = '#aaaaaa';
+                    textcolor = '#ffffff';
+                    for(let i in usertags){
+                        if (usertags[i].tagname == value){
+                            bgcolor = usertags[i].backgroundcolor;
+                            textcolor = usertags[i].textcolor;
                         }
                     }
-                },
-                {   data: 'beforeTranslation', className: "dt-left text-overflow-clip",
-                    "render" : function (data, type, row){
-                        html = "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Original' %}：" + row['beforeTranslation'] + "</div>";
-                        html = html + "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Translate' %}：" + row['afterTranslation'] + "</div>";
-                        return html;
+                    $(e.relatedTarget).addClass('badge');
+                    $(e.relatedTarget).css('background-color', bgcolor);
+                    $(e.relatedTarget).css('color', textcolor);
+                    var vals = { tagname: value, backgroundcolor: bgcolor, textcolor : textcolor };
+                    tokens.push(vals);
+                    if( initFlag == false ){
+                        ajaxAddTagRequest(value, bgcolor, textcolor);
+                    }
+                })
+                .on('tokenfield:removedtoken', function(e) {
+                    var i = 0;
+                    for(let i in tokens){
+                        if(tokens[i].tagname == e.attrs.value){
+                            ajaxRemoveTagRequest(e.attrs.value);
+                            tokens.splice(i, 1);
+                            break;
+                        }
+                        i++;
+                    }
+                })
+                .on('tokenfield:edittoken', function(e) {
+                    e.preventDefault();
+                })
+                .tokenfield({
+                    tokens:worktagsArr,
+                    autocomplete: {
+                        source: usertagsArr,
+                        delay: 100
+                    },
+                    showAutocompleteOnFocus: true,
+                    writeable : false
+            });
+
+            var dtable = $("#history").DataTable({
+                ajax: "gethistory",
+                data : { work_id : '{{ work.work_id }}' },
+                bDeferRender: true,
+                stateSave: false,
+                scrollCollapse : true,
+                paging : false,
+                searching : false,
+                scrollToTop: true,
+                orderClasses: false,
+                "responsive": true,
+                "autoWidth": false,
+                "order": [[ 0, "desc" ]],
+                columns: [
+                    {   data: 'historyNum', className: "dt-left no-wrap"},
+                    {   data: 'createdDateTime', className: "dt-left no-wrap" },
+                    {   data: 'TranslationType', className: "dt-left",
+                        "render": function (data, type, row) {
+                            if (row['TranslationType'] == 'Self') {
+                                return '<span class="badge badge-default color-trans-self">'+data+'</span>';
+                            }else if (row['TranslationType'] == 'Google') {
+                                return '<span class="badge badge-default color-trans-google">'+data+'</span>';
+                            }else if (row['TranslationType'] == 'Ignore') {
+                                return '<span class="badge badge-default color-trans-ignore">'+data+'</span>';
+                            }else {
+                                return data;
+                            }
+                        }
+                    },
+                    {   data: 'beforeTranslation', className: "dt-left text-overflow-clip",
+                        "render" : function (data, type, row){
+                            html = "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Original' %}：" + row['beforeTranslation'] + "</div>";
+                            html = html + "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Translate' %}：" + row['afterTranslation'] + "</div>";
+                            return html;
+                        }
+                    }
+                ],
+                columnDefs: [ {
+                    "targets": 3,
+                    "orderable": false
+                } ]
+            });
+            $('#wordsOriginalAll').summernote({
+                toolbar: false,
+                buttons: {selectAll: SummernoteSelectAllButton},
+                disableDragAndDrop:true,
+                spellCheck: true,
+                callbacks: {
+                    onInit: function() {
+                        $(".note-editable").addClass("prewrap");
+                        wordsOriginal = $("#wordsOriginalAll").val();
+                        convertText(1, wordsOriginal);
+                        $("#wordsOriginalAll").css("visibility", "true");
+                    },
+                    onPaste: function (e) {
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                        e.preventDefault();
+                        document.execCommand('insertText', false, bufferText);
+                    },
+                    onKeydown: function(e) {
+                        e.preventDefault();
                     }
                 }
-            ],
-            columnDefs: [ {
-                "targets": 3,
-                "orderable": false
-            } ]
-        });
-        $('#wordsOriginalAll').summernote({
-            toolbar: false,
-            buttons: {selectAll: SummernoteSelectAllButton},
-            disableDragAndDrop:true,
-            spellCheck: true,
-            callbacks: {
-                onInit: function() {
-                    $(".note-editable").addClass("prewrap");
-                    wordsOriginal = $("#wordsOriginalAll").val();
-                    convertText(1, wordsOriginal);
-                    $("#wordsOriginalAll").css("visibility", "true");
-                },
-                onPaste: function (e) {
-                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-                    e.preventDefault();
-                    document.execCommand('insertText', false, bufferText);
-                },
-                onKeydown: function(e) {
-                    e.preventDefault();
+            });
+            $('#gengoRequestText').summernote({
+                toolbar: [['style', ['highlight', 'clear']],],
+                buttons: {highlight: SummernoteHightlightButton},
+                disableDragAndDrop:true,
+                callbacks: {
+                    onInit: function() {
+                      $(".note-editable").addClass("prewrap");
+                    },
+                    onPaste: function (e) {
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                        e.preventDefault();
+                        document.execCommand('insertText', false, bufferText);
+                    },
+                    onKeydown: function(e) {
+                        e.preventDefault();
+                    }
                 }
-            }
-        });
-        $('#gengoRequestText').summernote({
-            toolbar: [['style', ['highlight', 'clear']],],
-            buttons: {highlight: SummernoteHightlightButton},
-            disableDragAndDrop:true,
-            callbacks: {
-                onInit: function() {
-                  $(".note-editable").addClass("prewrap");
-                },
-                onPaste: function (e) {
-                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-                    e.preventDefault();
-                    document.execCommand('insertText', false, bufferText);
-                },
-                onKeydown: function(e) {
-                    e.preventDefault();
+            })
+            var OriginalText = ""
+            $('#btnOpenSelfTranslate').on('click', function () {
+                OriginalText = getSelectedText();
+                if( OriginalText == ""){
+                    $("#ModalMessage").text('{% trans "Please select translating text." %}');
+                    $('#modal-Message').modal('show');
+                    return false;
                 }
-            }
-        })
-        var OriginalText = ""
-        $('#btnOpenSelfTranslate').on('click', function () {
-            OriginalText = getSelectedText();
-            if( OriginalText == ""){
-                $("#ModalMessage").text('{% trans "Please select translating text." %}');
-                $('#modal-Message').modal('show');
-                return false;
-            }
-            if( !wordsOriginal.includes(OriginalText)){
-                $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
-                $('#modal-Message').modal('show');
-                return false;
-            }
-            $('#openSelfTranslate').modal('show');
-        })
-        $('#openSelfTranslate').on('shown.bs.modal', function (e) {
-            $('#selfOriginalText').text(OriginalText);
-        })
-        $('#btnOpenGoogleRequest').on('click', function () {
-            OriginalText = getSelectedText();
-            if( OriginalText == ""){
-                $("#ModalMessage").text('{% trans "Please select translating text." %}');
-                $('#modal-Message').modal('show');
-                return false;
-            }
-            if( !wordsOriginal.includes(OriginalText)){
-                $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
-                $('#modal-Message').modal('show');
-                return false;
-            }
-            $('#openGoogleRequest').modal('show');
-        })
-        $('#openGoogleRequest').on('shown.bs.modal', function (e) {
-            $('#googleRequestText').text(OriginalText);
-            $.ajax("/requestGoogleTranslation", {
+                if( !wordsOriginal.includes(OriginalText)){
+                    $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
+                    $('#modal-Message').modal('show');
+                    return false;
+                }
+                $('#openSelfTranslate').modal('show');
+            })
+            $('#openSelfTranslate').on('shown.bs.modal', function (e) {
+                $('#selfOriginalText').text(OriginalText);
+            })
+            $('#btnOpenGoogleRequest').on('click', function () {
+                OriginalText = getSelectedText();
+                if( OriginalText == ""){
+                    $("#ModalMessage").text('{% trans "Please select translating text." %}');
+                    $('#modal-Message').modal('show');
+                    return false;
+                }
+                if( !wordsOriginal.includes(OriginalText)){
+                    $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
+                    $('#modal-Message').modal('show');
+                    return false;
+                }
+                $('#openGoogleRequest').modal('show');
+            })
+            $('#openGoogleRequest').on('shown.bs.modal', function (e) {
+                $('#googleRequestText').text(OriginalText);
+                $.ajax("/requestGoogleTranslation", {
+                    data: {
+                        originalText: OriginalText,
+                        lc_src: '{{ work.lc_src }}',
+                        lc_tgt: '{{ work.lc_tgt }}'
+                    }
+                }).then(
+                    function success(data) {
+                        $('#googleResponseText').val(data.data);
+                    },
+                    function fail(data, status) {
+                        alert('{% trans "Request failed. Returned status : " %}' + status);
+                    }
+                )
+            })
+            $('#btnOpenIgnoreText').on('click', function () {
+                OriginalText = getSelectedText();
+                if( OriginalText == ""){
+                    $("#ModalMessage").text('{% trans "Please select translating text." %}');
+                    $('#modal-Message').modal('show');
+                    return false;
+                }
+                if( !wordsOriginal.includes(OriginalText)){
+                    $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
+                    $('#modal-Message').modal('show');
+                    return false;
+                }
+                $('#openIgnoreText').modal('show');
+            })
+            $('#btnSelfSave').click(function() {
+                translatedText = $("#selfTranslateText").val();
+                $.ajax("/saveSelfTranslation", {
+                    data: {
+                        work_id: '{{ work.work_id }}',
+                        selfOriginalText: OriginalText,
+                        selfTranslatedText:translatedText
+                    }
+                }).then(
+                    function success(data) {
+                        wordsOriginal = data.wordsOriginal;
+                        $("#wordsOriginalAll").val(wordsOriginal);
+                        wordsOriginal = $("#wordsOriginalAll").val();
+                        convertText(1, data.wordsOriginal);
+                        convertText(2, data.wordsTranslated);
+                        $('#progress').text(data.progress)
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        $('#openSelfTranslate').modal('hide');
+                    },
+                    function fail(data, status) {
+                        alert('{% trans "Request failed. Returned status : " %}' + status);
+                    }
+                )
+            })
+            $('#btnGoogleSave').click(function() {
+                translatedText = $("#googleResponseText").val();
+                $.ajax("/saveGoogleTranslation", {
+                    data: {
+                        work_id: '{{ work.work_id }}',
+                        googleOriginalText: OriginalText,
+                        googleTranslatedText:translatedText
+                    }
+                }).then(
+                    function success(data) {
+                        wordsOriginal = data.wordsOriginal;
+                        $("#wordsOriginalAll").val(wordsOriginal);
+                        wordsOriginal = $("#wordsOriginalAll").val();
+                        convertText(1, data.wordsOriginal);
+                        convertText(2, data.wordsTranslated);
+                        $('#progress').text(data.progress);
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        $('#openGoogleRequest').modal('hide');
+                    },
+                    function fail(data, status) {
+                        alert('{% trans "Request failed. Returned status : " %}' + status);
+                    }
+                )
+            })
+            $('#btnIgnoreSave').click(function() {
+                $.ajax("/saveIgnoreTranslation", {
+                    data: {
+                        work_id: '{{ work.work_id }}',
+                        OriginalText: OriginalText
+                    }
+                }).then(
+                    function success(data) {
+                        wordsOriginal = data.wordsOriginal;
+                        $("#wordsOriginalAll").val(wordsOriginal);
+                        wordsOriginal = $("#wordsOriginalAll").val();
+                        convertText(1, data.wordsOriginal);
+                        convertText(2, data.wordsTranslated);
+                        $('#progress').text(data.progress)
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        $('#openIgnoreText').modal('hide');
+                    },
+                    function fail(data, status) {
+                        alert('{% trans "Request failed. Returned status : " %}' + status);
+                    }
+                )
+            })
+            $('.highrighthistory_gengo').select(function(){
+                alert(1)
+            })
+            $('.highrighthistory_google').select(function(){
+                alert(1)
+            })
+            $('.highrighthistory_self').select(function(){
+                alert(1)
+            })
+            wordsOriginalAll = document.getElementById("wordsOriginalAll");
+            textAreaHeightSet(wordsOriginalAll);
+            convertText(2, $("#wordsTranslatedAll").text())
+        });
+        function ajaxAddTagRequest(tagname, backgroundcolor, textcolor) {
+            $.ajax("/addTag", {
                 data: {
-                    originalText: OriginalText,
-                    lc_src: '{{ work.lc_src }}',
-                    lc_tgt: '{{ work.lc_tgt }}'
+                    work_id: '{{ work.work_id }}',
+                    tagname: tagname,
+                    backgroundcolor:backgroundcolor,
+                    textcolor:textcolor
                 }
             }).then(
-                function success(data) {
-                    $('#googleResponseText').val(data.data);
+                function success(name) {
                 },
                 function fail(data, status) {
                     alert('{% trans "Request failed. Returned status : " %}' + status);
                 }
             )
-        })
-        $('#btnOpenIgnoreText').on('click', function () {
-            OriginalText = getSelectedText();
-            if( OriginalText == ""){
-                $("#ModalMessage").text('{% trans "Please select translating text." %}');
-                $('#modal-Message').modal('show');
-                return false;
-            }
-            if( !wordsOriginal.includes(OriginalText)){
-                $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
-                $('#modal-Message').modal('show');
-                return false;
-            }
-            $('#openIgnoreText').modal('show');
-        })
-        $('#btnSelfSave').click(function() {
-            translatedText = $("#selfTranslateText").val();
-            $.ajax("/saveSelfTranslation", {
+        };
+        function ajaxRemoveTagRequest(tagname) {
+            actionurl = ""
+            $.ajax("/removeTag", {
                 data: {
                     work_id: '{{ work.work_id }}',
-                    selfOriginalText: OriginalText,
-                    selfTranslatedText:translatedText
+                    tagname: tagname
                 }
             }).then(
-                function success(data) {
-                    wordsOriginal = data.wordsOriginal;
-                    $("#wordsOriginalAll").val(wordsOriginal);
-                    wordsOriginal = $("#wordsOriginalAll").val();
-                    convertText(1, data.wordsOriginal);
-                    convertText(2, data.wordsTranslated);
-                    $('#progress').text(data.progress)
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                    $('#openSelfTranslate').modal('hide');
+                function success(name) {
                 },
                 function fail(data, status) {
                     alert('{% trans "Request failed. Returned status : " %}' + status);
                 }
             )
-        })
-        $('#btnGoogleSave').click(function() {
-            translatedText = $("#googleResponseText").val();
-            $.ajax("/saveGoogleTranslation", {
+        };
+        function convertText(type, word){
+            const selfstartregex = /\[s:s:[0-9]{1,}\]/gi;
+            const selfendregex = /\[s:e:[0-9]{1,}\]/gi;
+            const googlestartregex = /\[g:s:[0-9]{1,}\]/gi;
+            const googleendregex = /\[g:e:[0-9]{1,}\]/gi;
+            const ignstartregex = /\[i:s:[0-9]{1,}\]/gi;
+            const ignendregex = /\[i:e:[0-9]{1,}\]/gi;
+            // Self Trans
+            word = word.replace(selfstartregex, function(s) {
+                number = s.match(/[0-9]{1,}/);
+                return "<span class='highrighthistory_self madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"self\")'>";
+            })
+            word = word.replace(selfendregex, "</span>");
+            // Google Trans
+            word = word.replace(googlestartregex, function(s) {
+                number = s.match(/[0-9]{1,}/);
+                return "<span class='highrighthistory_google madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"google\")'>";
+            })
+            word = word.replace(googleendregex, "</span>");
+
+            word = word.replace(ignstartregex, function(s) {
+                number = s.match(/[0-9]{1,}/);
+                return "<span class='highrighthistory_ignore madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"ignore\")'>";
+            })
+            word = word.replace(ignendregex, "</span>");
+
+            if(type == 1){
+                $('#wordsOriginalAll').summernote('reset');
+                $('#wordsOriginalAll').summernote('pasteHTML', word);
+            }else{
+                $("#wordsTranslatedAll").html(word);
+            }
+        }
+        var historynumber = 0
+        function deleteConfirmation(number, deletetype){
+            historynumber = number;
+            if (deletetype=='google')
+                $('#modal-GoogleDeleteHistory').modal('show');
+            else if (deletetype=='self')
+                $('#modal-SelfDeleteHistory').modal('show');
+            else if (deletetype=='ignore')
+                $('#modal-IgnoreDeleteHistory').modal('show');
+        }
+        function deleteHistory(){
+            $.ajax("/deleteHistory", {
                 data: {
                     work_id: '{{ work.work_id }}',
-                    googleOriginalText: OriginalText,
-                    googleTranslatedText:translatedText
+                    historyNum: historynumber
                 }
             }).then(
                 function success(data) {
@@ -559,147 +692,14 @@
                     $('#progress').text(data.progress);
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
-                    $('#openGoogleRequest').modal('hide');
+                    $('#modal-SelfDeleteHistory').modal('hide');
+                    $('#modal-GoogleDeleteHistory').modal('hide');
+                    $('#modal-IgnoreDeleteHistory').modal('hide');
                 },
                 function fail(data, status) {
                     alert('{% trans "Request failed. Returned status : " %}' + status);
                 }
             )
-        })
-        $('#btnIgnoreSave').click(function() {
-            $.ajax("/saveIgnoreTranslation", {
-                data: {
-                    work_id: '{{ work.work_id }}',
-                    OriginalText: OriginalText
-                }
-            }).then(
-                function success(data) {
-                    wordsOriginal = data.wordsOriginal;
-                    $("#wordsOriginalAll").val(wordsOriginal);
-                    wordsOriginal = $("#wordsOriginalAll").val();
-                    convertText(1, data.wordsOriginal);
-                    convertText(2, data.wordsTranslated);
-                    $('#progress').text(data.progress)
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                    $('#openIgnoreText').modal('hide');
-                },
-                function fail(data, status) {
-                    alert('{% trans "Request failed. Returned status : " %}' + status);
-                }
-            )
-        })
-        $('.highrighthistory_gengo').select(function(){
-            alert(1)
-        })
-        $('.highrighthistory_google').select(function(){
-            alert(1)
-        })
-        $('.highrighthistory_self').select(function(){
-            alert(1)
-        })
-        wordsOriginalAll = document.getElementById("wordsOriginalAll");
-        textAreaHeightSet(wordsOriginalAll);
-        convertText(2, $("#wordsTranslatedAll").text())
-    });
-    function ajaxAddTagRequest(tagname, backgroundcolor, textcolor) {
-        $.ajax("/addTag", {
-            data: {
-                work_id: '{{ work.work_id }}',
-                tagname: tagname,
-                backgroundcolor:backgroundcolor,
-                textcolor:textcolor
-            }
-        }).then(
-            function success(name) {
-            },
-            function fail(data, status) {
-                alert('{% trans "Request failed. Returned status : " %}' + status);
-            }
-        )
-    };
-    function ajaxRemoveTagRequest(tagname) {
-        actionurl = ""
-        $.ajax("/removeTag", {
-            data: {
-                work_id: '{{ work.work_id }}',
-                tagname: tagname
-            }
-        }).then(
-            function success(name) {
-            },
-            function fail(data, status) {
-                alert('{% trans "Request failed. Returned status : " %}' + status);
-            }
-        )
-    };
-    function convertText(type, word){
-        const selfstartregex = /\[s:s:[0-9]{1,}\]/gi;
-        const selfendregex = /\[s:e:[0-9]{1,}\]/gi;
-        const googlestartregex = /\[g:s:[0-9]{1,}\]/gi;
-        const googleendregex = /\[g:e:[0-9]{1,}\]/gi;
-        const ignstartregex = /\[i:s:[0-9]{1,}\]/gi;
-        const ignendregex = /\[i:e:[0-9]{1,}\]/gi;
-        // Self Trans
-        word = word.replace(selfstartregex, function(s) {
-            number = s.match(/[0-9]{1,}/);
-            return "<span class='highrighthistory_self madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"self\")'>";
-        })
-        word = word.replace(selfendregex, "</span>");
-        // Google Trans
-        word = word.replace(googlestartregex, function(s) {
-            number = s.match(/[0-9]{1,}/);
-            return "<span class='highrighthistory_google madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"google\")'>";
-        })
-        word = word.replace(googleendregex, "</span>");
-
-        word = word.replace(ignstartregex, function(s) {
-            number = s.match(/[0-9]{1,}/);
-            return "<span class='highrighthistory_ignore madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"ignore\")'>";
-        })
-        word = word.replace(ignendregex, "</span>");
-
-        if(type == 1){
-            $('#wordsOriginalAll').summernote('reset');
-            $('#wordsOriginalAll').summernote('pasteHTML', word);
-        }else{
-            $("#wordsTranslatedAll").html(word);
         }
-    }
-    var historynumber = 0
-    function deleteConfirmation(number, deletetype){
-        historynumber = number;
-        if (deletetype=='google')
-            $('#modal-GoogleDeleteHistory').modal('show');
-        else if (deletetype=='self')
-            $('#modal-SelfDeleteHistory').modal('show');
-        else if (deletetype=='ignore')
-            $('#modal-IgnoreDeleteHistory').modal('show');
-    }
-    function deleteHistory(){
-        $.ajax("/deleteHistory", {
-            data: {
-                work_id: '{{ work.work_id }}',
-                historyNum: historynumber
-            }
-        }).then(
-            function success(data) {
-                wordsOriginal = data.wordsOriginal;
-                $("#wordsOriginalAll").val(wordsOriginal);
-                wordsOriginal = $("#wordsOriginalAll").val();
-                convertText(1, data.wordsOriginal);
-                convertText(2, data.wordsTranslated);
-                $('#progress').text(data.progress);
-                $('body').removeClass('modal-open');
-                $('.modal-backdrop').remove();
-                $('#modal-SelfDeleteHistory').modal('hide');
-                $('#modal-GoogleDeleteHistory').modal('hide');
-                $('#modal-IgnoreDeleteHistory').modal('hide');
-            },
-            function fail(data, status) {
-                alert('{% trans "Request failed. Returned status : " %}' + status);
-            }
-        )
-    }
-</script>
-{% endblock content %}
+    </script>
+{% endblock javascripts %}

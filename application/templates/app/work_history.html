@@ -35,58 +35,58 @@
         </div>
     </section>
 </div>
+{% endblock content %}
 {% block javascripts %}
   {{ block.super}}
-{% endblock javascripts %}
-<script>
-    $(document).ready(function() {
-        var dtable = $("#history").DataTable({
-            ajax: "gethistory",
-            bDeferRender: true,
-            stateSave: false,
-            scrollCollapse : true,
-            paging : false,
-            searching : true,
-            scrollToTop: true,
-            "responsive": false ,
-            "autoWidth": false,
-            columns: [
-                {   data: 'createdDateTime', className: "dt-left no-wrap"},
-                {   data: 'workTitle',
-                    className: "dt-left",
-                    "render": function (data, type, row) {
-                        url = "{% url 'workdetail' 0 %}".replace("0", row['work_id'])
-                        return '<a href="'+url+'">'+data+'</a>';
-                    }
-                },
-                {
-                    data: 'TranslationType',
-                    className: "dt-left",
-                    "render": function (data, type, row) {
-                        if (row['TranslationType'] == 'Self') {
-                            return '<span class="badge badge-default color-trans-self">'+data+'</span>';
-                        }else if (row['TranslationType'] == 'Google') {
-                            return '<span class="badge badge-default color-trans-google">'+data+'</span>';
-                        }else if (row['TranslationType'] == 'Ignore') {
-                            return '<span class="badge badge-default color-trans-ignore">'+data+'</span>';
-                        }else {
-                            return data;
+    <script>
+        $(document).ready(function() {
+            var dtable = $("#history").DataTable({
+                ajax: "gethistory",
+                bDeferRender: true,
+                stateSave: false,
+                scrollCollapse : true,
+                paging : false,
+                searching : true,
+                scrollToTop: true,
+                "responsive": false ,
+                "autoWidth": false,
+                columns: [
+                    {   data: 'createdDateTime', className: "dt-left no-wrap"},
+                    {   data: 'workTitle',
+                        className: "dt-left",
+                        "render": function (data, type, row) {
+                            url = "{% url 'workdetail' 0 %}".replace("0", row['work_id'])
+                            return '<a href="'+url+'">'+data+'</a>';
+                        }
+                    },
+                    {
+                        data: 'TranslationType',
+                        className: "dt-left",
+                        "render": function (data, type, row) {
+                            if (row['TranslationType'] == 'Self') {
+                                return '<span class="badge badge-default color-trans-self">'+data+'</span>';
+                            }else if (row['TranslationType'] == 'Google') {
+                                return '<span class="badge badge-default color-trans-google">'+data+'</span>';
+                            }else if (row['TranslationType'] == 'Ignore') {
+                                return '<span class="badge badge-default color-trans-ignore">'+data+'</span>';
+                            }else {
+                                return data;
+                            }
+                        }
+                    },
+                    {   data: 'beforeTranslation', className: "dt-left text-overflow-clip",
+                        "render" : function (data, type, row){
+                            html = "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>Original：" + row['beforeTranslation'] + "</div>";
+                            html = html + "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>Translate：" + row['afterTranslation'] + "</div>";
+                            return html;
                         }
                     }
-                },
-                {   data: 'beforeTranslation', className: "dt-left text-overflow-clip",
-                    "render" : function (data, type, row){
-                        html = "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>Original：" + row['beforeTranslation'] + "</div>";
-                        html = html + "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>Translate：" + row['afterTranslation'] + "</div>";
-                        return html;
-                    }
-                }
-            ],
-            columnDefs: [ {
-                "targets": 3,
-                "orderable": false
-            } ]
+                ],
+                columnDefs: [ {
+                    "targets": 3,
+                    "orderable": false
+                } ]
+            });
         });
-    });
-</script>
-{% endblock content %}
+    </script>
+{% endblock javascripts %}

@@ -313,3 +313,50 @@ div.tokenfield {
 .opacity-50{
   opacity: .5
 }
+table.dataTable thead th {
+    position: relative;
+    background-image: none !important;
+    white-space : nowrap;
+}
+table.dataTable thead th.sorting:before,
+table.dataTable thead th.sorting_asc:before,
+table.dataTable thead th.sorting_desc:before {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    display: block;
+    font-size: 1.2em;
+    font-family: "Font Awesome 5 Free";
+}
+table.dataTable thead th.sorting:before {
+    content: "\f0dc"; /* sort*/
+    color: #ddd;
+    padding-top: 0.12em;
+}
+table.dataTable thead th.sorting_asc:before {
+    content: "\f0de"; /* sort-up */
+}
+table.dataTable thead th.sorting_desc:before {
+    content: "\f0dd"; /* sort-down */
+}
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    display: block;
+    font-size: 1.2em;
+    font-family: "Font Awesome 5 Free";
+}
+table.dataTable thead th.sorting:after {
+    content: "\f0dc"; /* sort*/
+    color: #ddd;
+    padding-top: 0.12em;
+}
+table.dataTable thead th.sorting_asc:after {
+    content: "\f0de"; /* sort-up */
+}
+table.dataTable thead th.sorting_desc:after {
+    content: "\f0dd"; /* sort-down */
+}

@@ -38,10 +38,11 @@ insert into application_language(lc,language,flagId,japanese,english,spanish,chi
 insert into application_language(lc,language,flagId,japanese,english,spanish,chineseTra,chineseSim,korean,validFlag)Values('vi','Vietnamese','vn','ベトナム語','Vietnamese','Vietnamita','越南文','越南文','베트남어','1');
 insert into application_language(lc,language,flagId,japanese,english,spanish,chineseTra,chineseSim,korean,validFlag)Values('zh','Chinese (Simplified)','ch','中国語（簡体字）','Chinese (Simplified)','Chino (simplificado)','簡體中文','简体中文','중국어 (간체)','1');
 
-insert into application_displayLanguage(language,listname)Values('English','English');
-insert into application_displayLanguage(language,listname)Values('Japanese','日本語');
-insert into application_displayLanguage(language,listname)Values('Spanish','Español');
-insert into application_displayLanguage(language,listname)Values('ChineseTra','繁體中文');
-insert into application_displayLanguage(language,listname)Values('ChineseSim','简体中文');
-insert into application_displayLanguage(language,listname)Values('Korean','한국');
+insert into application_displayLanguage(language,listname,code)Values('English','English','en');
+insert into application_displayLanguage(language,listname,code)Values('Japanese','日本語','ja');
+insert into application_displayLanguage(language,listname,code)Values('Spanish','Español','es');
+insert into application_displayLanguage(language,listname,code)Values('ChineseTra','繁體中文','zh-tw');
+insert into application_displayLanguage(language,listname,code)Values('ChineseSim','简体中文','zh-cn');
+insert into application_displayLanguage(language,listname,code)Values('Korean','한국','kr');
+
 

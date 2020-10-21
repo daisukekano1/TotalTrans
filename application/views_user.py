@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from application.models import CustomUser, Language, DisplayLanguage
 from application.customlib import DataLib, CookieLib
+from django.urls import reverse
+from urllib.parse import urlencode
 
 def signup(request):
     if request.method == 'POST':
@@ -24,6 +26,9 @@ def forgotPassword(request):
 
 @login_required
 def personalsetting(request):
+    message = ""
+    if "status" in request.GET:
+        message = str(request.GET['status'])
     CookieLib.setLanguage(request)
     user = CustomUser.objects.filter(id=request.user.id).first()
     displayLangs = DisplayLanguage.objects.all()
@@ -37,6 +42,7 @@ def personalsetting(request):
         'selecteddisplayLang' :selecteddisplayLang,
         'langs' :langs,
         'selectedlang' : selectedlang,
+        'message' : message
     }
     return render(request, 'app/user_personalsetting.html', data)
 
@@ -50,7 +56,10 @@ def savepersonalsetting(request):
         cuser.defaultLcSrc = request.POST['lc_src']
         cuser.defaultLcTgt = request.POST['lc_tgt']
         cuser.save()
-    return redirect(personalsetting)
+    redirect_url = reverse('personalsetting')
+    parameters = urlencode({'status': 'success'})
+    url = f'{redirect_url}?{parameters}'
+    return redirect(url)
 
 @login_required
 def groupsetting(request):
