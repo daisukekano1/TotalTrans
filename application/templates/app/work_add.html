@@ -13,18 +13,18 @@
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
-                    <div class="card-header h6 sitecolor-bcolor">{% trans "Create a new Work" %}</div>
+                    <div class="card-header h6 font-weight-bold color-status-draft backcolor-status-draft">{% trans "Create a new Work" %}</div>
                     <div class="card-body">
                         <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
                             <div class="form-group col-4" style="margin-right:10px;">
-                                <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "Title" %}</span></div>
-                                    <input type="text" class="form-control editableColor" id="workTitle" name="workTitle" value="{{ work.workTitle }}" style="width:100%;   "/>
+                                <div class="input-group no-wrap" style="width:100%;">
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "Title" %}</span></div>
+                                    <input type="text" class="form-control editableColor" id="workTitle" name="workTitle" value="{{ work.workTitle }}" style="width:100%; min-width: 300px;"/>
                                 </div>
                             </div>
                             <div class="form-group col-4" style="margin-right:10px;">
-                                <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "language" %}</span></div>
+                                <div class="input-group no-wrap" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "language" %}</span></div>
                                     <select class="form-control editableColor" id="lc_src" name="lc_src"  readonly style="min-width:150px; background-color: #fbfbf3;">
                                         <option id="lc_src_selected" value="{{ selectedlang.srcValue }}" selected>{{ selectedlang.srcName.displaylang }}</option>
                                     </select>
@@ -34,8 +34,8 @@
                                 </div>
                             </div>
                             <div class="form-group col-2" style="margin-right:10px;">
-                                <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "ETA" %}</span></div>
+                                <div class="input-group no-wrap" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "ETA" %}</span></div>
                                     <input type="text" id="eta" name="eta" class="form-control editableColor" value="{{ work.eta|date:"Y/m/j" }}"/>
                                     <div class="input-group-append" data-target="#eta" data-toggle="datepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -45,8 +45,8 @@
                         </div>
                         <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
                             <div class="form-group col-4" style="margin-right:10px;">
-                                <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color">{% trans "Tags" %}</span></div>
+                                <div class="input-group no-wrap" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "Tags" %}</span></div>
                                     <input type="text" class="form-control editableColor" id="tags" name="tags" value=""/>
                                 </div>
                             </div>

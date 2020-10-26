@@ -14,89 +14,64 @@
             <div class="row justify-content-left">
                 <div class="col-md-6 col-sm-6 col-xs-6">
                     <div class="card">
-                        <div class="card-header h5 card-default">{% trans "ActivateLisence" %}</div>
+                        <div class="card-header">
+                            <div class="card-title">{% trans "PaymentRegistration" %}</div>
+                        </div>
                         <div class="card-body">
                             <form id="form" class="form-horizontal" action="/lisenceactivationsave" method="post"  role="form">
                                 {% csrf_token %}
-                                <div id="accordion">
-                                  <div class="card card-gray">
-                                    <div class="card-header">
-                                      <h4 class="card-title w-100"><a class="d-block w-100" data-toggle="collapse" href="#collapseOne">Credit Card</a></h4>
+                                <div class="billing">
+                                    <div class="row">
+                                        <div class="text-success pl-3 mb-lg-2">PCI DSS（Payment Card Industry Data Security Standard）に加盟しているPAY.JPを利用しています。</div>
                                     </div>
-                                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                                      <div class="card-body">
-                                        <div class="billing">
-                                            <div class="secure text-center margin-bottom-md">
-                                                <h3 class="margin-bottom-md text-success">
-                                                    <span class="fs1 icon" aria-hidden="true" data-icon=""></span>Secure credit card payment<br><small>This is a secure 128-bit SSL encrypted payment</small>
-                                                </h3>
-                                                <div style="text-align: left;">
-                                                    <ul class="list-inline">
-                                                        <li class="list-inline-item"><i class="fab fa-2x fa-cc-visa opacity-50"></i></li>
-                                                        <li class="list-inline-item"><i class="fab fa-2x fa-cc-mastercard opacity-50"></i></li>
-                                                        <li class="list-inline-item"><i class="fab fa-2x fa-cc-amex opacity-50"></i></li>
-                                                        <li class="list-inline-item"><i class="fab fa-2x fa-cc-jcb opacity-50"></i></li>
-                                                        <li class="list-inline-item"><i class="fab fa-2x fa-cc-diners-club opacity-50"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="form-group col-sm-5">
-                                                    <label>Card Number </label>
-                                                    <div>
-                                                        <input type="text" class="form-control cardnumber" name="number" placeholder="Enter the credit card number">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-sm-2">
-                                                    <label>Expiry</label>
-                                                    <div>
-                                                        <input type="text" class="form-control expiry" name="expiry" placeholder="MM/YY">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-sm-4">
-                                                    <label>Security Code</label>
-                                                    <div>
-                                                        <input type="text" class="form-control" style="width: 120px;" name="cvc" placeholder="CVC">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="userid" value="{{ user.id }}"/>
+                                    {% if cardregisterflag == 1 %}
+                                        <div class="d-flex">
+
                                         </div>
-
-
-                                      </div>
+                                        <i class="far fa-credit-card fa-5x"></i>
+                                    {% endif %}
+                                    <h6 class="pt-4">Register a new card</h6>
+                                    <hr class="mt-0">
+                                    <div class="row">
+                                        <div class="form-group col-sm-5">
+                                            <label>Card Number </label>
+                                            <div>
+                                                <input type="text" class="form-control cardnumber" name="number" placeholder="Enter the credit card number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-2">
+                                            <label>Expiry</label>
+                                            <div>
+                                                <input type="text" class="form-control expiry" name="expiry" placeholder="MM/YY">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-2">
+                                            <label>Security Code</label>
+                                            <div>
+                                                <input type="text" class="form-control" style="width: 120px;" name="cvc" placeholder="CVC">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-2">
+                                            <label>&nbsp;</label>
+                                            <div>
+                                                <button type="button" onclick="javascript:registerCreditCard()" class="btn btn-md btn-outline-success" style="width:100%; white-space: nowrap;">{% trans "Register" %}</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                  </div>
-                                  <div class="card card-gray">
-                                    <div class="card-header">
-                                      <h4 class="card-title w-100"><a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">PayPal</a></h4>
+                                    <div class="row">
+                                        <div class="pl-3">
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item"><i class="fab fa-2x fa-cc-visa opacity-50"></i></li>
+                                                <li class="list-inline-item"><i class="fab fa-2x fa-cc-mastercard opacity-50"></i></li>
+                                                <li class="list-inline-item"><i class="fab fa-2x fa-cc-amex opacity-50"></i></li>
+                                                <li class="list-inline-item"><i class="fab fa-2x fa-cc-jcb opacity-50"></i></li>
+                                                <li class="list-inline-item"><i class="fab fa-2x fa-cc-diners-club opacity-50"></i></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                                      <div class="card-body">
-
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="card card-gray">
-                                    <div class="card-header">
-                                      <h4 class="card-title w-100"><a class="d-block w-100" data-toggle="collapse" href="#collapseThree">ID決済(Online Payment)</a></h4>
-                                    </div>
-                                    <div id="collapseThree" class="collapse" data-parent="#accordion">
-                                      <div class="card-body">
-
-                                      </div>
-                                    </div>
-                                  </div>
+                                    <input type="hidden" name="userid" value="{{ user.id }}"/>
                                 </div>
-                                <hr>
                             </form>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="offset-sm-2 col-sm-2 text-right">
-                                    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="width:100%; white-space: nowrap;">{% trans "Save" %}<i class="fas fa-save pl-3"></i></button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,7 +83,7 @@
 {% block javascripts %}
   {{ block.super}}
 <script>
-    function submitAction(status) {
+    function registerCreditCard(status) {
         $('#form').submit();
     }
     $(document).ready(function(){

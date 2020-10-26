@@ -13,13 +13,16 @@
         <div class="container-fluid">
             <div class="row justify-content-left">
                 <div class="col-md-6 col-sm-6 col-xs-6">
-                    <div class="card">
-                        <div class="card-header h5 sitecolor-bcolor">{% trans "PersonalSetting" %}</div>
-                        <div class="card-body">
-                            <form id="form" action="/personalsettingsave" method="post">
-                                {% csrf_token %}
-                                <h4>Account</h4>
-                                <hr>
+                    <form>
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title" style="padding: .25rem .5rem;">Account Settings</h5>
+                                <div class="card-tools">
+                                    <button type="button" onclick="javascript:saveAccountsetting()" class="btn btn-sm btn-outline-primary">{% trans "Save" %}<i class="fas fa-save pl-3"></i></button>
+                                </div>
+                            </div>
+                            <div class="card-body">
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label text-right no-wrap" for="EmailAddress">{% trans "EmailAddress" %}</label>
                                     <div class="col-sm-4">
@@ -38,9 +41,16 @@
                                         <input type="text" id='username2' name='username2' class="form-control editableColor" style="width:300px;" value="{{ user.username2 }}">
                                     </div>
                                 </div>
-                                <br/>
-                                <h4>Language</h4>
-                                <hr>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title" style="padding: .25rem .5rem;">Language Settings</h4>
+                                <div class="card-tools">
+                                    <button type="button" onclick="javascript:saveLanguagesetting()" class="btn btn-sm btn-outline-primary">{% trans "Save" %}<i class="fas fa-save pl-3"></i></button>
+                                </div>
+                            </div>
+                            <div class="card-body">
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label text-right no-wrap" for="DisplayLanguage">{% trans "DisplayLanguage" %}</label>
                                     <div class="col-sm-4">
@@ -71,17 +81,10 @@
                                         </select>
                                     </div>
                                 </div>
-                                <input type="hidden" name="userid" value="{{ user.id }}"/>
-                            </form>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="offset-sm-2 col-sm-2 text-right">
-                                    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="width:100%; white-space: nowrap;">{% trans "Save" %}<i class="fas fa-save pl-3"></i></button>
-                                </div>
                             </div>
                         </div>
-                    </div>
+                        <input type="hidden" name="userid" value="{{ user.id }}"/>
+                    </form>
                 </div>
             </div>
         </div>
@@ -129,8 +132,37 @@
 {% block javascripts %}
   {{ block.super}}
     <script>
-        function submitAction(status) {
-            $('#form').submit();
+        function saveAccountsetting() {
+            $.ajax("/saveAccountsetting", {
+                data: {
+                    userid: '{{ user.id }}',
+                    username2: $("#username2").val()
+                }
+            }).then(
+                function success(data) {
+                    toastr.success('{% trans 'msg_UpdateSuccessful' %}')
+                },
+                function fail(data, status) {
+                    toastr.error('{% trans "Request failed. Returned status : " %}' + status)
+                }
+            )
+        }
+        function saveLanguagesetting() {
+            $.ajax("/saveLanguagesetting", {
+                data: {
+                    userid: '{{ user.id }}',
+                    DisplayLanguage: $("#DisplayLanguage").val(),
+                    lc_src: $("#lc_src").val(),
+                    lc_tgt: $("#lc_tgt").val()
+                }
+            }).then(
+                function success(data) {
+                    toastr.success('{% trans 'msg_UpdateSuccessful' %}')
+                },
+                function fail(data, status) {
+                    toastr.error('{% trans "Request failed. Returned status : " %}' + status)
+                }
+            )
         }
         var targetElement = ""
         $(document).ready(function() {

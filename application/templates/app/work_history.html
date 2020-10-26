@@ -14,8 +14,13 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title" style="font-size:1.2em;"><i class="fas fa-history"></i> {% trans "TranslationHistory" %}</h5>
+                        <div class="card-header d-flex align-items-center" style="padding-bottom: 3px;">
+                            <div>
+                                <h5 class="card-title md-0 font-weight-bold"><i class="fas fa-history"></i> {% trans "TranslationHistory" %}</h5>
+                            </div>
+                            <div class="ml-auto d-flex no-wrap align-items-center">
+                                {% trans "Search : " %}<input type="text" class="form-control" id="searchword">
+                            </div>
                         </div>
                         <div class="card-body">
                             <table id="history" class="table table-hover table-responsive-lg tabletype1">
@@ -87,6 +92,9 @@
                     "orderable": false
                 } ]
             });
+            $('#searchword').keyup(function(){
+                  dtable.search($(this).val()).draw();
+            })
         });
     </script>
 {% endblock javascripts %}

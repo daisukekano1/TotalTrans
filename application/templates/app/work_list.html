@@ -14,6 +14,14 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
+                        <div class="card-header d-flex align-items-center" style="padding-bottom: 3px;">
+                            <div>
+                                <h5 class="card-title md-0 font-weight-bold"><i class="nav-icon fas fa-tasks"></i> Work List</h5>
+                            </div>
+                            <div class="ml-auto d-flex no-wrap align-items-center">
+                                {% trans "Search : " %}<input type="text" class="form-control" id="searchword">
+                            </div>
+                        </div>
                         <div class="card-body">
                             <table id="table" class="table table-hover table-responsive-lg tabletype1">
                             <thead>
@@ -32,11 +40,11 @@
                             <tbody>
                                 {% for row in data %}
                                     {% if row.status == "Draft" %}
-                                        <tr style="background-color:#7fe08021">
+                                        <tr class="backcolor-status-draft">
                                     {% elif row.status == "Open" %}
-                                        <tr style="background-color:#4ec6de12">
+                                        <tr class="backcolor-status-open">
                                     {% elif row.status == "Closed" %}
-                                        <tr style="background-color:#19161614">
+                                        <tr class="backcolor-status-closed">
                                     {% endif %}
                                         <td>{{ row.workTitle }}</td>
                                         <td>
@@ -66,14 +74,14 @@
                                         <td>{% if row.eta %}{{ row.eta|date:"Y/m/j" }}{% endif %}</td>
                                         <td style="white-space: nowrap">
                                             {% if row.status == "Draft" %}
-                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-edit"></i> {% trans "Edit Draft" %}</a>
-                                                <a href="{% url 'workstart' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> {% trans "Start Translation" %}</a>
+                                                <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-draft btn-md"><i class="fas fa-edit"></i> {% trans "Edit Draft" %}</a>
+                                                <a href="{% url 'workstart' row.work_id %}" class="btn btn-outline-open btn-md"><i class="fas fa-random"></i> {% trans "Start Translation" %}</a>
                                             {% elif row.status == "Open" %}
-                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> {% trans "Translate" %}</a>
-                                                <a href="{% url 'workclose' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> {% trans "Work Close" %}</a>
+                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-open btn-md"><i class="fas fa-random"></i> {% trans "Translate" %}</a>
+                                                <a href="{% url 'workclose' row.work_id %}" class="btn btn-outline-closed btn-md"><i class="fas fa-archive"></i> {% trans "Work Close" %}</a>
                                             {% elif row.status == "Closed" %}
-                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-archive"></i> {% trans "View" %}</a>
-                                                <a href="{% url 'workreopen' row.work_id %}" class="btn btn-outline-primary btn-md"><i class="fas fa-random"></i> {% trans "Reopen" %}</a>
+                                                <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-closed btn-md"><i class="fas fa-archive"></i> {% trans "View" %}</a>
+                                                <a href="{% url 'workreopen' row.work_id %}" class="btn btn-outline-open btn-md"><i class="fas fa-random"></i> {% trans "Reopen" %}</a>
                                             {% endif %}
                                         </td>
                                   </tr>
@@ -107,6 +115,9 @@
                     "orderable": false
                 } ]
             });
+            $('#searchword').keyup(function(){
+                  dtable.search($(this).val()).draw();
+            })
         });
     </script>
 {% endblock javascripts %}

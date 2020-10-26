@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
 from application.forms import SignupForm
 from django.shortcuts import render, redirect
@@ -21,6 +22,9 @@ def signup(request):
         form = SignupForm()
     return render(request, 'user_signup.html', {'form': form})
 
+def customlogin(request, user){
+
+}
 def forgotPassword(request):
     return render(request, 'app/user_forgotpassword.html')
 
@@ -47,19 +51,30 @@ def personalsetting(request):
     return render(request, 'app/user_personalsetting.html', data)
 
 @login_required
-def savepersonalsetting(request):
-    id = request.POST['userid']
-    cuser = CustomUser.objects.filter(id = id).first()
+def saveAccountsetting(request):
+    message = ""
+    userid = request.GET.get("userid")
+    cuser = CustomUser.objects.filter(id = userid).first()
     if cuser != None:
-        cuser.username2 = request.POST['username2']
-        cuser.userLanguage = request.POST['DisplayLanguage']
-        cuser.defaultLcSrc = request.POST['lc_src']
-        cuser.defaultLcTgt = request.POST['lc_tgt']
+        cuser.username2 = request.GET.get("username2")
         cuser.save()
-    redirect_url = reverse('personalsetting')
-    parameters = urlencode({'status': 'success'})
-    url = f'{redirect_url}?{parameters}'
-    return redirect(url)
+    else:
+        message = "The customer does not exist"
+    return JsonResponse({"data": message})
+
+@login_required
+def saveLanguagesetting(request):
+    message = ""
+    userid = request.GET.get("userid")
+    cuser = CustomUser.objects.filter(id = userid).first()
+    if cuser != None:
+        cuser.userLanguage = request.GET.get("DisplayLanguage")
+        cuser.defaultLcSrc = request.GET.get("lc_src")
+        cuser.defaultLcTgt = request.GET.get("lc_tgt")
+        cuser.save()
+    else:
+        message = "The customer does not exist"
+    return JsonResponse({"data": message})
 
 @login_required
 def groupsetting(request):

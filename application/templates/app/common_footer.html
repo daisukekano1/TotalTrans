@@ -1,16 +1,16 @@
 {% load i18n %}
 {% if "/workcreation/" in request.path %}
-    <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
-    <button type="button" onclick="javascript:submitAction('Draft')" class="btn btn-lg btn-outline-primary" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save as Draft" %}</button>
-    <button type="button" onclick="javascript:submitAction('Open')" class="btn btn-lg btn-outline-primary" style="white-space: nowrap;"><i class="fas fa-random"></i> {% trans "Start Translation" %}</button>
+    <button type="button" onclick="javascript:history.back()" class="btn btn-lg w-150px btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
+    <button type="button" onclick="javascript:submitAction('Draft')" class="btn btn-lg w-150px btn-outline-primary" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save as Draft" %}</button>
+    <button type="button" onclick="javascript:submitAction('Open')" class="btn btn-lg w-150px btn-outline-primary" style="white-space: nowrap;"><i class="fas fa-random"></i> {% trans "Start Translation" %}</button>
 {% elif "/workdetail/" in request.path %}
-    <button type="button" id="btnOpenSelfTranslate" class="btn btn-md btn-self" style="color:white; font-size:1em;"><i class="fas fa-share"></i> {% trans "SelfTrans" %}</button>
-    <button type="button" id="btnOpenGoogleRequest" class="btn btn-md btn-primary" style="color:white; font-size:1em;"><i class="fas fa-share"></i> {% trans "GoogleTrans" %}</button>
-    <button type="button" id="btnOpenIgnoreText" class="btn btn-md color-trans-ignore" style="color:white; font-size:1em;"><i class="fas fa-share"></i> {% trans "IgnoreTrans" %}</button>
+    <button type="button" id="btnOpenSelfTranslate" class="btn btn-md w-150px btn-self" style="color:white; font-size:1em;"><i class="fas fa-share"></i> {% trans "SelfTrans" %}</button>
+    <button type="button" id="btnOpenGoogleRequest" class="btn btn-md w-150px btn-primary" style="color:white; font-size:1em;"><i class="fas fa-share"></i> {% trans "GoogleTrans" %}</button>
+    <button type="button" id="btnOpenIgnoreText" class="btn btn-md w-150px color-trans-ignore" style="color:white; font-size:1em;"><i class="fas fa-share"></i> {% trans "IgnoreTrans" %}</button>
 {% elif "/glossary/" in request.path %}
-    <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
-    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+    <button type="button" onclick="javascript:history.back()" class="btn btn-lg w-150px btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
+    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg w-150px btn-outline-primary" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save" %}</button>
 {% elif "/taglist/" in request.path %}
-    <button type="button" onclick="javascript:history.back()" class="btn btn-lg btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
-    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg btn-info" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+    <button type="button" onclick="javascript:history.back()" class="btn btn-lg w-150px btn-outline-info" style="white-space: nowrap;"><i class="far fa-times-circle"></i> {% trans "Cancel" %}</button>
+    <button type="button" onclick="javascript:submitAction()" class="btn btn-lg w-150px btn-outline-primary" style="white-space: nowrap;"><i class="fas fa-save"></i> {% trans "Save" %}</button>
 {% endif %}

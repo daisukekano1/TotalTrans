@@ -20,7 +20,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name='registration/login.html'), name='logout'),
 
     path('personalsetting/', views_user.personalsetting, name='personalsetting'),
-    path('personalsettingsave', views_user.savepersonalsetting, name='savepersonalsetting'),
+    path('saveAccountsetting', views_user.saveAccountsetting, name='saveAccountsetting'),
+    path('saveLanguagesetting', views_user.saveLanguagesetting, name='saveLanguagesetting'),
     path('groupsetting/', views_user.groupsetting, name='groupsetting'),
     path('forgotPassword/', views_user.forgotPassword, name='forgotPassword'),
 

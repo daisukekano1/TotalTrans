@@ -36,6 +36,9 @@ class CustomUser(AbstractUser):
     defaultLcSrc = models.CharField(max_length=5, null=True)
     defaultLcTgt = models.CharField(max_length=5, null=True)
     usertype = models.CharField(max_length=10, null=True)
+    registrationday = models.IntegerField(null=True)
+    suspendflg = models.SmallIntegerField(null=True)
+    createdDate = models.DateTimeField(default=timezone.now)
 
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'email'
@@ -150,8 +153,10 @@ class UserPayment(models.Model):
     class Meta():
         index_together = [['user_id']]
     user = models.ForeignKey(CustomUser, models.CASCADE, default=1)
-    customerid = models.CharField(max_length=30, null=True)
-    tokenid = models.CharField(max_length=30, null=True)
-    cardid = models.CharField(max_length=30, null=True)
+    customerid = models.CharField(max_length=50, null=True)
+    tokenid = models.CharField(max_length=50, null=True)
+    cardid = models.CharField(max_length=50, null=True)
+    validflag = models.SmallIntegerField(null=True)
     def __str__(self):
         return self.user_id
+
