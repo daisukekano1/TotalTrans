@@ -5,6 +5,10 @@
 
 {% block stylesheets %}
     {{ block.super }}
+    <link rel="stylesheet" href="/static/vendors/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/static/vendors/codemirror/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="/static/vendors/codemirror/addon/display/fullscreen.css">
+    <link rel="stylesheet" href="/static/vendors/codemirror/addon/scroll/simplescrollbars.css">
 {% endblock stylesheets %}
 {% block content %}
 <div class="content-wrapper workdetail">
@@ -15,15 +19,15 @@
                 <div class="card">
                     <div class="card-header h6 font-weight-bold color-status-draft backcolor-status-draft">{% trans "Create a new Work" %}</div>
                     <div class="card-body">
-                        <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
+                        <div class="row" style="margin-left: 0px; margin-bottom: 6px;">
                             <div class="form-group col-4" style="margin-right:10px;">
-                                <div class="input-group no-wrap" style="width:100%;">
+                                <div class="input-group flex-nowrap" style="width:100%;">
                                     <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "Title" %}</span></div>
                                     <input type="text" class="form-control editableColor" id="workTitle" name="workTitle" value="{{ work.workTitle }}" style="width:100%; min-width: 300px;"/>
                                 </div>
                             </div>
                             <div class="form-group col-4" style="margin-right:10px;">
-                                <div class="input-group no-wrap" style="width:100%">
+                                <div class="input-group flex-nowrap" style="width:100%">
                                     <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "language" %}</span></div>
                                     <select class="form-control editableColor" id="lc_src" name="lc_src"  readonly style="min-width:150px; background-color: #fbfbf3;">
                                         <option id="lc_src_selected" value="{{ selectedlang.srcValue }}" selected>{{ selectedlang.srcName.displaylang }}</option>
@@ -34,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-2" style="margin-right:10px;">
-                                <div class="input-group no-wrap" style="width:100%">
+                                <div class="input-group flex-nowrap" style="width:100%">
                                     <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "ETA" %}</span></div>
                                     <input type="text" id="eta" name="eta" class="form-control editableColor" value="{{ work.eta|date:"Y/m/j" }}"/>
                                     <div class="input-group-append" data-target="#eta" data-toggle="datepicker">
@@ -43,16 +47,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row" style="margin-left: 0px; margin-bottom: 6px;">
+                        <div class="row" style="margin-left: 0px; margin-bottom: 6px;">
                             <div class="form-group col-4" style="margin-right:10px;">
                                 <div class="input-group no-wrap" style="width:100%">
                                     <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "Tags" %}</span></div>
                                     <input type="text" class="form-control editableColor" id="tags" name="tags" value=""/>
                                 </div>
                             </div>
+                            <div class="form-group col-4" style="margin-right:10px;">
+                                <div class="input-group flex-nowrap" style="width:100%">
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "URL" %}</span></div>
+                                    <input type="text" class="form-control editableColor" id="url" name="url" value="{{ work.url }}" placeholder="Input URL and click on the right button"/>
+                                    <input type="button" id="btnExtractText" class="btn btn-sm btn-success ml-2" value="Extract Text">
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="wordsOriginal" name='wordsOriginal' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)">{{ work.wordsOriginal }}</textarea>
+                        <div style="border:1px solid #80808042;">
+                            <textarea id="wordsOriginal" name='wordsOriginal' style="display: none;"placeholder="Input translating text here...">{{ work.wordsOriginal }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -85,11 +96,22 @@
 {% endblock content %}
 {% block javascripts %}
     {{ block.super }}
+    <script src="/static/vendors/codemirror/lib/codemirror.js"></script>
+    <script src="/static/vendors/codemirror/addon/search/search.js"></script>
+    <script src="/static/vendors/codemirror/addon/search/searchcursor.js"></script>
+    <script src="/static/vendors/codemirror/addon/search/jump-to-line.js"></script>
+    <script src="/static/vendors/codemirror/addon/dialog/dialog.js"></script>
+    <script src="/static/vendors/codemirror/addon/selection/active-line.js"></script>
+    <script src="/static/vendors/codemirror/addon/display/fullscreen.js"></script>
+    <script src="/static/vendors/codemirror/addon/display/placeholder.js"></script>
+    <script src="/static/vendors/codemirror/addon/scroll/simplescrollbars.js"></script>
     <script>
         var tokens = []
+        var editor;
         function submitAction(status) {
             $('#tagsinfo').val(JSON.stringify(tokens));
             $('#status').val(status);
+            $('#wordsOriginal').val(editor.getValue());
             $('#workform').submit();
         }
         var targetElement = ""
@@ -178,6 +200,41 @@
                     showAutocompleteOnFocus: true,
                     writeable : false
             });
+            $('#btnExtractText').on('click',function(){
+                $.ajax("/getTextfromURL", {
+                    data: {
+                        url: $('#url').val()
+                    }
+                }).then(
+                    function success(data) {
+                        toastr.success('{% trans "The URL is loaded Sucessfuly" %}')
+                        $('#wordsOriginal').val(data.text);
+                        editor.setValue(data.text)
+                    },
+                    function fail(data, status) {
+                        toastr.error('{% trans "Failed to load from the URL" %}')
+                    }
+                )
+            })
+            editor = CodeMirror.fromTextArea(document.getElementById('wordsOriginal'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                indentUnit: 4,
+                styleActiveLine: true,
+                {#scrollbarStyle: "simple",#}
+                {#viewportMargin : Infinity,#}
+                extraKeys: {
+                    "Alt-F": "findPersistent",
+                    "F11": function(cm) {
+                      cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+                      $(".CodeMirror-fullscreen").addClass("z-index9999");
+                    },
+                    "Esc": function(cm) {
+                      if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+                    }
+                }
+            });
+            editor.setSize("100%", "100%");
         });
         function ajaxRemoveTagRequest(tagname) {
             actionurl = ""

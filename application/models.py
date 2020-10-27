@@ -62,6 +62,7 @@ class Works(models.Model):
     wordsTranslated = models.TextField(null=True)
     status = models.CharField(max_length=10, null=True)
     eta = models.DateTimeField(null=True)
+    url = models.CharField(max_length=1000, null=True)
 
     def __str__(self):
         return self.id
@@ -94,6 +95,10 @@ class TranslationHistory(models.Model):
     jobid = models.CharField(max_length=20, null=True)
     deleteFlag = models.SmallIntegerField(null=True)
     createdDate = models.DateTimeField(default=timezone.now)
+    startline = models.IntegerField(null=True)
+    startchar = models.IntegerField(null=True)
+    endline = models.IntegerField(null=True)
+    endchar = models.IntegerField(null=True)
 
     def __str__(self):
         return self.id

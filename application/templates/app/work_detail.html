@@ -5,6 +5,10 @@
 
 {% block stylesheets %}
     {{ block.super }}
+    <link rel="stylesheet" href="/static/vendors/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/static/vendors/codemirror/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="/static/vendors/codemirror/addon/display/fullscreen.css">
+    <link rel="stylesheet" href="/static/vendors/codemirror/addon/scroll/simplescrollbars.css">
 {% endblock stylesheets %}
 {% block content %}
 <div class="content-wrapper workdetail">
@@ -94,7 +98,7 @@
                                 <div class="card-body">
                                     <div class="tab-content" id="custom-tabs-one-tabContent">
                                         <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                            <textarea class='wordsOriginalAll' id='wordsOriginalAll' name='wordsOriginalAll' rows='10' style="visibility:hidden; white-space: pre-wrap;">{{ work.wordsOriginal }}</textarea>
+                                            <textarea class='wordsOriginalAll' id='wordsOriginalAll' name='wordsOriginalAll' style="display:none;">{{ work.wordsOriginal }}</textarea>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                             <div class="x_panel">
@@ -280,9 +284,21 @@
 {% endblock content %}
 {% block javascripts %}
     {{ block.super }}
+    <script src="/static/vendors/codemirror/lib/codemirror.js"></script>
+    <script src="/static/vendors/codemirror/addon/search/search.js"></script>
+    <script src="/static/vendors/codemirror/addon/search/searchcursor.js"></script>
+    <script src="/static/vendors/codemirror/addon/search/jump-to-line.js"></script>
+    <script src="/static/vendors/codemirror/addon/dialog/dialog.js"></script>
+    <script src="/static/vendors/codemirror/addon/selection/active-line.js"></script>
+    <script src="/static/vendors/codemirror/addon/display/fullscreen.js"></script>
+    <script src="/static/vendors/codemirror/addon/scroll/simplescrollbars.js"></script>
     <script>
         var tokens = [];
         var wordsOriginal = "";
+        var startline;
+        var startchar;
+        var endline;
+        var endchar;
         var SummernoteHightlightButton = function(context) {
           var ui = $.summernote.ui;
           var button = ui.button({
@@ -421,6 +437,44 @@
                     "orderable": false
                 } ]
             });
+            editor = CodeMirror.fromTextArea(document.getElementById('wordsOriginalAll'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                indentUnit: 4,
+                styleActiveLine: true,
+                readOnly : true,
+                styleSelectedText: true,
+                extraKeys: {
+                    "Alt-F": "findPersistent",
+                    "F11": function(cm) {
+                      cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+                      $(".CodeMirror-fullscreen").addClass("z-index9999");
+                    },
+                    "Esc": function(cm) {
+                      if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+                    }
+                }
+            });
+            editor.setSize("100%", "100%");
+            $.ajax({
+                url: "gethistory",
+                data : { work_id : '{{ work.work_id }}' },
+                success: function(result){
+                    hist = result.data
+                    classname = ""
+                    hist.forEach(val => {
+                        if (val.TranslationType == "Self")
+                            classname = 'highrighthistory_self'
+                        else if (val.TranslationType == "Google")
+                            classname = 'highrighthistory_google'
+                        else if (val.TranslationType == "Ignore")
+                            classname = 'highrighthistory_ignore'
+                        editor.markText({line: val.startline, ch: val.startchar}, {line: val.endline, ch: val.endchar}, {className: classname});
+                    })
+              }});
+
+            // data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"self\")'
+            /*
             $('#wordsOriginalAll').summernote({
                 toolbar: false,
                 buttons: {selectAll: SummernoteSelectAllButton},
@@ -443,6 +497,9 @@
                     }
                 }
             });
+            */
+            wordsOriginal = $("#wordsOriginalAll").val();
+            convertText(1, wordsOriginal);
             $('#gengoRequestText').summernote({
                 toolbar: [['style', ['highlight', 'clear']],],
                 buttons: {highlight: SummernoteHightlightButton},
@@ -463,7 +520,14 @@
             })
             var OriginalText = ""
             $('#btnOpenSelfTranslate').on('click', function () {
-                OriginalText = getSelectedText();
+                var string = editor.getSelection();
+                var startpos = editor.getCursor(true);
+                var endpos = editor.getCursor(false);
+                startline = startpos.line
+                startchar = startpos.ch
+                endline = endpos.line
+                endchar = endpos.ch
+                OriginalText = string;
                 if( OriginalText == ""){
                     $("#ModalMessage").text('{% trans "Please select translating text." %}');
                     $('#modal-Message').modal('show');
@@ -530,7 +594,11 @@
                     data: {
                         work_id: '{{ work.work_id }}',
                         selfOriginalText: OriginalText,
-                        selfTranslatedText:translatedText
+                        selfTranslatedText:translatedText,
+                        startline:startline,
+                        startchar:startchar,
+                        endline:endline,
+                        endchar:endchar
                     }
                 }).then(
                     function success(data) {
@@ -667,12 +735,17 @@
             })
             word = word.replace(ignendregex, "</span>");
 
+            /*
             if(type == 1){
                 $('#wordsOriginalAll').summernote('reset');
                 $('#wordsOriginalAll').summernote('pasteHTML', word);
             }else{
                 $("#wordsTranslatedAll").html(word);
             }
+            */
+            editor.eachLine(function(line) {
+
+            });
         }
         var historynumber = 0
         function deleteConfirmation(number, deletetype){

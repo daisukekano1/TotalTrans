@@ -480,3 +480,21 @@ table.dataTable thead th.sorting_desc:after {
     display: block;
     padding: .5rem 1rem;
 }
+textarea:focus {
+    outline: none;
+}
+.z-index9999{
+    z-index:9999 !important;
+}
+.CodeMirror-scroll {
+    min-height: 300px; /* the minimum height */
+}
+.ui-datepicker{
+    z-index: 99 !important
+}
+.CodeMirror{
+    margin-bottom:30px;
+}
+.CodeMirror pre.CodeMirror-placeholder {
+    color: #999 !important;
+}

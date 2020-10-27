@@ -14,7 +14,8 @@ from django.contrib.auth.decorators import login_required
 from application.customlib import GoogleApiLib, DataLib, CookieLib
 
 from datetime import datetime as dt
-
+from bs4 import BeautifulSoup
+import requests as req
 
 # GENGO Parameter
 # GENGO_SANDBOX_FLG = False
@@ -111,6 +112,7 @@ def save(request):
             wordsTranslated = request.POST['wordsOriginal'],
             status = status,
             eta = eta,
+            url = request.POST['url'],
             createdDate = timezone.now()
         )
         t1.save()
@@ -125,13 +127,14 @@ def save(request):
             t1.wordsTranslated = request.POST['wordsOriginal']
             t1.eta = eta
             t1.status = status
+            t1.url = request.POST['url']
             t1.save()
 
     tags = json.loads(request.POST['tagsinfo'])
     for tag in tags:
-        querySet = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
+        ut = UserTag.objects.filter(user=request.user.id).filter(tagname=tag['tagname'])
         tag_id = 0
-        if querySet.first() is None:
+        if ut.first() is None:
             t2 = UserTag(
                 user_id=request.user.id,
                 tagname=tag['tagname'],
@@ -142,13 +145,15 @@ def save(request):
             t2.save()
             tag_id = UserTag.objects.filter(user=request.user.id).latest().id
         else:
-            tag_id = querySet.first().id;
-        t3 = WorkUserTag(
-            work_id=work_id,
-            tag_id=tag_id,
-            createdDate=timezone.now()
-        )
-        t3.save()
+            tag_id = ut.first().id;
+        wt = WorkUserTag.objects.filter(work=work_id).filter(tag=tag_id)
+        if wt.first() is None:
+            t3 = WorkUserTag(
+                work_id=work_id,
+                tag_id=tag_id,
+                createdDate=timezone.now()
+            )
+            t3.save()
     if str(status).lower() == "draft":
         redirecttarget = "workcreation"
     else:
@@ -245,6 +250,10 @@ def gethistory(request, work_id = 0):
         onedata['TranslationType'] = vals.TranslationType
         onedata['beforeTranslation'] = vals.beforeTranslation
         onedata['afterTranslation'] = vals.afterTranslation
+        onedata['startline'] = vals.startline
+        onedata['startchar'] = vals.startchar
+        onedata['endline'] = vals.endline
+        onedata['endchar'] = vals.endchar
         data.append((onedata))
 
     return JsonResponse({"data": data})
@@ -316,13 +325,17 @@ def saveSelfTranslation(request):
         afterTranslation = TranslatedText,
         TranslationType = "Self",
         historyNum = historyNum,
-        createdDate=timezone.now()
+        createdDate=timezone.now(),
+        startline = request.GET.get("startline"),
+        startchar = request.GET.get("startchar"),
+        endline = request.GET.get("endline"),
+        endchar = request.GET.get("endchar"),
     )
     t2.save()
 
     work = Works.objects.get(pk=work_id)
-    workoriginal = work.wordsOriginal
-    work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "s")
+    # workoriginal = work.wordsOriginal
+    # work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "s")
     work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, TranslatedText, historyNum, "s")
     work.progress = getPercentage2(work.wordsOriginal)
     work.save()
@@ -459,3 +472,18 @@ def workreopen(request, work_id = 0):
     work.status = "Open"
     work.save()
     return redirect("workdetail", work_id=work_id)
+
+@login_required
+def getTextfromURL(request):
+    url = request.GET.get("url")
+    html = req.get(url).content
+    soup = BeautifulSoup(html, 'html.parser')
+    for i in soup.select("br"):
+        i.replace_with("\n")
+    text = soup.body.get_text()
+    text = '\n'.join(filter(lambda x: x.strip(), map(lambda x: x.strip(), text.split('\n'))))
+    data = {
+        'text': text
+    }
+    return JsonResponse(data)
+

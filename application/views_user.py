@@ -22,9 +22,6 @@ def signup(request):
         form = SignupForm()
     return render(request, 'user_signup.html', {'form': form})
 
-def customlogin(request, user){
-
-}
 def forgotPassword(request):
     return render(request, 'app/user_forgotpassword.html')
 

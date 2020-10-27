@@ -43,6 +43,7 @@ urlpatterns = [
     path('workstart/<int:work_id>/', views_work.workstart, name='workstart'),
     path('workclose/<int:work_id>/', views_work.workclose, name='workclose'),
     path('workreopen/<int:work_id>/', views_work.workreopen, name='workreopen'),
+    path('getTextfromURL', views_work.getTextfromURL, name='getTextfromURL'),
 
     path('translationHistory/', views_work.history, name='translationHistory'),
     path('translationHistory/gethistory', views_work.gethistory, name='gethistory'),
