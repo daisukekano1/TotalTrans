@@ -17,7 +17,18 @@
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
-                    <div class="card-header h6 font-weight-bold color-status-draft backcolor-status-draft">{% trans "Create a new Work" %}</div>
+                    <div class="card-header d-flex align-items-center font-weight-bold color-status-draft backcolor-status-draft">
+                        <div class="card-title md-0 font-weight-bold">
+                            {% if work.id == "" %}
+                                {% trans "Create a new Work" %}
+                            {% else %}
+                                {% trans "Edit Work" %}
+                            {% endif %}
+                        </div>
+                        <div class="ml-auto d-flex no-wrap align-items-center">
+                            <button type="button" onclick="javascript:submitAction('Open')" class="btn btn-md btn-outline-open" style="white-space: nowrap;"><i class="fas fa-random"></i> {% trans "Start Translation" %}</button>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="row" style="margin-left: 0px; margin-bottom: 6px;">
                             <div class="form-group col-4" style="margin-right:10px;">
@@ -207,9 +218,13 @@
                     }
                 }).then(
                     function success(data) {
-                        toastr.success('{% trans "The URL is loaded Sucessfuly" %}')
-                        $('#wordsOriginal').val(data.text);
-                        editor.setValue(data.text)
+                        if (data.text.startsWith("403 Forbidden")){
+                            toastr.error('{% trans "It is forbidden to load from the URL" %}')
+                        }else{
+                            toastr.success('{% trans "The URL is loaded Sucessfuly" %}')
+                            $('#wordsOriginal').val(data.text);
+                            editor.setValue(data.text)
+                        }
                     },
                     function fail(data, status) {
                         toastr.error('{% trans "Failed to load from the URL" %}')

@@ -119,6 +119,9 @@ class UserTag(models.Model):
     def __str__(self):
         return self.id
 
+    class Meta:
+        get_latest_by = ['id']
+
 class WorkUserTag(models.Model):
     class Meta():
         index_together = [['work_id']]
@@ -128,6 +131,9 @@ class WorkUserTag(models.Model):
 
     def __str__(self):
         return self.id
+
+    class Meta:
+        get_latest_by = ['id']
 
 class UserGlossary(models.Model):
     class Meta():

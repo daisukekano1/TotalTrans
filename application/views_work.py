@@ -292,14 +292,18 @@ def saveGoogleTranslation(request):
         afterTranslation = TranslatedText,
         TranslationType = "Google",
         historyNum = historyNum,
-        createdDate=timezone.now()
+        createdDate=timezone.now(),
+        startline=request.GET.get("startline"),
+        startchar=request.GET.get("startchar"),
+        endline=request.GET.get("endline"),
+        endchar=request.GET.get("endchar")
     )
     t2.save()
 
     work = Works.objects.get(pk=work_id)
-    work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "g")
+    # work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "g")
     work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, TranslatedText, historyNum, "g")
-    work.progress = getPercentage2(work.wordsOriginal)
+    work.progress = getPercentage2(work.wordsTranslated)
     work.save()
     data = {
         'wordsOriginal': work.wordsOriginal,
@@ -334,13 +338,10 @@ def saveSelfTranslation(request):
     t2.save()
 
     work = Works.objects.get(pk=work_id)
-    # workoriginal = work.wordsOriginal
-    # work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "s")
     work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, TranslatedText, historyNum, "s")
-    work.progress = getPercentage2(work.wordsOriginal)
+    work.progress = getPercentage2(work.wordsTranslated)
     work.save()
     data = {
-        'wordsOriginal': work.wordsOriginal,
         'wordsTranslated': work.wordsTranslated,
         'progress': work.progress
     }
@@ -362,14 +363,17 @@ def saveIgnoreTranslation(request):
         afterTranslation = OriginalText,
         TranslationType = "Ignore",
         historyNum = historyNum,
-        createdDate=timezone.now()
+        createdDate=timezone.now(),
+        startline=request.GET.get("startline"),
+        startchar=request.GET.get("startchar"),
+        endline=request.GET.get("endline"),
+        endchar=request.GET.get("endchar")
     )
     t2.save()
 
     work = Works.objects.get(pk=work_id)
-    work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "i")
     work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, OriginalText, historyNum, "i")
-    work.progress = getPercentage2(work.wordsOriginal)
+    work.progress = getPercentage2(work.wordsTranslated)
     work.save()
     data = {
         'wordsOriginal': work.wordsOriginal,
@@ -378,9 +382,9 @@ def saveIgnoreTranslation(request):
     }
     return JsonResponse(data)
 
-def getPercentage2(wordsOriginal):
-    wkval = wordsOriginal.replace('\r\n','')
-    wkval = wkval.replace('\n','')
+def getPercentage2(wordsTranslated):
+    wkval = wordsTranslated.replace('\r\n','')
+    wkval = wordsTranslated.replace('\n','')
     wk = ''
     wk2 = ''
     removeTags = re.sub(r'\[(s|g|i):(e|s):[0-9]+\]','', wkval)

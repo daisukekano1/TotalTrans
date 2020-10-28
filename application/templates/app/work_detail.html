@@ -98,6 +98,7 @@
                                 <div class="card-body">
                                     <div class="tab-content" id="custom-tabs-one-tabContent">
                                         <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                            <textarea class='wordsOriginalAll' id='wordsOriginalAll' name='wordsOriginalAll' rows='10' style="visibility:hidden; white-space: pre-wrap;">{{ work.wordsOriginal }}</textarea>
                                             <textarea class='wordsOriginalAll' id='wordsOriginalAll' name='wordsOriginalAll' style="display:none;">{{ work.wordsOriginal }}</textarea>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
@@ -295,30 +296,13 @@
     <script>
         var tokens = [];
         var wordsOriginal = "";
+        var OriginalText = "";
+        var editor;
         var startline;
         var startchar;
         var endline;
         var endchar;
-        var SummernoteHightlightButton = function(context) {
-          var ui = $.summernote.ui;
-          var button = ui.button({
-            contents: '<i class="fa fa-ban"/>&nbsp{% trans "Not translate for the selected text" %}',
-            click: function() {
-              context.invoke('editor.backColor', 'gray');
-            }
-          });
-          return button.render();
-        }
-        var SummernoteSelectAllButton = function() {
-          var ui = $.summernote.ui;
-          var button = ui.button({
-            contents: '{% trans "Select All" %}',
-            click: function() {
-                this.select()
-            }
-          });
-          return button.render();
-        }
+        var historytable;
         $(document).ready(function() {
             $("#lc_src").select2({
                 placeholder: '{% trans "Translate From" %}',
@@ -394,8 +378,189 @@
                     showAutocompleteOnFocus: true,
                     writeable : false
             });
-
-            var dtable = $("#history").DataTable({
+            historyRefresh();
+            originalInitialize();
+            $('#btnOpenSelfTranslate').on('click', function () {
+                modalTranslateOpen("Self");
+            })
+            $('#btnOpenGoogleRequest').on('click', function () {
+                modalTranslateOpen("Google");
+            })
+            $('#btnOpenIgnoreText').on('click', function () {
+                modalTranslateOpen("Ignore");
+            })
+            $('#btnSelfSave').click(function() {
+                translatedText = $("#selfTranslateText").val();
+                $.ajax("/saveSelfTranslation", {
+                    data: {
+                        work_id: '{{ work.work_id }}',
+                        selfOriginalText: OriginalText,
+                        selfTranslatedText:translatedText,
+                        startline:startline,
+                        startchar:startchar,
+                        endline:endline,
+                        endchar:endchar
+                    }
+                }).then(
+                    function success(data) {
+                        originalAddHighlight("Self", startline, startchar, endline, endchar);
+                        updateTranslatedText(data.wordsTranslated);
+                        updateProgress(data.progress);
+                        modalTranslationClose();
+                        historytable.ajax.reload();
+                        msgUpdateSuccessful();
+                    },
+                    function fail(data, status) {
+                        msgUpdateFailed();
+                    }
+                )
+            })
+            $('#btnGoogleSave').click(function() {
+                translatedText = $("#googleResponseText").val();
+                $.ajax("/saveGoogleTranslation", {
+                    data: {
+                        work_id: '{{ work.work_id }}',
+                        googleOriginalText: OriginalText,
+                        googleTranslatedText:translatedText,
+                        startline:startline,
+                        startchar:startchar,
+                        endline:endline,
+                        endchar:endchar
+                    }
+                }).then(
+                    function success(data) {
+                        originalAddHighlight("Google", startline, startchar, endline, endchar);
+                        updateTranslatedText(data.wordsTranslated);
+                        updateProgress(data.progress);
+                        modalTranslationClose();
+                        historytable.ajax.reload();
+                        msgUpdateSuccessful();
+                    },
+                    function fail(data, status) {
+                        msgUpdateFailed();
+                    }
+                )
+            })
+            $('#btnIgnoreSave').click(function() {
+                $.ajax("/saveIgnoreTranslation", {
+                    data: {
+                        work_id: '{{ work.work_id }}',
+                        OriginalText: OriginalText,
+                        startline:startline,
+                        startchar:startchar,
+                        endline:endline,
+                        endchar:endchar
+                    }
+                }).then(
+                    function success(data) {
+                        originalAddHighlight("Ignore", startline, startchar, endline, endchar);
+                        updateTranslatedText(data.wordsTranslated);
+                        updateProgress(data.progress);
+                        modalTranslationClose();
+                        historytable.ajax.reload();
+                        msgUpdateSuccessful();
+                    },
+                    function fail(data, status) {
+                        msgUpdateFailed();
+                    }
+                )
+            })
+            updateTranslatedText($("#wordsTranslatedAll").text());
+        });
+        function ajaxAddTagRequest(tagname, backgroundcolor, textcolor) {
+            $.ajax("/addTag", {
+                data: {
+                    work_id: '{{ work.work_id }}',
+                    tagname: tagname,
+                    backgroundcolor:backgroundcolor,
+                    textcolor:textcolor
+                }
+            }).then(
+                function success(name) {
+                },
+                function fail(data, status) {
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
+                }
+            )
+        };
+        function ajaxRemoveTagRequest(tagname) {
+            actionurl = ""
+            $.ajax("/removeTag", {
+                data: {
+                    work_id: '{{ work.work_id }}',
+                    tagname: tagname
+                }
+            }).then(
+                function success(name) {
+                },
+                function fail(data, status) {
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
+                }
+            )
+        };
+        function updateTranslatedText(word){
+            const selfstartregex = /\[s:s:[0-9]{1,}\]/gi;
+            const selfendregex = /\[s:e:[0-9]{1,}\]/gi;
+            const googlestartregex = /\[g:s:[0-9]{1,}\]/gi;
+            const googleendregex = /\[g:e:[0-9]{1,}\]/gi;
+            const ignstartregex = /\[i:s:[0-9]{1,}\]/gi;
+            const ignendregex = /\[i:e:[0-9]{1,}\]/gi;
+            // Self Trans
+            word = word.replace(selfstartregex, function(s) {
+                number = s.match(/[0-9]{1,}/);
+                return "<span class='highrighthistory_self madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"self\")'>";
+            })
+            word = word.replace(selfendregex, "</span>");
+            // Google Trans
+            word = word.replace(googlestartregex, function(s) {
+                number = s.match(/[0-9]{1,}/);
+                return "<span class='highrighthistory_google madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"google\")'>";
+            })
+            word = word.replace(googleendregex, "</span>");
+            // Ignore Trans
+            word = word.replace(ignstartregex, function(s) {
+                number = s.match(/[0-9]{1,}/);
+                return "<span class='highrighthistory_ignore madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"ignore\")'>";
+            })
+            word = word.replace(ignendregex, "</span>");
+            $("#wordsTranslatedAll").html(word);
+        }
+        var historynumber = 0
+        function deleteConfirmation(number, deletetype){
+            historynumber = number;
+            if (deletetype=='google')
+                $('#modal-GoogleDeleteHistory').modal('show');
+            else if (deletetype=='self')
+                $('#modal-SelfDeleteHistory').modal('show');
+            else if (deletetype=='ignore')
+                $('#modal-IgnoreDeleteHistory').modal('show');
+        }
+        function deleteHistory(){
+            $.ajax("/deleteHistory", {
+                data: {
+                    work_id: '{{ work.work_id }}',
+                    historyNum: historynumber
+                }
+            }).then(
+                function success(data) {
+                    wordsOriginal = data.wordsOriginal;
+                    $("#wordsOriginalAll").val(wordsOriginal);
+                    wordsOriginal = $("#wordsOriginalAll").val();
+                    convertText(2, data.wordsTranslated);
+                    $('#progress').text(data.progress);
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    $('#modal-SelfDeleteHistory').modal('hide');
+                    $('#modal-GoogleDeleteHistory').modal('hide');
+                    $('#modal-IgnoreDeleteHistory').modal('hide');
+                },
+                function fail(data, status) {
+                    alert('{% trans "Request failed. Returned status : " %}' + status);
+                }
+            )
+        }
+        function historyRefresh(){
+            historytable = $("#history").DataTable({
                 ajax: "gethistory",
                 data : { work_id : '{{ work.work_id }}' },
                 bDeferRender: true,
@@ -437,6 +602,8 @@
                     "orderable": false
                 } ]
             });
+        }
+        function originalInitialize(){
             editor = CodeMirror.fromTextArea(document.getElementById('wordsOriginalAll'), {
                 lineNumbers: true,
                 lineWrapping: true,
@@ -463,101 +630,46 @@
                     hist = result.data
                     classname = ""
                     hist.forEach(val => {
-                        if (val.TranslationType == "Self")
-                            classname = 'highrighthistory_self'
-                        else if (val.TranslationType == "Google")
-                            classname = 'highrighthistory_google'
-                        else if (val.TranslationType == "Ignore")
-                            classname = 'highrighthistory_ignore'
-                        editor.markText({line: val.startline, ch: val.startchar}, {line: val.endline, ch: val.endchar}, {className: classname});
+                        originalAddHighlight(val.TranslationType, val.startline, val.startchar, val.endline, val.endchar);
                     })
-              }});
-
-            // data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"self\")'
-            /*
-            $('#wordsOriginalAll').summernote({
-                toolbar: false,
-                buttons: {selectAll: SummernoteSelectAllButton},
-                disableDragAndDrop:true,
-                spellCheck: true,
-                callbacks: {
-                    onInit: function() {
-                        $(".note-editable").addClass("prewrap");
-                        wordsOriginal = $("#wordsOriginalAll").val();
-                        convertText(1, wordsOriginal);
-                        $("#wordsOriginalAll").css("visibility", "true");
-                    },
-                    onPaste: function (e) {
-                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-                        e.preventDefault();
-                        document.execCommand('insertText', false, bufferText);
-                    },
-                    onKeydown: function(e) {
-                        e.preventDefault();
-                    }
                 }
             });
-            */
-            wordsOriginal = $("#wordsOriginalAll").val();
-            convertText(1, wordsOriginal);
-            $('#gengoRequestText').summernote({
-                toolbar: [['style', ['highlight', 'clear']],],
-                buttons: {highlight: SummernoteHightlightButton},
-                disableDragAndDrop:true,
-                callbacks: {
-                    onInit: function() {
-                      $(".note-editable").addClass("prewrap");
-                    },
-                    onPaste: function (e) {
-                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-                        e.preventDefault();
-                        document.execCommand('insertText', false, bufferText);
-                    },
-                    onKeydown: function(e) {
-                        e.preventDefault();
-                    }
-                }
-            })
-            var OriginalText = ""
-            $('#btnOpenSelfTranslate').on('click', function () {
-                var string = editor.getSelection();
-                var startpos = editor.getCursor(true);
-                var endpos = editor.getCursor(false);
-                startline = startpos.line
-                startchar = startpos.ch
-                endline = endpos.line
-                endchar = endpos.ch
-                OriginalText = string;
-                if( OriginalText == ""){
-                    $("#ModalMessage").text('{% trans "Please select translating text." %}');
-                    $('#modal-Message').modal('show');
-                    return false;
-                }
-                if( !wordsOriginal.includes(OriginalText)){
-                    $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
-                    $('#modal-Message').modal('show');
-                    return false;
-                }
-                $('#openSelfTranslate').modal('show');
-            })
-            $('#openSelfTranslate').on('shown.bs.modal', function (e) {
+        }
+        function originalAddHighlight(transtype, stln, stch, enln, ench){
+            classname = ""
+            if (transtype == "Self") {
+                classname = "highrighthistory_self";
+            }else if (transtype == "Google") {
+                classname = "highrighthistory_google";
+            }else if (transtype == "Ignore") {
+                classname = "highrighthistory_ignore";
+            }
+            editor.markText({line: stln, ch: stch}, {line: enln, ch: ench}, {className: classname});
+        }
+        function modalTranslateOpen(transtype){
+            var string = editor.getSelection();
+            var startpos = editor.getCursor(true);
+            var endpos = editor.getCursor(false);
+            startline = startpos.line
+            startchar = startpos.ch
+            endline = endpos.line
+            endchar = endpos.ch
+            OriginalText = string;
+            if( OriginalText == ""){
+                toastr.error('{% trans "Please select translating text" %}')
+                return false;
+            }
+            checkmarkers = editor.findMarks({line:startline, ch:startchar}, {line:endline, ch:endchar});
+            if (checkmarkers.length != 0){
+                toastr.error('{% trans "CannotIncludeTranslatedText" %}');
+                return false;
+            }
+            modalname = ""
+            if (transtype == "Self") {
+                modalname = "openSelfTranslate";
                 $('#selfOriginalText').text(OriginalText);
-            })
-            $('#btnOpenGoogleRequest').on('click', function () {
-                OriginalText = getSelectedText();
-                if( OriginalText == ""){
-                    $("#ModalMessage").text('{% trans "Please select translating text." %}');
-                    $('#modal-Message').modal('show');
-                    return false;
-                }
-                if( !wordsOriginal.includes(OriginalText)){
-                    $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
-                    $('#modal-Message').modal('show');
-                    return false;
-                }
-                $('#openGoogleRequest').modal('show');
-            })
-            $('#openGoogleRequest').on('shown.bs.modal', function (e) {
+            }else if (transtype == "Google") {
+                modalname = "openGoogleRequest";
                 $('#googleRequestText').text(OriginalText);
                 $.ajax("/requestGoogleTranslation", {
                     data: {
@@ -567,220 +679,33 @@
                     }
                 }).then(
                     function success(data) {
+                        toastr.success('{% trans "Succeeded to translate with Google Translation" %}');
                         $('#googleResponseText').val(data.data);
                     },
                     function fail(data, status) {
-                        alert('{% trans "Request failed. Returned status : " %}' + status);
+                        toastr.error('{% trans "Failed to translate with Google Translation" %}');
                     }
                 )
-            })
-            $('#btnOpenIgnoreText').on('click', function () {
-                OriginalText = getSelectedText();
-                if( OriginalText == ""){
-                    $("#ModalMessage").text('{% trans "Please select translating text." %}');
-                    $('#modal-Message').modal('show');
-                    return false;
-                }
-                if( !wordsOriginal.includes(OriginalText)){
-                    $("#ModalMessage").text('{% trans "CannotIncludeTranslatedText" %}');
-                    $('#modal-Message').modal('show');
-                    return false;
-                }
-                $('#openIgnoreText').modal('show');
-            })
-            $('#btnSelfSave').click(function() {
-                translatedText = $("#selfTranslateText").val();
-                $.ajax("/saveSelfTranslation", {
-                    data: {
-                        work_id: '{{ work.work_id }}',
-                        selfOriginalText: OriginalText,
-                        selfTranslatedText:translatedText,
-                        startline:startline,
-                        startchar:startchar,
-                        endline:endline,
-                        endchar:endchar
-                    }
-                }).then(
-                    function success(data) {
-                        wordsOriginal = data.wordsOriginal;
-                        $("#wordsOriginalAll").val(wordsOriginal);
-                        wordsOriginal = $("#wordsOriginalAll").val();
-                        convertText(1, data.wordsOriginal);
-                        convertText(2, data.wordsTranslated);
-                        $('#progress').text(data.progress)
-                        $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove();
-                        $('#openSelfTranslate').modal('hide');
-                    },
-                    function fail(data, status) {
-                        alert('{% trans "Request failed. Returned status : " %}' + status);
-                    }
-                )
-            })
-            $('#btnGoogleSave').click(function() {
-                translatedText = $("#googleResponseText").val();
-                $.ajax("/saveGoogleTranslation", {
-                    data: {
-                        work_id: '{{ work.work_id }}',
-                        googleOriginalText: OriginalText,
-                        googleTranslatedText:translatedText
-                    }
-                }).then(
-                    function success(data) {
-                        wordsOriginal = data.wordsOriginal;
-                        $("#wordsOriginalAll").val(wordsOriginal);
-                        wordsOriginal = $("#wordsOriginalAll").val();
-                        convertText(1, data.wordsOriginal);
-                        convertText(2, data.wordsTranslated);
-                        $('#progress').text(data.progress);
-                        $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove();
-                        $('#openGoogleRequest').modal('hide');
-                    },
-                    function fail(data, status) {
-                        alert('{% trans "Request failed. Returned status : " %}' + status);
-                    }
-                )
-            })
-            $('#btnIgnoreSave').click(function() {
-                $.ajax("/saveIgnoreTranslation", {
-                    data: {
-                        work_id: '{{ work.work_id }}',
-                        OriginalText: OriginalText
-                    }
-                }).then(
-                    function success(data) {
-                        wordsOriginal = data.wordsOriginal;
-                        $("#wordsOriginalAll").val(wordsOriginal);
-                        wordsOriginal = $("#wordsOriginalAll").val();
-                        convertText(1, data.wordsOriginal);
-                        convertText(2, data.wordsTranslated);
-                        $('#progress').text(data.progress)
-                        $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove();
-                        $('#openIgnoreText').modal('hide');
-                    },
-                    function fail(data, status) {
-                        alert('{% trans "Request failed. Returned status : " %}' + status);
-                    }
-                )
-            })
-            $('.highrighthistory_gengo').select(function(){
-                alert(1)
-            })
-            $('.highrighthistory_google').select(function(){
-                alert(1)
-            })
-            $('.highrighthistory_self').select(function(){
-                alert(1)
-            })
-            wordsOriginalAll = document.getElementById("wordsOriginalAll");
-            textAreaHeightSet(wordsOriginalAll);
-            convertText(2, $("#wordsTranslatedAll").text())
-        });
-        function ajaxAddTagRequest(tagname, backgroundcolor, textcolor) {
-            $.ajax("/addTag", {
-                data: {
-                    work_id: '{{ work.work_id }}',
-                    tagname: tagname,
-                    backgroundcolor:backgroundcolor,
-                    textcolor:textcolor
-                }
-            }).then(
-                function success(name) {
-                },
-                function fail(data, status) {
-                    alert('{% trans "Request failed. Returned status : " %}' + status);
-                }
-            )
-        };
-        function ajaxRemoveTagRequest(tagname) {
-            actionurl = ""
-            $.ajax("/removeTag", {
-                data: {
-                    work_id: '{{ work.work_id }}',
-                    tagname: tagname
-                }
-            }).then(
-                function success(name) {
-                },
-                function fail(data, status) {
-                    alert('{% trans "Request failed. Returned status : " %}' + status);
-                }
-            )
-        };
-        function convertText(type, word){
-            const selfstartregex = /\[s:s:[0-9]{1,}\]/gi;
-            const selfendregex = /\[s:e:[0-9]{1,}\]/gi;
-            const googlestartregex = /\[g:s:[0-9]{1,}\]/gi;
-            const googleendregex = /\[g:e:[0-9]{1,}\]/gi;
-            const ignstartregex = /\[i:s:[0-9]{1,}\]/gi;
-            const ignendregex = /\[i:e:[0-9]{1,}\]/gi;
-            // Self Trans
-            word = word.replace(selfstartregex, function(s) {
-                number = s.match(/[0-9]{1,}/);
-                return "<span class='highrighthistory_self madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"self\")'>";
-            })
-            word = word.replace(selfendregex, "</span>");
-            // Google Trans
-            word = word.replace(googlestartregex, function(s) {
-                number = s.match(/[0-9]{1,}/);
-                return "<span class='highrighthistory_google madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"google\")'>";
-            })
-            word = word.replace(googleendregex, "</span>");
 
-            word = word.replace(ignstartregex, function(s) {
-                number = s.match(/[0-9]{1,}/);
-                return "<span class='highrighthistory_ignore madding-intext' data-toggle='tooltip' title='#TranslationNum#:"+number+"\nDouble Click for delete' ondblclick='deleteConfirmation("+number+",\"ignore\")'>";
-            })
-            word = word.replace(ignendregex, "</span>");
-
-            /*
-            if(type == 1){
-                $('#wordsOriginalAll').summernote('reset');
-                $('#wordsOriginalAll').summernote('pasteHTML', word);
-            }else{
-                $("#wordsTranslatedAll").html(word);
+            }else if (transtype == "Ignore") {
+                modalname = "openIgnoreText"
             }
-            */
-            editor.eachLine(function(line) {
-
-            });
+            $('#'+modalname).modal('show');
         }
-        var historynumber = 0
-        function deleteConfirmation(number, deletetype){
-            historynumber = number;
-            if (deletetype=='google')
-                $('#modal-GoogleDeleteHistory').modal('show');
-            else if (deletetype=='self')
-                $('#modal-SelfDeleteHistory').modal('show');
-            else if (deletetype=='ignore')
-                $('#modal-IgnoreDeleteHistory').modal('show');
+        function modalTranslationClose(){
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $('.modal').modal('hide');
         }
-        function deleteHistory(){
-            $.ajax("/deleteHistory", {
-                data: {
-                    work_id: '{{ work.work_id }}',
-                    historyNum: historynumber
-                }
-            }).then(
-                function success(data) {
-                    wordsOriginal = data.wordsOriginal;
-                    $("#wordsOriginalAll").val(wordsOriginal);
-                    wordsOriginal = $("#wordsOriginalAll").val();
-                    convertText(1, data.wordsOriginal);
-                    convertText(2, data.wordsTranslated);
-                    $('#progress').text(data.progress);
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                    $('#modal-SelfDeleteHistory').modal('hide');
-                    $('#modal-GoogleDeleteHistory').modal('hide');
-                    $('#modal-IgnoreDeleteHistory').modal('hide');
-                },
-                function fail(data, status) {
-                    alert('{% trans "Request failed. Returned status : " %}' + status);
-                }
-            )
+        function updateProgress(progress){
+            $('#progress').text(progress)
+        }
+        function msgUpdateSuccessful(){
+            toastr.success('{% trans "Translation is updated successfully" %}')
+        }
+        function msgUpdateFailed(){
+            toastr.success('{% trans "Failed to update with the translation" %}')
         }
     </script>
 {% endblock javascripts %}
+
