@@ -13,20 +13,24 @@
 {% block content %}
 <div class="content-wrapper workdetail">
     <section class="content">
-        <form id="workform" class="form-inline" action="/worksave" method="post">
+        <form id="workform" class="form-inline" action="/startTranslation" method="post">
             {% csrf_token %}
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
-                    <div class="card-header d-flex align-items-center font-weight-bold color-status-draft backcolor-status-draft">
+                    <div class="card-header d-flex align-items-center font-weight-bold color-status-draft backcolor-status-draft" style="padding-top: .2rem; padding-bottom: .2rem;">
                         <div class="card-title md-0 font-weight-bold">
-                            {% if work.id == "" %}
-                                {% trans "Create a new Work" %}
+                            {% if work.id == None %}
+                                <span id="cardtitle">{% trans "Create a new Work" %}</span> <i class="fas fa-edit"></i>
                             {% else %}
-                                {% trans "Edit Work" %}
+                                {% trans "Edit Draft" %} <i class="fas fa-edit"></i>
                             {% endif %}
                         </div>
                         <div class="ml-auto d-flex no-wrap align-items-center">
-                            <button type="button" onclick="javascript:submitAction('Open')" class="btn btn-md btn-outline-open" style="white-space: nowrap;"><i class="fas fa-random"></i> {% trans "Start Translation" %}</button>
+                            {% if work.id != None %}
+                                <button type="button" id="starttranslation" style="display:block" onclick="javascript:submitStartTranslation('Open')" class="btn btn-md btn-outline-open" style="white-space: nowrap;"><i class="fas fa-random"></i> {% trans "Start Translation" %}</button>
+                            {% else %}
+                                <button type="button" id="starttranslation" style="display:none" onclick="javascript:submitStartTranslation('Open')" class="btn btn-md btn-outline-open" style="white-space: nowrap;"><i class="fas fa-random"></i> {% trans "Start Translation" %}</button>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="card-body">
@@ -119,9 +123,31 @@
     <script>
         var tokens = []
         var editor;
-        function submitAction(status) {
+        var work_id;
+        function submitDraft() {
             $('#tagsinfo').val(JSON.stringify(tokens));
-            $('#status').val(status);
+            $('#status').val("Draft");
+            $('#wordsOriginal').val(editor.getValue());
+            var form = $('#workform');
+            $.ajax("/savework", {
+                type: "POST",
+                data: form.serialize()
+            }).then(
+                function success(data) {
+                    toastr.success('{% trans "SuccessToUpdate" %}');
+                    $("#cardtitle").text("{% trans 'Edit Draft' %}");
+                    $("#starttranslation").css("display","block");
+                    $("#work_id").val(data.work_id);
+                    work_id = data.work_id;
+                },
+                function fail(data, status) {
+                    toastr.error('{% trans "FailedToUpdate" %}');
+                }
+            )
+        }
+        function submitStartTranslation() {
+            $('#tagsinfo').val(JSON.stringify(tokens));
+            $('#status').val("Open");
             $('#wordsOriginal').val(editor.getValue());
             $('#workform').submit();
         }
@@ -192,7 +218,7 @@
                     var i = 0;
                     for(var tag of tokens){
                         if(tag.tagname == e.attrs.value){
-                            if ("{{ work.work_id }}" != "")
+                            if (work_id != "")
                                 ajaxRemoveTagRequest(e.attrs.value);
                             tokens.splice(i, 1);
                             break;
@@ -236,8 +262,6 @@
                 lineWrapping: true,
                 indentUnit: 4,
                 styleActiveLine: true,
-                {#scrollbarStyle: "simple",#}
-                {#viewportMargin : Infinity,#}
                 extraKeys: {
                     "Alt-F": "findPersistent",
                     "F11": function(cm) {
@@ -252,17 +276,17 @@
             editor.setSize("100%", "100%");
         });
         function ajaxRemoveTagRequest(tagname) {
-            actionurl = ""
             $.ajax("/removeTag", {
                 data: {
-                    work_id: '{{ work.work_id }}',
+                    work_id: work_id,
                     tagname: tagname
                 }
             }).then(
                 function success(name) {
+                    toastr.success('{% trans "SucceededToDeleteTag" %}');
                 },
                 function fail(data, status) {
-                    alert('{% trans "Request failed. Returned status : " %}' + status);
+                    toastr.error('{% trans "FailedToDeleteTag" %}');
                 }
             )
         };

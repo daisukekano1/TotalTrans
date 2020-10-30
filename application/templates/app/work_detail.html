@@ -18,12 +18,22 @@
             <div class="container-fluid" style="padding-top:10px;">
                 <div class="card">
                     {% if work.status == "Open" %}
-                        <div class="card-header h6 font-weight-bold color-status-open backcolor-status-open">
-                            {% trans "Translating" %} <i class="fas fa-random"></i>
+                        <div class="card-header d-flex align-items-center font-weight-bold color-status-open backcolor-status-open" style="padding-top: .2rem; padding-bottom: .2rem;">
+                            <div class="card-title md-0 font-weight-bold">
+                                {% trans "Translating" %} <i class="fas fa-random"></i>
+                            </div>
+                            <div class="ml-auto d-flex no-wrap align-items-center">
+                                <button type="button" onclick="javascript:workclose()" class="btn btn-md btn-outline-closed" style="white-space: nowrap;"><i class="fas fa-archive"></i> {% trans "Close Work" %}</button>
+                            </div>
                         </div>
                     {% elif work.status == "Closed" %}
-                        <div class="card-header h6 font-weight-bold color-status-closed backcolor-status-closed">
-                            {% trans "Closed" %} <i class="fas fa-archive"></i>
+                        <div class="card-header d-flex align-items-center font-weight-bold color-status-closed backcolor-status-closed" style="padding-top: .2rem; padding-bottom: .2rem;">
+                            <div class="card-title md-0 font-weight-bold">
+                                {% trans "Closed" %} <i class="fas fa-archive"></i>
+                            </div>
+                            <div class="ml-auto d-flex no-wrap align-items-center">
+                                <button type="button" onclick="javascript:workreopen()" class="btn btn-md btn-outline-open" style="white-space: nowrap;"><i class="fas fa-random"></i> {% trans "Reopen Work" %}</button>
+                            </div>
                         </div>
                     {% endif %}
                     <div class="card-body">
@@ -477,9 +487,10 @@
                 }
             }).then(
                 function success(name) {
+                    toastr.success('{% trans "SucceededToAddTag" %}');
                 },
                 function fail(data, status) {
-                    alert('{% trans "Request failed. Returned status : " %}' + status);
+                    toastr.error('{% trans "FailedToAddTag" %}');
                 }
             )
         };
@@ -492,9 +503,10 @@
                 }
             }).then(
                 function success(name) {
+                    toastr.success('{% trans "SucceededToDeleteTag" %}');
                 },
                 function fail(data, status) {
-                    alert('{% trans "Request failed. Returned status : " %}' + status);
+                    toastr.error('{% trans "FailedToDeleteTag" %}');
                 }
             )
         };
@@ -704,7 +716,13 @@
             toastr.success('{% trans "Translation is updated successfully" %}')
         }
         function msgUpdateFailed(){
-            toastr.success('{% trans "Failed to update with the translation" %}')
+            toastr.error('{% trans "Failed to update with the translation" %}')
+        }
+        function workclose(){
+            window.location.href="{% url 'workclose' work.work_id %}";
+        }
+        function workreopen(){
+            window.location.href="{% url 'workreopen' work.work_id %}";
         }
     </script>
 {% endblock javascripts %}

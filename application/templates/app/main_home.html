@@ -172,7 +172,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-hover table-responsive-lg tabletype1">
+                            <table class="table table-hover table-responsive-lg tabletype1" id="translatinglist">
                             <thead>
                                 <tr>
                                     <th>{% trans "Title" %}</th>
@@ -207,7 +207,6 @@
                                         <td>{% if row.eta %}{{ row.eta|date:"Y/m/j"}}{% endif %}</td>
                                         <td style="white-space: nowrap">
                                             <a href="{% url 'workdetail' row.work_id %}" class="btn btn-outline-open btn-md"><i class="fas fa-random"></i> {% trans "Translate" %}</a>
-                                            <a href="{% url 'workclose' row.work_id %}" class="btn btn-outline-closed btn-md"><i class="fas fa-archive"></i> {% trans "Work Close" %}</a>
                                         </td>
                                       </tr>
                               {% endfor %}
@@ -223,5 +222,5 @@
 {% endblock content %}
 
 {% block javascripts %}
-  {{ block.super}}
+    {{ block.super}}
 {% endblock javascripts %}

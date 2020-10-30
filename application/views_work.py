@@ -92,6 +92,20 @@ def workcreation(request, work_id = 0):
     return render(request, 'app/work_add.html', data)
 
 @login_required
+def savework(request):
+    save(request)
+    data = {
+        'work_id': request.POST['work_id']
+    }
+    return JsonResponse({"data": data})
+
+@login_required
+def startTranslation(request):
+    save(request)
+    work_id = request.POST['work_id']
+    return redirect(workdetail, work_id)
+
+@login_required
 def save(request):
     etastr = request.POST['eta']
     eta = None
@@ -154,11 +168,6 @@ def save(request):
                 createdDate=timezone.now()
             )
             t3.save()
-    if str(status).lower() == "draft":
-        redirecttarget = "workcreation"
-    else:
-        redirecttarget = "workdetail"
-    return redirect(redirecttarget, work_id=work_id)
 
 @login_required
 def addTag(request):

@@ -28,7 +28,8 @@ urlpatterns = [
     # The work page functions
     path('workcreation/', views_work.workcreation, name='workcreation'),
     path('workcreation/<int:work_id>/', views_work.workcreation, name='workcreation'),
-    path('worksave', views_work.save, name='saveWork'),
+    path('savework', views_work.savework, name='saveWork'),
+    path('startTranslation', views_work.startTranslation, name='startTranslation'),
     path('workdetail/<int:work_id>/', views_work.workdetail, name='workdetail'),
     path('addTag', views_work.addTag, name='addTag'),
     path('removeTag', views_work.removeTag, name='removeTag'),
