@@ -54,7 +54,7 @@
                             </div>
                             <div class="form-group col-2" style="margin-right:10px;">
                                 <div class="input-group flex-nowrap" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "ETA" %}</span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-120px">{% trans "ETA" %}</span></div>
                                     <input type="text" id="eta" name="eta" class="form-control editableColor" value="{{ work.eta|date:"Y/m/j" }}"/>
                                     <div class="input-group-append" data-target="#eta" data-toggle="datepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                         <div style="border:1px solid #80808042;">
-                            <textarea id="wordsOriginal" name='wordsOriginal' style="display: none;"placeholder="Input translating text here...">{{ work.wordsOriginal }}</textarea>
+                            <textarea id="wordsOriginal" name='wordsOriginal' style="display: none;" placeholder="Input text here...">{{ work.wordsOriginal }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -146,6 +146,13 @@
             )
         }
         function submitStartTranslation() {
+            if ($("#workTitle").val() == ""){
+                toastr.error('{% trans "WorkTitleCannotBeBlank" %}');
+                return false;
+            }else if(editor.getValue() == ""){
+                toastr.error('{% trans "ContentsCannotBeBlank" %}');
+                return false;
+            }
             $('#tagsinfo').val(JSON.stringify(tokens));
             $('#status').val("Open");
             $('#wordsOriginal').val(editor.getValue());
@@ -230,6 +237,7 @@
                 })
                 .tokenfield({
                     tokens:worktagsArr,
+                    createTokensOnBlur : true,
                     autocomplete: {
                         source: tagsource,
                         delay: 100

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-12 16:48+0900\n"
+"POT-Creation-Date: 2020-10-30 18:01+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,45 +58,39 @@ msgstr "Email address"
 msgid "Login-Password"
 msgstr "Password"
 
-#: .\templates\app\common_footer.html:3 .\templates\app\common_footer.html:11
-#: .\templates\app\common_footer.html:14 .\templates\app\work_detail.html:151
-#: .\templates\app\work_detail.html:187 .\templates\app\work_detail.html:203
-#: .\templates\app\work_detail.html:219 .\templates\app\work_detail.html:235
-#: .\templates\app\work_detail.html:251 .\templates\app\work_detail.html:267
+#: .\templates\app\common_footer.html:3 .\templates\app\common_footer.html:10
+#: .\templates\app\common_footer.html:13 .\templates\app\work_detail.html:174
+#: .\templates\app\work_detail.html:210 .\templates\app\work_detail.html:226
+#: .\templates\app\work_detail.html:242 .\templates\app\work_detail.html:258
+#: .\templates\app\work_detail.html:274 .\templates\app\work_detail.html:290
 msgid "Cancel"
 msgstr "Cancel"
 
-#: .\templates\app\common_footer.html:4
-msgid "Save as Draft"
-msgstr "Save as Draft"
+#: .\templates\app\common_footer.html:4 .\templates\app\common_footer.html:11
+#: .\templates\app\common_footer.html:14
+#: .\templates\app\user_personalsetting.html:22
+#: .\templates\app\user_personalsetting.html:50
+msgid "Save"
+msgstr "Save"
 
-#: .\templates\app\common_footer.html:5 .\templates\app\main_home.html:155
-#: .\templates\app\work_list.html:70
-msgid "Start Translation"
-msgstr "Start Translation"
-
-#: .\templates\app\common_footer.html:7 .\templates\app\work_detail.html:125
+#: .\templates\app\common_footer.html:6 .\templates\app\work_detail.html:148
 msgid "SelfTrans"
 msgstr "Self Trans"
 
-#: .\templates\app\common_footer.html:8 .\templates\app\work_detail.html:161
+#: .\templates\app\common_footer.html:7 .\templates\app\work_detail.html:184
 msgid "GoogleTrans"
 msgstr "Google Trans"
 
-#: .\templates\app\common_footer.html:9
+#: .\templates\app\common_footer.html:8
 msgid "IgnoreTrans"
 msgstr "Ignore Trans"
-
-#: .\templates\app\common_footer.html:12 .\templates\app\common_footer.html:15
-msgid "Save"
-msgstr "Save"
 
 #: .\templates\app\common_sidebar.html:11
 msgid "worklist"
 msgstr "Work List"
 
 #: .\templates\app\common_sidebar.html:17 .\templates\app\main_home.html:80
-#: .\templates\app\work_history.html:4 .\templates\app\work_history.html:18
+#: .\templates\app\work_history.html:4 .\templates\app\work_history.html:19
 msgid "TranslationHistory"
 msgstr "Translation History"
 
@@ -109,10 +103,6 @@ msgid "Glossary"
 msgstr "Glossary"
 
 #: .\templates\app\common_sidebar.html:35
-msgid "Manual"
-msgstr "Manual"
-
-#: .\templates\app\common_sidebar.html:41
 msgid "TermsAndConditions"
 msgstr "Terms and conditions"
 
@@ -124,7 +114,29 @@ msgstr "Home"
 msgid "Create_a_New_Work"
 msgstr "Create a new Work"
 
-#: .\templates\app\common_top_navigation.html:29
+#: .\templates\app\common_top_navigation.html:23
+msgid "Personal Settings"
+msgstr ""
+
+#: .\templates\app\common_top_navigation.html:25
+msgid "Group Settings"
+msgstr ""
+
+#: .\templates\app\common_top_navigation.html:34
+msgid "Activate lisence"
+msgstr ""
+
+#: .\templates\app\common_top_navigation.html:36
+msgid "Suspend activation"
+msgstr ""
+
+#: .\templates\app\common_top_navigation.html:38
+#, fuzzy
+#| msgid "History"
+msgid "Payment History"
+msgstr "History"
+
+#: .\templates\app\common_top_navigation.html:42
 msgid "logout"
 msgstr ""
 
@@ -141,7 +153,7 @@ msgid "Keyword"
 msgstr "Keyword"
 
 #: .\templates\app\glossary.html:41 .\templates\app\main_home.html:209
-#: .\templates\app\work_detail.html:406 .\templates\app\work_list.html:72
+#: .\templates\app\work_detail.html:607 .\templates\app\work_list.html:80
 msgid "Translate"
 msgstr "Translate"
 
@@ -163,29 +175,49 @@ msgstr ""
 "Click the <i>Submit</i> button to confirm. Optionally, override the value "
 "for a field to set a common value by clicking on the field below."
 
+#: .\templates\app\lisence_activation.html:4
+msgid "ActivateLisence"
+msgstr ""
+
+#: .\templates\app\lisence_activation.html:18
+msgid "PaymentRegistration"
+msgstr ""
+
+#: .\templates\app\lisence_activation.html:57
+msgid "Register"
+msgstr ""
+
 #: .\templates\app\main_home.html:17
 msgid "Translation Works"
 msgstr "Translation Works"
 
-#: .\templates\app\main_home.html:23 .\templates\app\main_home.html:60
-#: .\templates\app\main_home.html:120 .\templates\app\work_list.html:44
+#: .\templates\app\main_home.html:23 .\templates\app\main_home.html:120
+#: .\templates\app\work_list.html:52
 msgid "Draft"
 msgstr "Draft"
 
 #: .\templates\app\main_home.html:29 .\templates\app\main_home.html:62
-#: .\templates\app\main_home.html:169 .\templates\app\work_list.html:46
+#: .\templates\app\main_home.html:169 .\templates\app\work_detail.html:23
+#: .\templates\app\work_list.html:54
 msgid "Translating"
 msgstr "Translating"
 
-#: .\templates\app\main_home.html:35 .\templates\app\work_list.html:48
+#: .\templates\app\main_home.html:35 .\templates\app\work_detail.html:32
+#: .\templates\app\work_list.html:56
 msgid "Closed"
 msgstr "Closed"
 
 #: .\templates\app\main_home.html:44 .\templates\app\main_home.html:134
-#: .\templates\app\main_home.html:184 .\templates\app\work_add.html:38
-#: .\templates\app\work_detail.html:43 .\templates\app\work_list.html:28
+#: .\templates\app\main_home.html:184 .\templates\app\work_add.html:57
+#: .\templates\app\work_detail.html:65 .\templates\app\work_list.html:36
 msgid "ETA"
-msgstr "ETA"
+msgstr "Delivery Date"
+
+#: .\templates\app\main_home.html:60
+#, fuzzy
+#| msgid "Edit Draft"
+msgid "Editing Draft"
+msgstr "Edit Draft"
 
 #: .\templates\app\main_home.html:71
 msgid "No_Tags_are_registered_yet."
@@ -196,74 +228,76 @@ msgid "No_translation_history."
 msgstr "No translation history."
 
 #: .\templates\app\main_home.html:129 .\templates\app\main_home.html:178
-#: .\templates\app\work_add.html:21 .\templates\app\work_detail.html:21
-#: .\templates\app\work_list.html:21
+#: .\templates\app\work_add.html:40 .\templates\app\work_detail.html:43
+#: .\templates\app\work_list.html:29
 msgid "Title"
 msgstr "Title"
 
 #: .\templates\app\main_home.html:130 .\templates\app\main_home.html:180
-#: .\templates\app\work_list.html:24
+#: .\templates\app\work_list.html:32
 msgid "srclang"
 msgstr "Source lang"
 
 #: .\templates\app\main_home.html:131 .\templates\app\main_home.html:181
-#: .\templates\app\work_list.html:25
+#: .\templates\app\work_list.html:33
 msgid "tgtlang"
 msgstr "Target lang"
 
 #: .\templates\app\main_home.html:132 .\templates\app\main_home.html:182
-#: .\templates\app\work_list.html:26
+#: .\templates\app\work_list.html:34
 msgid "Tag"
 msgstr "Tag"
 
 #: .\templates\app\main_home.html:133 .\templates\app\main_home.html:183
-#: .\templates\app\work_detail.html:98 .\templates\app\work_history.html:24
-#: .\templates\app\work_list.html:27
+#: .\templates\app\work_detail.html:121 .\templates\app\work_history.html:29
+#: .\templates\app\work_list.html:35
 msgid "createdDate"
 msgstr "Created date"
 
-#: .\templates\app\main_home.html:154 .\templates\app\work_list.html:69
+#: .\templates\app\main_home.html:154 .\templates\app\work_add.html:25
+#: .\templates\app\work_add.html:138 .\templates\app\work_list.html:77
 msgid "Edit Draft"
 msgstr "Edit Draft"
 
-#: .\templates\app\main_home.html:179 .\templates\app\work_detail.html:82
-#: .\templates\app\work_list.html:23
+#: .\templates\app\main_home.html:155 .\templates\app\work_add.html:30
+#: .\templates\app\work_add.html:32 .\templates\app\work_list.html:78
+msgid "Start Translation"
+msgstr "Start Translation"
+
+#: .\templates\app\main_home.html:179 .\templates\app\work_detail.html:104
+#: .\templates\app\work_list.html:31
 msgid "Progress"
 msgstr "Progress"
 
-#: .\templates\app\main_home.html:210 .\templates\app\work_list.html:73
-msgid "Work Close"
-msgstr "Close Work"
-
-#: .\templates\app\tag_list.html:17
+#: .\templates\app\tag_list.html:19
 msgid "taglist"
 msgstr "Tag List"
 
-#: .\templates\app\tag_list.html:19
+#: .\templates\app\tag_list.html:23
 msgid "Add a new Tag"
 msgstr "Add a new Tag"
 
-#: .\templates\app\tag_list.html:26
+#: .\templates\app\tag_list.html:30
 msgid "tag image"
 msgstr "Tag image"
 
-#: .\templates\app\tag_list.html:27
+#: .\templates\app\tag_list.html:31
 msgid "tag text"
 msgstr "Tag text"
 
-#: .\templates\app\tag_list.html:28
+#: .\templates\app\tag_list.html:32
 msgid "background color"
 msgstr "Background color"
 
-#: .\templates\app\tag_list.html:29
+#: .\templates\app\tag_list.html:33
 msgid "text color"
 msgstr "Text color"
 
-#: .\templates\app\tag_list.html:162
+#: .\templates\app\tag_list.html:166
 msgid "WorkTitle"
 msgstr "Work title"
 
-#: .\templates\app\tag_list.html:162 .\templates\app\work_list.html:22
+#: .\templates\app\tag_list.html:166 .\templates\app\work_list.html:30
 msgid "Status"
 msgstr "Status"
 
@@ -273,132 +307,231 @@ msgid "GroupSetting"
 msgstr ""
 
 #: .\templates\app\user_personalsetting.html:4
-#: .\templates\app\user_personalsetting.html:17
 msgid "PersonalSetting"
 msgstr ""
+
+#: .\templates\app\user_personalsetting.html:27
+#, fuzzy
+#| msgid "Login-Email address"
+msgid "EmailAddress"
+msgstr "Email address"
+
+#: .\templates\app\user_personalsetting.html:33
+msgid "UserType"
+msgstr ""
+
+#: .\templates\app\user_personalsetting.html:39
+msgid "UserName"
+msgstr ""
+
+#: .\templates\app\user_personalsetting.html:55
+#, fuzzy
+#| msgid "language"
+msgid "DisplayLanguage"
+msgstr "language"
+
+#: .\templates\app\user_personalsetting.html:69
+msgid "DefaultSrcLang"
+msgstr ""
+
+#: .\templates\app\user_personalsetting.html:77
+msgid "DefaultTgtLang"
+msgstr ""
+
+#: .\templates\app\user_personalsetting.html:97
+#: .\templates\app\user_personalsetting.html:116
+#: .\templates\app\work_add.html:96
+msgid "Language Selection"
+msgstr "Language selection"
+
+#: .\templates\app\user_personalsetting.html:107
+#: .\templates\app\user_personalsetting.html:126
+#: .\templates\app\work_add.html:106
+msgid "CloseModal"
+msgstr "Close Modal"
+
+#: .\templates\app\user_personalsetting.html:143
+#: .\templates\app\user_personalsetting.html:160
+msgid "msg_UpdateSuccessful"
+msgstr ""
+
+#: .\templates\app\user_personalsetting.html:146
+#: .\templates\app\user_personalsetting.html:163
+#: .\templates\app\work_detail.html:570
+msgid "Request failed. Returned status : "
+msgstr "Request failed. Returned status : "
 
 #: .\templates\app\user_signup.html:11 .\templates\app\user_signup.html:26
 msgid "Sign up"
 msgstr "Sign up"
 
-#: .\templates\app\work_add.html:16
+#: .\templates\app\work_add.html:23
 msgid "Create a new Work"
 msgstr "Create a new Work"
 
-#: .\templates\app\work_add.html:27 .\templates\app\work_detail.html:27
+#: .\templates\app\work_add.html:46 .\templates\app\work_detail.html:49
 msgid "language"
 msgstr "language"
 
-#: .\templates\app\work_add.html:49 .\templates\app\work_detail.html:54
+#: .\templates\app\work_add.html:68 .\templates\app\work_detail.html:76
 msgid "Tags"
 msgstr "Tags"
 
-#: .\templates\app\work_add.html:70
-msgid "Language Selection"
-msgstr "Language selection"
+#: .\templates\app\work_add.html:74
+msgid "URL"
+msgstr ""
 
-#: .\templates\app\work_add.html:80
-msgid "CloseModal"
-msgstr "Close Modal"
+#: .\templates\app\work_add.html:137
+msgid "SuccessToUpdate"
+msgstr ""
 
-#: .\templates\app\work_add.html:193 .\templates\app\work_detail.html:501
-#: .\templates\app\work_detail.html:540 .\templates\app\work_detail.html:565
-#: .\templates\app\work_detail.html:588 .\templates\app\work_detail.html:617
-#: .\templates\app\work_detail.html:632 .\templates\app\work_detail.html:700
-msgid "Request failed. Returned status : "
-msgstr "Request failed. Returned status : "
+#: .\templates\app\work_add.html:144
+msgid "FailedToUpdate"
+msgstr ""
 
-#: .\templates\app\work_detail.html:4 .\templates\app\work_detail.html:16
+#: .\templates\app\work_add.html:248
+msgid "It is forbidden to load from the URL"
+msgstr ""
+
+#: .\templates\app\work_add.html:250
+msgid "The URL is loaded Sucessfuly"
+msgstr ""
+
+#: .\templates\app\work_add.html:256
+msgid "Failed to load from the URL"
+msgstr ""
+
+#: .\templates\app\work_add.html:286 .\templates\app\work_detail.html:506
+msgid "SucceededToDeleteTag"
+msgstr ""
+
+#: .\templates\app\work_add.html:289 .\templates\app\work_detail.html:509
+msgid "FailedToDeleteTag"
+msgstr ""
+
+#: .\templates\app\work_detail.html:4
 msgid "WorkDetail"
 msgstr "Work detail"
 
-#: .\templates\app\work_detail.html:66 .\templates\app\work_detail.html:405
+#: .\templates\app\work_detail.html:26
+#, fuzzy
+#| msgid "Closed"
+msgid "Close Work"
+msgstr "Closed"
+
+#: .\templates\app\work_detail.html:35
+#, fuzzy
+#| msgid "Reopen"
+msgid "Reopen Work"
+msgstr "Reopen"
+
+#: .\templates\app\work_detail.html:88 .\templates\app\work_detail.html:606
 msgid "Original"
 msgstr "Original"
 
-#: .\templates\app\work_detail.html:71
+#: .\templates\app\work_detail.html:93
 msgid "History"
 msgstr "History"
 
-#: .\templates\app\work_detail.html:76
+#: .\templates\app\work_detail.html:98
 msgid "Translated"
 msgstr "Translated"
 
-#: .\templates\app\work_detail.html:83
+#: .\templates\app\work_detail.html:105
 msgid "status"
 msgstr "Status"
 
-#: .\templates\app\work_detail.html:99 .\templates\app\work_history.html:26
+#: .\templates\app\work_detail.html:122 .\templates\app\work_history.html:31
 msgid "TranslationType"
 msgstr "Type"
 
-#: .\templates\app\work_detail.html:100 .\templates\app\work_history.html:27
+#: .\templates\app\work_detail.html:123 .\templates\app\work_history.html:32
 msgid "Translation"
 msgstr "Translation"
 
-#: .\templates\app\work_detail.html:133 .\templates\app\work_detail.html:169
+#: .\templates\app\work_detail.html:156 .\templates\app\work_detail.html:192
 msgid "OriginalText"
 msgstr "Original"
 
-#: .\templates\app\work_detail.html:142 .\templates\app\work_detail.html:178
+#: .\templates\app\work_detail.html:165 .\templates\app\work_detail.html:201
 msgid "TranslatedText"
 msgstr "Translated"
 
-#: .\templates\app\work_detail.html:152 .\templates\app\work_detail.html:188
+#: .\templates\app\work_detail.html:175 .\templates\app\work_detail.html:211
 msgid "Reflect"
 msgstr "Reflect"
 
-#: .\templates\app\work_detail.html:197 .\templates\app\work_detail.html:213
-#: .\templates\app\work_detail.html:229 .\templates\app\work_detail.html:245
-#: .\templates\app\work_detail.html:261
+#: .\templates\app\work_detail.html:220 .\templates\app\work_detail.html:236
+#: .\templates\app\work_detail.html:252 .\templates\app\work_detail.html:268
+#: .\templates\app\work_detail.html:284
 msgid "ConfirmationMessage"
 msgstr "Confirmation message"
 
-#: .\templates\app\work_detail.html:200
+#: .\templates\app\work_detail.html:223
 msgid "TranslateIgnoreConfirmationMessage"
 msgstr "Are you sure to set ignore for the selected text?"
 
-#: .\templates\app\work_detail.html:204
+#: .\templates\app\work_detail.html:227
 msgid "OK"
 msgstr "OK"
 
-#: .\templates\app\work_detail.html:216 .\templates\app\work_detail.html:232
-#: .\templates\app\work_detail.html:248
+#: .\templates\app\work_detail.html:239 .\templates\app\work_detail.html:255
+#: .\templates\app\work_detail.html:271
 msgid "TranslateDeleteConfirmationMessage"
 msgstr "Are you sure to cancel the translation?"
 
-#: .\templates\app\work_detail.html:220 .\templates\app\work_detail.html:236
-#: .\templates\app\work_detail.html:252
+#: .\templates\app\work_detail.html:243 .\templates\app\work_detail.html:259
+#: .\templates\app\work_detail.html:275
 msgid "RemoveTranslation"
 msgstr "Cancel translation"
 
-#: .\templates\app\work_detail.html:281
-msgid "Not translate for the selected text"
-msgstr "Not translate for the selected text. "
-
-#: .\templates\app\work_detail.html:291
-msgid "Select All"
-msgstr "Select All"
-
-#: .\templates\app\work_detail.html:300
+#: .\templates\app\work_detail.html:318
 msgid "Translate From"
 msgstr "Translate From"
 
-#: .\templates\app\work_detail.html:304
+#: .\templates\app\work_detail.html:322
 msgid "Translate To"
 msgstr "Translate To"
 
-#: .\templates\app\work_detail.html:460 .\templates\app\work_detail.html:477
-#: .\templates\app\work_detail.html:508
-msgid "Please select translating text."
+#: .\templates\app\work_detail.html:490
+msgid "SucceededToAddTag"
+msgstr ""
+
+#: .\templates\app\work_detail.html:493
+msgid "FailedToAddTag"
+msgstr ""
+
+#: .\templates\app\work_detail.html:671
+#, fuzzy
+#| msgid "Please select translating text."
+msgid "Please select translating text"
 msgstr "Please select translating text."
 
-#: .\templates\app\work_detail.html:465 .\templates\app\work_detail.html:482
-#: .\templates\app\work_detail.html:513
+#: .\templates\app\work_detail.html:676
 msgid "CannotIncludeTranslatedText"
 msgstr "Translated text is not available to include. Please select again."
 
-#: .\templates\app\work_history.html:25
+#: .\templates\app\work_detail.html:694
+msgid "Succeeded to translate with Google Translation"
+msgstr ""
+
+#: .\templates\app\work_detail.html:698
+msgid "Failed to translate with Google Translation"
+msgstr ""
+
+#: .\templates\app\work_detail.html:716
+msgid "Translation is updated successfully"
+msgstr ""
+
+#: .\templates\app\work_detail.html:719
+msgid "Failed to update with the translation"
+msgstr ""
+
+#: .\templates\app\work_history.html:22 .\templates\app\work_list.html:22
+msgid "Search : "
+msgstr ""
+
+#: .\templates\app\work_history.html:30
 msgid "workTitle"
 msgstr "Work title"
 
@@ -406,11 +539,15 @@ msgstr "Work title"
 msgid "WorkList"
 msgstr "Work list"
 
-#: .\templates\app\work_list.html:75
+#: .\templates\app\work_list.html:81
+msgid "Work Close"
+msgstr "Close Work"
+
+#: .\templates\app\work_list.html:83
 msgid "View"
 msgstr "View"
 
-#: .\templates\app\work_list.html:76
+#: .\templates\app\work_list.html:84
 msgid "Reopen"
 msgstr "Reopen"
 
@@ -445,6 +582,18 @@ msgstr "I forgot my password."
 #: .\templates\registration\login.html:53
 msgid "Login_Register_a_new_membership"
 msgstr "Register a new membership"
+
+#~ msgid "Save as Draft"
+#~ msgstr "Save as Draft"
+
+#~ msgid "Manual"
+#~ msgstr "Manual"
+
+#~ msgid "Not translate for the selected text"
+#~ msgstr "Not translate for the selected text. "
+
+#~ msgid "Select All"
+#~ msgstr "Select All"
 
 #~ msgid "beforeTranslation"
 #~ msgstr "Original"

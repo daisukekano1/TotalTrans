@@ -208,9 +208,6 @@ table.table thead{
       margin: 1.75rem auto;
   }
 }
-.editableTable table.table th, table.table td {
-  padding: .75rem;;
-}
 .home-widget-header {
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
@@ -497,4 +494,37 @@ textarea:focus {
 }
 .CodeMirror pre.CodeMirror-placeholder {
     color: #999 !important;
+}
+.TransHistoryCompareTable{
+    width: 100%;
+    margin-bottom: 10px;
+    margin-right:20px;
+}
+.TransHistoryCompareTable tr{
+    border-bottom: 1px dotted lightgrey;
+}
+.TransHistoryCompareTable td{
+    font-size:0.8rem;
+}
+.TransHistoryCompareTable td.comparetabletitle{
+    color:#318c8c;
+}
+.TransHistoryCompareTable td.comparetabletext{
+    overflow : hidden;
+    white-space : nowrap;
+    text-overflow: ellipsis;
+}
+@media (min-width: 992px){
+    .modal .modal-full-height {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        width: 600px;
+        height: auto;
+        min-height: 100%;
+        margin: 0;
+    }
 }

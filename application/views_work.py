@@ -312,7 +312,7 @@ def saveGoogleTranslation(request):
     work = Works.objects.get(pk=work_id)
     # work.wordsOriginal = getConvertWords(work.wordsOriginal, OriginalText, OriginalText, historyNum, "g")
     work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, TranslatedText, historyNum, "g")
-    work.progress = getPercentage2(work.wordsTranslated)
+    work.progress = getPercentage3(work_id)
     work.save()
     data = {
         'wordsOriginal': work.wordsOriginal,
@@ -348,7 +348,7 @@ def saveSelfTranslation(request):
 
     work = Works.objects.get(pk=work_id)
     work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, TranslatedText, historyNum, "s")
-    work.progress = getPercentage2(work.wordsTranslated)
+    work.progress = getPercentage3(work_id)
     work.save()
     data = {
         'wordsTranslated': work.wordsTranslated,
@@ -382,7 +382,7 @@ def saveIgnoreTranslation(request):
 
     work = Works.objects.get(pk=work_id)
     work.wordsTranslated = getConvertWords(work.wordsTranslated, OriginalText, OriginalText, historyNum, "i")
-    work.progress = getPercentage2(work.wordsTranslated)
+    work.progress = getPercentage3(work_id)
     work.save()
     data = {
         'wordsOriginal': work.wordsOriginal,
@@ -408,6 +408,15 @@ def getPercentage2(wordsTranslated):
         wkval = wkval[search.end():]
     wklen = len(wk2)
     return math.ceil(wklen/totallength * 100)
+
+def getPercentage3(work_id):
+    work = Works.objects.get(pk=work_id)
+    history = TranslationHistory.objects.filter(work_id=work_id)
+    totallength = len(work.wordsOriginal)
+    translatedlength = 0
+    for vals in history:
+        translatedlength = translatedlength + len(vals.beforeTranslation)
+    return math.ceil(translatedlength/totallength * 100)
 
 def getConvertWords(original, originalText, translatedText, historyId, typePrefix):
     wkval = original
@@ -451,7 +460,7 @@ def deleteHistory(request):
     elif history.TranslationType == "Ignore":
         typeprefix = "i"
 
-    work.progress = getPercentage2(work.wordsOriginal)
+    work.progress = getPercentage3(work_id)
     work.save()
     data = {
         'wordsOriginal': work.wordsOriginal,

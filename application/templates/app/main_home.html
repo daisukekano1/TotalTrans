@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="col-3 nav-link">
                                             {% if eta.status == 'Draft' %}
-                                                <span class="color-status-draft"><i class="fas fa-edit"></i> {% trans "Draft" %}</span>
+                                                <span class="color-status-draft"><i class="fas fa-edit"></i> {% trans "Editing Draft" %}</span>
                                             {% elif eta.status == 'Open' %}
                                                 <span class="color-status-open"><i class="fas fa-random"></i> {% trans "Translating" %}</span>
                                             {% endif %}
@@ -97,9 +97,17 @@
                                             {% endif %}
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-12" style="padding-left:2em; overflow : hidden; white-space : nowrap; text-overflow: ellipsis; font-size:0.8rem;">{{ history.beforeTranslation }}</div>
-                                        <div class="col-12" style="padding-left:2em; overflow : hidden; white-space : nowrap; text-overflow: ellipsis; font-size:0.8rem;">{{ history.afterTranslation }}</div>
+                                    <div class="row" style="padding-left:2em;">
+                                        <table class="TransHistoryCompareTable" border="0">
+                                            <tr>
+                                                <td class="w-80px comparetabletitle">{% trans 'Original'%}</td>
+                                                <td class="comparetabletext">{{ history.beforeTranslation }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="w-80px comparetabletitle">{% trans 'Translated'%}</td>
+                                                <td class="comparetabletext">{{ history.afterTranslation }}</td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </li>
                                 {% endfor %}
@@ -152,7 +160,6 @@
                                         <td>{% if row.eta %}{{ row.eta|date:"Y/m/j" }}{% endif %}</td>
                                         <td style="white-space: nowrap">
                                             <a href="{% url 'workcreation' row.work_id %}" class="btn btn-outline-draft btn-md"><i class="fas fa-edit"></i> {% trans "Edit Draft" %}</a>
-                                            <a href="{% url 'workstart' row.work_id %}" class="btn btn-outline-open btn-md"><i class="fas fa-random"></i> {% trans "Start Translation" %}</a>
                                         </td>
                                   </tr>
                               {% endfor %}

@@ -62,7 +62,7 @@
                             </div>
                             <div class="form-group col-2" style="margin-right:10px;">
                                 <div class="input-group" style="width:100%">
-                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-80px">{% trans "ETA" %}</span></div>
+                                    <div class="input-group-prepend"><span class="input-group-text input-label-color w-120px">{% trans "ETA" %}</span></div>
                                     <input type="text" id="eta" name="eta" class="form-control editableColor" value="{{ work.eta|date:"Y/m/j" }}"/>
                                     <div class="input-group-append" data-target="#eta" data-toggle="datepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -84,17 +84,17 @@
                                     <div class="card-title">
                                         <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
+                                                <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true" style="font-size:.9rem;">
                                                     {% trans "Original" %}
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
+                                                <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false" style="font-size:.9rem;">
                                                     {% trans "History" %}
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                                <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false" style="font-size:.9rem;"   >
                                                     {% trans "Translated" %}
                                                 </a>
                                             </li>
@@ -108,7 +108,6 @@
                                 <div class="card-body">
                                     <div class="tab-content" id="custom-tabs-one-tabContent">
                                         <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                            <textarea class='wordsOriginalAll' id='wordsOriginalAll' name='wordsOriginalAll' rows='10' style="visibility:hidden; white-space: pre-wrap;">{{ work.wordsOriginal }}</textarea>
                                             <textarea class='wordsOriginalAll' id='wordsOriginalAll' name='wordsOriginalAll' style="display:none;">{{ work.wordsOriginal }}</textarea>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
@@ -120,7 +119,9 @@
                                                         <th width="3%">#</th>
                                                         <th width="10%">{% trans "createdDate" %}</th>
                                                         <th width="5%">{% trans "TranslationType" %}</th>
-                                                        <th width="82%">{% trans "Translation" %}</th>
+                                                        <th width="8%">{% trans "Position" %}</th>
+                                                        <th width="65%">{% trans "Translation" %}</th>
+                                                        <th width="9%"></th>
                                                       </tr>
                                                     </thead>
                                                     </table>
@@ -143,9 +144,9 @@
 </div>
 <div class="modal fade right" id="openSelfTranslate" tabindex="-1" role="dialog" aria-labelledby="openSelfRequest" data-backdrop="true" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-full-height modal-right modal-notify" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="background-color: #fffbf0">
             <div class="modal-header color-trans-self">
-                <p class="heading lead">{% trans "SelfTrans" %}</p>
+                <div>{% trans "SelfTrans" %}</div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="white-text">×</span>
                 </button>
@@ -167,7 +168,9 @@
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                         </div>
                     </div>
-                    <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="selfTranslateText" name='selfTranslateText' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
+                    <div class="card-body">
+                        <textarea style="display:none" placeholder="Input text here..." id='selfTranslateText' name='selfTranslateText' ></textarea>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
@@ -194,7 +197,7 @@
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
-                    <div class="card-body prewrap" id="googleRequestText"></div>f
+                    <div class="card-body prewrap" id="googleRequestText"></div>
                 </div>
                 <div class="card">
                     <div class="card-header color-trans-google">
@@ -203,7 +206,7 @@
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                         </div>
                     </div>
-                    <textarea rows="10" class="form-control editableColor prewrap textArea" style="margin-bottom:100px; width:100%; min-height: 200px;" id="googleResponseText" name='googleResponseText' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
+                    <textarea rows="10" class="form-control editableColor prewrap textArea" style="width:100%; min-height: 200px;" id="googleResponseText" name='googleResponseText' oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -308,6 +311,8 @@
         var wordsOriginal = "";
         var OriginalText = "";
         var editor;
+        var selfeditor;
+        var googleeditor;
         var startline;
         var startchar;
         var endline;
@@ -381,6 +386,7 @@
                 })
                 .tokenfield({
                     tokens:worktagsArr,
+                    createTokensOnBlur : true,
                     autocomplete: {
                         source: usertagsArr,
                         delay: 100
@@ -390,11 +396,27 @@
             });
             historyRefresh();
             originalInitialize();
+            selfeditorInitialize();
+            googleeditorInitialize();
             $('#btnOpenSelfTranslate').on('click', function () {
                 modalTranslateOpen("Self");
             })
+            $('#openSelfTranslate').on('shown.bs.modal', function () {
+                selfeditor.focus();
+                selfeditor.setCursor(selfeditor.lineCount(), 0);
+            })
+            $('#openSelfTranslate').on('hide.bs.modal', function () {
+                selfeditor.setValue("");
+            })
             $('#btnOpenGoogleRequest').on('click', function () {
                 modalTranslateOpen("Google");
+            })
+            $('#openGoogleRequest').on('shown.bs.modal', function () {
+                googleeditor.focus();
+                googleeditor.setCursor(googleeditor.lineCount(), 0);
+            })
+            $('#openGoogleRequest').on('hide.bs.modal', function () {
+                googleeditor.setValue("");
             })
             $('#btnOpenIgnoreText').on('click', function () {
                 modalTranslateOpen("Ignore");
@@ -405,7 +427,7 @@
                     data: {
                         work_id: '{{ work.work_id }}',
                         selfOriginalText: OriginalText,
-                        selfTranslatedText:translatedText,
+                        selfTranslatedText:selfeditor.getValue(),
                         startline:startline,
                         startchar:startchar,
                         endline:endline,
@@ -431,7 +453,7 @@
                     data: {
                         work_id: '{{ work.work_id }}',
                         googleOriginalText: OriginalText,
-                        googleTranslatedText:translatedText,
+                        googleTranslatedText:googleeditor.getValue(),
                         startline:startline,
                         startchar:startchar,
                         endline:endline,
@@ -547,7 +569,9 @@
             else if (deletetype=='ignore')
                 $('#modal-IgnoreDeleteHistory').modal('show');
         }
-        function deleteHistory(){
+        function deleteHistory(param = 0){
+            if (param != 0)
+                historynumber = param;
             $.ajax("/deleteHistory", {
                 data: {
                     work_id: '{{ work.work_id }}',
@@ -555,16 +579,13 @@
                 }
             }).then(
                 function success(data) {
+                    originalRemoveHighlight(startline, startchar, endline, endchar);
+                    updateTranslatedText(data.wordsTranslated);
+                    updateProgress(data.progress);
+                    historytable.ajax.reload();
+                    msgUpdateSuccessful();
                     wordsOriginal = data.wordsOriginal;
                     $("#wordsOriginalAll").val(wordsOriginal);
-                    wordsOriginal = $("#wordsOriginalAll").val();
-                    convertText(2, data.wordsTranslated);
-                    $('#progress').text(data.progress);
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                    $('#modal-SelfDeleteHistory').modal('hide');
-                    $('#modal-GoogleDeleteHistory').modal('hide');
-                    $('#modal-IgnoreDeleteHistory').modal('hide');
                 },
                 function fail(data, status) {
                     alert('{% trans "Request failed. Returned status : " %}' + status);
@@ -601,13 +622,23 @@
                             }
                         }
                     },
+                    {   data: 'startline', className: "dt-left",
+                        "render": function (data, type, row) {
+                            return "{% trans 'Line:' %}" + row['startline'] + " {% trans 'Char:' %}" + row['startchar'];
+                        }
+                    },
                     {   data: 'beforeTranslation', className: "dt-left text-overflow-clip",
                         "render" : function (data, type, row){
                             html = "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Original' %}：" + row['beforeTranslation'] + "</div>";
                             html = html + "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>{% trans 'Translate' %}：" + row['afterTranslation'] + "</div>";
                             return html;
                         }
-                    }
+                    },
+                    {   data: 'historyNum', className: "dt-center no-wrap",
+                        "render": function (data, type, row) {
+                            return '<input type="button" class="btn btn-md btn-outline-danger" onclick="deleteHistory('+data+')" value="Delete"/>';
+                        }
+                    },
                 ],
                 columnDefs: [ {
                     "targets": 3,
@@ -693,12 +724,13 @@
                     function success(data) {
                         toastr.success('{% trans "Succeeded to translate with Google Translation" %}');
                         $('#googleResponseText').val(data.data);
+                        googleeditor.setValue(data.data);
                     },
                     function fail(data, status) {
                         toastr.error('{% trans "Failed to translate with Google Translation" %}');
+                        return false;
                     }
                 )
-
             }else if (transtype == "Ignore") {
                 modalname = "openIgnoreText"
             }
@@ -723,6 +755,27 @@
         }
         function workreopen(){
             window.location.href="{% url 'workreopen' work.work_id %}";
+        }
+        function selfeditorInitialize(){
+            selfeditor = CodeMirror.fromTextArea(document.getElementById('selfTranslateText'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                styleActiveLine: true,
+                styleSelectedText: true
+            });
+            selfeditor.refresh();
+        }
+        function googleeditorInitialize(){
+            googleeditor = CodeMirror.fromTextArea(document.getElementById('googleResponseText'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                styleActiveLine: true,
+                styleSelectedText: true
+            });
+            googleeditor.refresh();
+        }
+        function originalRemoveHighlight(){
+
         }
     </script>
 {% endblock javascripts %}

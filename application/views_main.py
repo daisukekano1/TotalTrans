@@ -36,7 +36,7 @@ def home(request):
         glossary['count'] = gl.numberofcount
 
     transhistory = []
-    for history in TranslationHistory.objects.select_related('work').filter(work__user_id=request.user.id).order_by('createdDate').reverse()[:3]:
+    for history in TranslationHistory.objects.select_related('work').filter(work__user_id=request.user.id).order_by('createdDate').reverse()[:2]:
         onedata = {}
         onedata['work_id'] = history.work.id
         onedata['workTitle'] = history.work.workTitle
@@ -48,7 +48,7 @@ def home(request):
 
     works_eta = []
     dt_now = datetime.datetime.now()
-    for work in Works.objects.filter(**filters).filter(user_id=request.user.id).filter(status__in=['Open','Draft']).filter(eta__isnull=False).order_by('eta').reverse()[:5]:
+    for work in Works.objects.filter(**filters).filter(user_id=request.user.id).filter(status__in=['Open','Draft']).filter(eta__isnull=False).order_by('eta')[:5]:
         onedata = {}
         onedata['work_id'] = work.id
         onedata['workTitle'] = work.workTitle
@@ -62,7 +62,7 @@ def home(request):
             color = "red"
         elif diff == 0:
             message = "Today"
-            color = "yellow"
+            color = "#057f09"
         else:
             message = str(diff)+ " days left"
             color = "green"

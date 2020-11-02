@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="history" class="table table-hover table-responsive-lg tabletype1">
+                            <table id="history" class="table table-responsive-lg tabletype1">
                                 <thead>
                                 <tr>
                                     <th width="10%">{% trans "createdDate" %}</th>
@@ -58,7 +58,7 @@
                 columns: [
                     {   data: 'createdDateTime', className: "dt-left no-wrap"},
                     {   data: 'workTitle',
-                        className: "dt-left",
+                        className: "dt-left  p-0",
                         "render": function (data, type, row) {
                             url = "{% url 'workdetail' 0 %}".replace("0", row['work_id'])
                             return '<a href="'+url+'">'+data+'</a>';
@@ -66,7 +66,7 @@
                     },
                     {
                         data: 'TranslationType',
-                        className: "dt-left",
+                        className: "dt-left  p-0",
                         "render": function (data, type, row) {
                             if (row['TranslationType'] == 'Self') {
                                 return '<span class="badge badge-default color-trans-self">'+data+'</span>';
@@ -79,10 +79,17 @@
                             }
                         }
                     },
-                    {   data: 'beforeTranslation', className: "dt-left text-overflow-clip",
+                    {   data: 'beforeTranslation', className: "dt-left text-overflow-clip p-0",
                         "render" : function (data, type, row){
-                            html = "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>Original：" + row['beforeTranslation'] + "</div>";
-                            html = html + "<div style='overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size:0.8em;'>Translate：" + row['afterTranslation'] + "</div>";
+                            html = '<div style="padding-left:2em;">';
+                            html = html + '<table class="TransHistoryCompareTable" border="0" style="margin-bottom:0px;">';
+                            html = html + '<tr>'
+                            html = html + '<td class="w-80px comparetabletitle" style="padding:.1rem">{% trans 'Original'%}</td>'
+                            html = html + '<td class="comparetabletext" style="padding:.1rem">'+row['beforeTranslation']+'</td>'
+                            html = html + '</tr><tr>'
+                            html = html + '<td class="w-80px comparetabletitle" style="padding:.1rem">{% trans 'Translated'%}</td>'
+                            html = html + '<td class="comparetabletext" style="padding:.1rem">'+row['afterTranslation']+'</td>'
+                            html = html + '</tr>'
                             return html;
                         }
                     }
