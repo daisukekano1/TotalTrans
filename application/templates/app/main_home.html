@@ -98,16 +98,18 @@
                                         </div>
                                     </div>
                                     <div class="row" style="padding-left:2em;">
-                                        <table class="TransHistoryCompareTable" border="0">
-                                            <tr>
-                                                <td class="w-80px comparetabletitle">{% trans 'Original'%}</td>
-                                                <td class="comparetabletext">{{ history.beforeTranslation }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="w-80px comparetabletitle">{% trans 'Translated'%}</td>
-                                                <td class="comparetabletext">{{ history.afterTranslation }}</td>
-                                            </tr>
-                                        </table>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 text-overflow-clip" style="max-width: 97%;">
+                                            <table class="TransHistoryCompareTable mr-4" border="0">
+                                                <tr>
+                                                    <td class="w-80px comparetabletitle">{% trans 'Original'%}</td>
+                                                    <td class="comparetabletext">{{ history.beforeTranslation }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="w-80px comparetabletitle">{% trans 'Translated'%}</td>
+                                                    <td class="comparetabletext">{{ history.afterTranslation }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
                                     </div>
                                 </li>
                                 {% endfor %}

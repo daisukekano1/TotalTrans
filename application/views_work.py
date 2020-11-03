@@ -447,19 +447,9 @@ def deleteHistory(request):
     history.save()
 
     work = Works.objects.get(pk=work_id)
-    work.wordsOriginal = re.sub('\[(s|g|i):(s|e):'+str(historyNum)+'\]','',work.wordsOriginal)
     work.wordsTranslated = re.sub('\[(s|g|i):s:'+str(historyNum)+'\]'+afterTranslation+'\[(s|g|i):e:'+str(historyNum)+'\]',
                                   beforeTranslation,
                                   work.wordsTranslated)
-    history = TranslationHistory.objects.filter(work_id=work_id).filter(historyNum=historyNum).first()
-    typeprefix = ""
-    if history.TranslationType == "Self":
-        typeprefix = "s"
-    elif history.TranslationType == "Google":
-        typeprefix = "g"
-    elif history.TranslationType == "Ignore":
-        typeprefix = "i"
-
     work.progress = getPercentage3(work_id)
     work.save()
     data = {

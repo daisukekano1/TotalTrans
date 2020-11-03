@@ -774,8 +774,9 @@
             });
             googleeditor.refresh();
         }
-        function originalRemoveHighlight(){
-
+        function originalRemoveHighlight(startline, startchar, endline, endchar){
+            mark = editor.findMarksAt(startline, startchar);
+            mark.clear();
         }
     </script>
 {% endblock javascripts %}
